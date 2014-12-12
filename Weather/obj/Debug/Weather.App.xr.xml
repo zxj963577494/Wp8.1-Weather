@@ -8,6 +8,8 @@
     <RootPropertyPathName Name="SecondGroup" />
     <RootPropertyPathName Name="Items" />
     <RootPropertyPathName Name="Description" />
+    <RootPropertyPathName Name="AutoUpdateTimes" />
+    <RootPropertyPathName Name="Switches" />
   </Roots.PropertyPathNames>
   <Roots.RootTypes>
     <RootType FullName="Windows.UI.Xaml.Application" />
@@ -100,6 +102,7 @@
     <RootType FullName="Windows.UI.Xaml.Controls.Pivot">
       <RootProperty Name="Title" />
       <RootProperty Name="Items" />
+      <RootEvent Name="SelectionChanged" />
       <RootMethod Name="GetSlideInAnimationGroup" />
       <RootMethod Name="SetSlideInAnimationGroup" />
     </RootType>
@@ -108,7 +111,6 @@
       <RootProperty Name="Header" />
       <RootProperty Name="DataContext" />
       <RootProperty Name="Content" />
-      <RootEvent Name="Loaded" />
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.ListView">
       <RootProperty Name="ItemsSource" />
@@ -138,9 +140,12 @@
     </RootType>
     <RootType FullName="Weather.App.PivotPage" />
     <RootType FullName="Windows.UI.Xaml.Controls.ComboBox">
-      <RootProperty Name="Items" />
+      <RootProperty Name="MinWidth" />
+      <RootProperty Name="ItemsSource" />
+      <RootProperty Name="SelectedValuePath" />
+      <RootProperty Name="DisplayMemberPath" />
+      <RootEvent Name="DropDownClosed" />
     </RootType>
-    <RootType FullName="System.String" />
     <RootType FullName="Weather.App.SettingPage" />
   </Roots.RootTypes>
 </Roots>

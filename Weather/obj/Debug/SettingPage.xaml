@@ -9,20 +9,18 @@
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid x:Name="LayoutRoot">
-        <Pivot x:Uid="Pivot" Title="应用设置" x:Name="pivot" CommonNavigationTransitionInfo.IsStaggerElement="True">
+        <Pivot x:ConnectionId='1' x:Name="SettingPivot" Title="应用设置"                                                 >
             <!--枢轴项一-->
             <PivotItem
-				x:Uid="FirstPivot"
 				Margin="0,10,0,-9.778"
 				Header="常规设置"
 CommonNavigationTransitionInfo.IsStaggerElement="True">
             </PivotItem>
-            <PivotItem x:ConnectionId='1'
-				x:Uid="SecondPivot"
+            <PivotItem
                 x:Name="SecondPivot"
 				Margin="0,10,0,-9.778"
 				Header="自动更新"
-CommonNavigationTransitionInfo.IsStaggerElement="True"                            >
+CommonNavigationTransitionInfo.IsStaggerElement="True">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
@@ -33,28 +31,19 @@ CommonNavigationTransitionInfo.IsStaggerElement="True"                          
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Grid.Row="0" Grid.Column="0"  Text="仅在WI-FI建立后自动更新"/>
                     </StackPanel>
+
                     <StackPanel Orientation="Horizontal" Grid.Row="1">
-                        <ComboBox x:Name="cbbWifiConnnection">
-                            <x:String>开</x:String>
-                            <x:String>关</x:String>
+                        <ComboBox x:ConnectionId='2' x:Name="cbbWifiConnnection"  ItemsSource="{Binding Switches}" MinWidth="400"                                                     SelectedValuePath="Id"  DisplayMemberPath="Content">
                         </ComboBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="2">
                         <TextBlock Grid.Row="0" Grid.Column="0"  Text="自动更新频率"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="3">
-                        <ComboBox x:Name="cbbAutoUpdateTime">
-                            <x:String>30分钟</x:String>
-                            <x:String>1小时</x:String>
-                            <x:String>2小时</x:String>
-                            <x:String>4小时</x:String>
-                            <x:String>6小时</x:String>
-                            <x:String>12小时</x:String>
-                            <x:String>1天</x:String>
+                        <ComboBox x:Name="cbbAutoUpdateTime" MinWidth="400" ItemsSource="{Binding AutoUpdateTimes}" SelectedValuePath="Id"  DisplayMemberPath="Content">
                         </ComboBox>
                     </StackPanel>
                 </Grid>
-
             </PivotItem>
         </Pivot>
     </Grid>

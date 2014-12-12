@@ -24,3 +24,32 @@ D:\GitHub\Projects\Windows Phone 8.1\Weather\Service\obj\Debug\pri.resfiles.inte
 D:\GitHub\Projects\Windows Phone 8.1\Weather\Service\obj\Debug\qualifiers.txt
 D:\GitHub\Projects\Windows Phone 8.1\Weather\Service\obj\Debug\qualifiers.txt.intermediate
 D:\GitHub\Projects\Windows Phone 8.1\Weather\Service\obj\Debug\MultipleQualifiersPerDimensionFound.txt
+D:\GitHub\Wp8.1-Weather\Service\bin\Debug\Weather.Service.dll
+D:\GitHub\Wp8.1-Weather\Service\bin\Debug\Weather.Service.pdb
+D:\GitHub\Wp8.1-Weather\Service\bin\Debug\Weather.Service.pri
+D:\GitHub\Wp8.1-Weather\Service\bin\Debug\Weather.Model.dll
+D:\GitHub\Wp8.1-Weather\Service\bin\Debug\Weather.Utils.dll
+D:\GitHub\Wp8.1-Weather\Service\bin\Debug\NotificationsExtensions.dll
+D:\GitHub\Wp8.1-Weather\Service\bin\Debug\Weather.Utils.pdb
+D:\GitHub\Wp8.1-Weather\Service\bin\Debug\Weather.Utils.pri
+D:\GitHub\Wp8.1-Weather\Service\bin\Debug\Weather.Model.pdb
+D:\GitHub\Wp8.1-Weather\Service\bin\Debug\Weather.Model.pri
+D:\GitHub\Wp8.1-Weather\Service\bin\Debug\NotificationsExtensions.pdb
+D:\GitHub\Wp8.1-Weather\Service\bin\Debug\NotificationsExtensions.pri
+D:\GitHub\Wp8.1-Weather\Service\obj\Debug\Weather.Service.csprojResolveAssemblyReference.cache
+D:\GitHub\Wp8.1-Weather\Service\obj\Debug\Weather.Service.dll
+D:\GitHub\Wp8.1-Weather\Service\obj\Debug\Weather.Service.pdb
+D:\GitHub\Wp8.1-Weather\Service\obj\Debug\priconfig.xml
+D:\GitHub\Wp8.1-Weather\Service\obj\Debug\priconfig.xml.intermediate
+D:\GitHub\Wp8.1-Weather\Service\obj\Debug\layout.resfiles
+D:\GitHub\Wp8.1-Weather\Service\obj\Debug\layout.resfiles.intermediate
+D:\GitHub\Wp8.1-Weather\Service\obj\Debug\resources.resfiles
+D:\GitHub\Wp8.1-Weather\Service\obj\Debug\resources.resfiles.intermediate
+D:\GitHub\Wp8.1-Weather\Service\obj\Debug\pri.resfiles
+D:\GitHub\Wp8.1-Weather\Service\obj\Debug\pri.resfiles.intermediate
+D:\GitHub\Wp8.1-Weather\Service\obj\Debug\qualifiers.txt
+D:\GitHub\Wp8.1-Weather\Service\obj\Debug\qualifiers.txt.intermediate
+D:\GitHub\Wp8.1-Weather\Service\obj\Debug\MultipleQualifiersPerDimensionFound.txt
+D:\GitHub\Weather\bin\Weather.Service.dll
+D:\GitHub\Weather\bin\Weather.Service.pdb
+D:\GitHub\Weather\bin\Weather.Service.pri

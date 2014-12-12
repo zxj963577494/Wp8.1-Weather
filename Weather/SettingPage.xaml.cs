@@ -38,6 +38,7 @@ namespace Weather.App
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+
         }
 
         /// <summary>
@@ -88,25 +89,10 @@ namespace Weather.App
         /// <summary>
         /// 滚动到视图中后，为第二个数据透视项加载内容。
         /// </summary>
-        private async void SecondPivot_Loaded(object sender, RoutedEventArgs e)
-        {
-            SettingService service=new SettingService();
-            GetSettingSwitchesRespose switchesRespose=new GetSettingSwitchesRespose();
-            switchesRespose=await service.GetSettingSwitchesAsync();
-            GetSettingAutoUpdateTimeRepose autoUpdateTimeRepose = new GetSettingAutoUpdateTimeRepose();
-            autoUpdateTimeRepose = await service.GetSettingAutoUpdateTimeAsync();
+        //private async void SecondPivot_Loaded(object sender, RoutedEventArgs e)
+        //{
 
-            ViewModel.AutoUpdatePage autoUpdatePage = new ViewModel.AutoUpdatePage();
-            autoUpdatePage.Switches = switchesRespose.Switches;
-            autoUpdatePage.AutoUpdateTimes = autoUpdatePage.AutoUpdateTimes;
-
-
-            cbbAutoUpdateTime.ItemsSource = autoUpdatePage.AutoUpdateTimes;
-
-            SecondPivot.DataContext = autoUpdatePage;
-
-
-        }
+        //}
 
         #region NavigationHelper 注册
 
@@ -134,5 +120,38 @@ namespace Weather.App
         }
 
         #endregion
+
+        private async  void SettingPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (SettingPivot.SelectedIndex == 1)
+            {
+                SettingService service = new SettingService();
+                GetSettingSwitchesRespose switchesRespose = new GetSettingSwitchesRespose();
+                switchesRespose = await service.GetSettingSwitchesAsync();
+                GetSettingAutoUpdateTimeRepose autoUpdateTimeRepose = new GetSettingAutoUpdateTimeRepose();
+                autoUpdateTimeRepose = await service.GetSettingAutoUpdateTimeAsync();
+                ViewModel.AutoUpdatePage autoUpdatePage = new ViewModel.AutoUpdatePage();
+                autoUpdatePage.Switches = switchesRespose.Switches;
+                autoUpdatePage.AutoUpdateTimes = autoUpdateTimeRepose.AutoUpdateTimes;
+                SecondPivot.DataContext = autoUpdatePage;
+            }
+
+        }
+
+        private void cbbWifiConnnection_DropDownClosed(object sender, object e)
+        {
+            Model.Switchable wc = cbbWifiConnnection.SelectedItem as Model.Switchable;
+        }
+
+    }
+
+    public class Order{
+        public List<OrderModel> Orders { get; set; }
+    }
+
+    public class OrderModel
+    {
+        public string Id { get; set; }
+        public string Content { get; set; }
     }
 }

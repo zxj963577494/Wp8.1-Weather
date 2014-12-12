@@ -15,3 +15,23 @@ D:\GitHub\Projects\Windows Phone 8.1\Weather\Model\obj\Debug\qualifiers.txt
 D:\GitHub\Projects\Windows Phone 8.1\Weather\Model\obj\Debug\qualifiers.txt.intermediate
 D:\GitHub\Projects\Windows Phone 8.1\Weather\Model\obj\Debug\MultipleQualifiersPerDimensionFound.txt
 D:\GitHub\Projects\Windows Phone 8.1\Weather\Model\obj\Debug\Weather.Model.csprojResolveAssemblyReference.cache
+D:\GitHub\Wp8.1-Weather\Model\bin\Debug\Weather.Model.dll
+D:\GitHub\Wp8.1-Weather\Model\bin\Debug\Weather.Model.pdb
+D:\GitHub\Wp8.1-Weather\Model\bin\Debug\Weather.Model.pri
+D:\GitHub\Wp8.1-Weather\Model\obj\Debug\Weather.Model.dll
+D:\GitHub\Wp8.1-Weather\Model\obj\Debug\Weather.Model.pdb
+D:\GitHub\Wp8.1-Weather\Model\obj\Debug\priconfig.xml
+D:\GitHub\Wp8.1-Weather\Model\obj\Debug\priconfig.xml.intermediate
+D:\GitHub\Wp8.1-Weather\Model\obj\Debug\layout.resfiles
+D:\GitHub\Wp8.1-Weather\Model\obj\Debug\layout.resfiles.intermediate
+D:\GitHub\Wp8.1-Weather\Model\obj\Debug\resources.resfiles
+D:\GitHub\Wp8.1-Weather\Model\obj\Debug\resources.resfiles.intermediate
+D:\GitHub\Wp8.1-Weather\Model\obj\Debug\pri.resfiles
+D:\GitHub\Wp8.1-Weather\Model\obj\Debug\pri.resfiles.intermediate
+D:\GitHub\Wp8.1-Weather\Model\obj\Debug\qualifiers.txt
+D:\GitHub\Wp8.1-Weather\Model\obj\Debug\qualifiers.txt.intermediate
+D:\GitHub\Wp8.1-Weather\Model\obj\Debug\MultipleQualifiersPerDimensionFound.txt
+D:\GitHub\Weather\bin\Weather.Model.dll
+D:\GitHub\Weather\bin\Weather.Model.pdb
+D:\GitHub\Weather\bin\Weather.Model.pri
+D:\GitHub\Wp8.1-Weather\Model\obj\Debug\Weather.Model.csprojResolveAssemblyReference.cache
