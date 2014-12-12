@@ -1,0 +1,1 @@
+﻿{"AutoUpdateTimes":[{"Id":"1","Content":"30分钟"},{"Id":"2","Content":"1小时"},{"Id":"3","Content":"2小时"},{"Id":"4","Content":"4小时"},{"Id":"3","Content":"6小时"},{"Id":"3","Content":"24小时"}]}

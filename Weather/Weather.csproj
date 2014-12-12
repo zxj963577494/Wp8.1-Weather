@@ -1,0 +1,273 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A2871DC2-74B3-48F7-BC23-DE4BED06F766}</ProjectGuid>
+    <OutputType>AppContainerExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Weather</RootNamespace>
+    <AssemblyName>Weather</AssemblyName>
+    <DefaultLanguage>zh-CN</DefaultLanguage>
+    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BackgroundTask\BackgroundTaskHelper.cs" />
+    <Compile Include="BackgroundTask\BackgroundTaskExecute.cs" />
+    <Compile Include="Common\NetHelper.cs" />
+    <Compile Include="Common\NavigationHelper.cs" />
+    <Compile Include="Common\ObservableDictionary.cs" />
+    <Compile Include="Common\RelayCommand.cs" />
+    <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="Common\TileHelper.cs" />
+    <Compile Include="DataModel\SampleDataSource.cs" />
+    <Compile Include="DTO\TileModel.cs" />
+    <Compile Include="ItemPage.xaml.cs">
+      <DependentUpon>ItemPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Message\Forecast3h\GetForecast3hByCityNameRepose.cs" />
+    <Compile Include="Message\Forecast3h\GetForecast3hByCityNameRequest.cs" />
+    <Compile Include="Message\General\GetWeatherByIpRequest.cs" />
+    <Compile Include="Message\General\GetWeatherByGpsRequest.cs" />
+    <Compile Include="Message\General\GetWeatherByCityNameOrIdRequest.cs" />
+    <Compile Include="Message\General\GetWeatherRespose.cs" />
+    <Compile Include="Model\Forecast3h\Forecast3hList.cs" />
+    <Compile Include="Model\CientData\WeatherCityList.cs" />
+    <Compile Include="Model\CientData\WeatherCity.cs" />
+    <Compile Include="Model\Forecast3h\Forecast3h.cs" />
+    <Compile Include="Model\General\Future.cs" />
+    <Compile Include="Model\General\Sk.cs" />
+    <Compile Include="Model\General\Today.cs" />
+    <Compile Include="Model\CientData\WeatherType.cs" />
+    <Compile Include="Model\CientData\WeatherTypeList.cs" />
+    <Compile Include="Model\General\Weather.cs" />
+    <Compile Include="Model\General\WeatherId.cs" />
+    <Compile Include="Model\User\User.cs" />
+    <Compile Include="PivotPage.xaml.cs">
+      <DependentUpon>PivotPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BackgroundTask\UpdateTileTask.cs" />
+    <Compile Include="ViewModel\HomePageModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\BadgeLogo.scale-100.png" />
+    <Content Include="Assets\BadgeLogo.scale-140.png" />
+    <Content Include="Assets\BadgeLogo.scale-240.png" />
+    <Content Include="Assets\DarkGray.png" />
+    <Content Include="Assets\LightGray.png" />
+    <Content Include="Assets\Logo.scale-100.png" />
+    <Content Include="Assets\Logo.scale-140.png" />
+    <Content Include="Assets\MediumGray.png" />
+    <Content Include="Assets\HubBackground.theme-dark.png" />
+    <Content Include="Assets\HubBackground.theme-light.png" />
+    <Content Include="Assets\Logo.scale-240.png" />
+    <Content Include="Assets\SmallLogo.scale-100.png" />
+    <Content Include="Assets\SmallLogo.scale-140.png" />
+    <Content Include="Assets\SmallLogo.scale-240.png" />
+    <Content Include="Assets\SplashScreen.scale-100.png" />
+    <Content Include="Assets\SplashScreen.scale-140.png" />
+    <Content Include="Assets\SplashScreen.scale-240.png" />
+    <Content Include="Assets\Square71x71Logo.scale-100.png" />
+    <Content Include="Assets\Square71x71Logo.scale-140.png" />
+    <Content Include="Assets\Square71x71Logo.scale-240.png" />
+    <Content Include="Assets\StoreLogo.scale-100.png" />
+    <Content Include="Assets\StoreLogo.scale-140.png" />
+    <Content Include="Assets\StoreLogo.scale-240.png" />
+    <Content Include="Assets\WideLogo.scale-100.png" />
+    <Content Include="Assets\WideLogo.scale-140.png" />
+    <Content Include="Assets\WideLogo.scale-240.png" />
+    <Content Include="Data\Cities.txt" />
+    <Content Include="Images\Background\01.jpg" />
+    <Content Include="Images\Background\02.jpg" />
+    <Content Include="Images\Background\08.jpg" />
+    <Content Include="Images\Background\10.jpg" />
+    <Content Include="Images\Background\07.jpg" />
+    <Content Include="Images\Background\00.jpg" />
+    <Content Include="Images\Background\06.jpg" />
+    <Content Include="Images\Background\09.jpg" />
+    <Content Include="Images\Background\04.jpg" />
+    <Content Include="Images\Background\11.jpg" />
+    <Content Include="Images\Background\12.jpg" />
+    <Content Include="Images\OtherIcon\wdj.jpg" />
+    <Content Include="Images\OtherIcon\xdsd.jpg" />
+    <Content Include="Images\Today\03.png" />
+    <Content Include="Images\Today\04.png" />
+    <Content Include="Images\Today\18.png" />
+    <Content Include="Images\Today\08.png" />
+    <Content Include="Images\Today\15.png" />
+    <Content Include="Images\Today\01.png" />
+    <Content Include="Images\Today\900.png" />
+    <Content Include="Images\Today\11.png" />
+    <Content Include="Images\Today\09.png" />
+    <Content Include="Images\Today\16.png" />
+    <Content Include="Images\Today\07.png" />
+    <Content Include="Images\Today\14.png" />
+    <Content Include="Images\Today\31.png" />
+    <Content Include="Images\Today\30.png" />
+    <Content Include="Images\Today\00.png" />
+    <Content Include="Images\Today\10.png" />
+    <Content Include="Images\Today\17.png" />
+    <Content Include="Images\Today\20.png" />
+    <Content Include="Images\Today\29.png" />
+    <Content Include="Images\Today\12.png" />
+    <Content Include="Images\Today\02.png" />
+    <Content Include="Images\Today\06.png" />
+    <Content Include="Images\Today\05.png" />
+    <Content Include="Images\Today\53.png" />
+    <Content Include="Images\Today\901.png" />
+    <Content Include="Images\Tomorrow\00.png" />
+    <Content Include="Images\Tomorrow\03.png" />
+    <Content Include="Images\Tomorrow\05.png" />
+    <Content Include="Images\Tomorrow\09.png" />
+    <Content Include="Images\Tomorrow\10.png" />
+    <Content Include="Images\Tomorrow\11.png" />
+    <Content Include="Images\Tomorrow\12.png" />
+    <Content Include="Images\Tomorrow\20.png" />
+    <Content Include="Images\Tomorrow\06.png" />
+    <Content Include="Images\Tomorrow\14.png" />
+    <Content Include="Images\Tomorrow\15.png" />
+    <Content Include="Images\Tomorrow\16.png" />
+    <Content Include="Images\Tomorrow\900.png" />
+    <Content Include="Images\Tomorrow\17.png" />
+    <Content Include="Images\Tomorrow\29.png" />
+    <Content Include="Images\Tomorrow\30.png" />
+    <Content Include="Images\Tomorrow\23.png" />
+    <Content Include="Images\Tomorrow\31.png" />
+    <Content Include="Images\Tomorrow\02.png" />
+    <Content Include="Images\Tomorrow\04.png" />
+    <Content Include="Images\Tomorrow\18.png" />
+    <Content Include="Images\Tomorrow\01.png" />
+    <Content Include="Images\Tomorrow\53.png" />
+    <Content Include="Images\Tomorrow\07.png" />
+    <Content Include="Images\Tomorrow\08.png" />
+    <Content Include="Images\Tomorrow\901.png" />
+    <Content Include="Images\Weather-Clouds-icon.png" />
+    <Content Include="StoreManifest.xml" />
+    <Content Include="Temp\20141209.txt" />
+    <Content Include="Temp\20141210050000.txt" />
+    <Content Include="User\User.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DataModel\SampleData.json" />
+    <PRIResource Include="Strings\zh-CN\Resources.resw" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="ItemPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PivotPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\WeatherTypes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Utils.csproj">
+      <Project>{5351dd4f-5218-4e3d-99fc-fcd485696da9}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NotificationsExtensions\NotificationsExtensions.csproj">
+      <Project>{5c6beb72-588f-4c4b-a230-6cf60c0baca1}</Project>
+      <Name>NotificationsExtensions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
+    <VisualStudioVersion>12.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetPlatformIdentifier)' == '' ">
+    <TargetPlatformIdentifier>WindowsPhoneApp</TargetPlatformIdentifier>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

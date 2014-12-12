@@ -1,0 +1,16 @@
+D:\GitHub\Projects\Windows Phone 8.1\Weather\NotificationsExtensions\bin\Debug\NotificationsExtensions.dll
+D:\GitHub\Projects\Windows Phone 8.1\Weather\NotificationsExtensions\bin\Debug\NotificationsExtensions.pdb
+D:\GitHub\Projects\Windows Phone 8.1\Weather\NotificationsExtensions\bin\Debug\NotificationsExtensions.pri
+D:\GitHub\Projects\Windows Phone 8.1\Weather\NotificationsExtensions\obj\Debug\NotificationsExtensions.dll
+D:\GitHub\Projects\Windows Phone 8.1\Weather\NotificationsExtensions\obj\Debug\NotificationsExtensions.pdb
+D:\GitHub\Projects\Windows Phone 8.1\Weather\NotificationsExtensions\obj\Debug\priconfig.xml
+D:\GitHub\Projects\Windows Phone 8.1\Weather\NotificationsExtensions\obj\Debug\priconfig.xml.intermediate
+D:\GitHub\Projects\Windows Phone 8.1\Weather\NotificationsExtensions\obj\Debug\layout.resfiles
+D:\GitHub\Projects\Windows Phone 8.1\Weather\NotificationsExtensions\obj\Debug\layout.resfiles.intermediate
+D:\GitHub\Projects\Windows Phone 8.1\Weather\NotificationsExtensions\obj\Debug\resources.resfiles
+D:\GitHub\Projects\Windows Phone 8.1\Weather\NotificationsExtensions\obj\Debug\resources.resfiles.intermediate
+D:\GitHub\Projects\Windows Phone 8.1\Weather\NotificationsExtensions\obj\Debug\pri.resfiles
+D:\GitHub\Projects\Windows Phone 8.1\Weather\NotificationsExtensions\obj\Debug\pri.resfiles.intermediate
+D:\GitHub\Projects\Windows Phone 8.1\Weather\NotificationsExtensions\obj\Debug\qualifiers.txt
+D:\GitHub\Projects\Windows Phone 8.1\Weather\NotificationsExtensions\obj\Debug\qualifiers.txt.intermediate
+D:\GitHub\Projects\Windows Phone 8.1\Weather\NotificationsExtensions\obj\Debug\MultipleQualifiersPerDimensionFound.txt

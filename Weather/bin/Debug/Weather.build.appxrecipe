@@ -1,0 +1,361 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Machine>网</Machine>
+    <WindowsUser>001</WindowsUser>
+    <TargetPlatformIdentifier>WindowsPhoneApp</TargetPlatformIdentifier>
+    <SolutionConfiguration>Debug|AnyCPU</SolutionConfiguration>
+    <PackageArchitecture>neutral</PackageArchitecture>
+    <PackageIdentityName>35597e35-d4c4-4750-b97d-3fc3bb664708</PackageIdentityName>
+    <IntermediateOutputPath>D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\obj\Debug\</IntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <AppXManifest Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\bin\Debug\AppxManifest.xml">
+      <PackagePath>AppxManifest.xml</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppXManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\bin\Debug\Weather.exe">
+      <PackagePath>Weather.exe</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\NotificationsExtensions\bin\Debug\NotificationsExtensions.dll">
+      <PackagePath>NotificationsExtensions.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Common\bin\Debug\Utils.dll">
+      <PackagePath>Utils.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\BadgeLogo.scale-100.png">
+      <PackagePath>Assets\BadgeLogo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\BadgeLogo.scale-140.png">
+      <PackagePath>Assets\BadgeLogo.scale-140.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\BadgeLogo.scale-240.png">
+      <PackagePath>Assets\BadgeLogo.scale-240.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\DarkGray.png">
+      <PackagePath>Assets\DarkGray.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\LightGray.png">
+      <PackagePath>Assets\LightGray.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\Logo.scale-100.png">
+      <PackagePath>Assets\Logo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\Logo.scale-140.png">
+      <PackagePath>Assets\Logo.scale-140.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\MediumGray.png">
+      <PackagePath>Assets\MediumGray.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\HubBackground.theme-dark.png">
+      <PackagePath>Assets\HubBackground.theme-dark.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\HubBackground.theme-light.png">
+      <PackagePath>Assets\HubBackground.theme-light.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\Logo.scale-240.png">
+      <PackagePath>Assets\Logo.scale-240.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\SmallLogo.scale-100.png">
+      <PackagePath>Assets\SmallLogo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\SmallLogo.scale-140.png">
+      <PackagePath>Assets\SmallLogo.scale-140.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\SmallLogo.scale-240.png">
+      <PackagePath>Assets\SmallLogo.scale-240.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\SplashScreen.scale-100.png">
+      <PackagePath>Assets\SplashScreen.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\SplashScreen.scale-140.png">
+      <PackagePath>Assets\SplashScreen.scale-140.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\SplashScreen.scale-240.png">
+      <PackagePath>Assets\SplashScreen.scale-240.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\Square71x71Logo.scale-100.png">
+      <PackagePath>Assets\Square71x71Logo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\Square71x71Logo.scale-140.png">
+      <PackagePath>Assets\Square71x71Logo.scale-140.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\Square71x71Logo.scale-240.png">
+      <PackagePath>Assets\Square71x71Logo.scale-240.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\StoreLogo.scale-100.png">
+      <PackagePath>Assets\StoreLogo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\StoreLogo.scale-140.png">
+      <PackagePath>Assets\StoreLogo.scale-140.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\StoreLogo.scale-240.png">
+      <PackagePath>Assets\StoreLogo.scale-240.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\WideLogo.scale-100.png">
+      <PackagePath>Assets\WideLogo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\WideLogo.scale-140.png">
+      <PackagePath>Assets\WideLogo.scale-140.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Assets\WideLogo.scale-240.png">
+      <PackagePath>Assets\WideLogo.scale-240.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\03.png">
+      <PackagePath>Images\Today\03.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\04.png">
+      <PackagePath>Images\Today\04.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\18.png">
+      <PackagePath>Images\Today\18.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\08.png">
+      <PackagePath>Images\Today\08.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\15.png">
+      <PackagePath>Images\Today\15.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\01.png">
+      <PackagePath>Images\Today\01.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\900.png">
+      <PackagePath>Images\Today\900.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\11.png">
+      <PackagePath>Images\Today\11.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\09.png">
+      <PackagePath>Images\Today\09.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\16.png">
+      <PackagePath>Images\Today\16.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\07.png">
+      <PackagePath>Images\Today\07.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\14.png">
+      <PackagePath>Images\Today\14.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\31.png">
+      <PackagePath>Images\Today\31.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\30.png">
+      <PackagePath>Images\Today\30.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\00.png">
+      <PackagePath>Images\Today\00.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\10.png">
+      <PackagePath>Images\Today\10.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\17.png">
+      <PackagePath>Images\Today\17.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\20.png">
+      <PackagePath>Images\Today\20.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\29.png">
+      <PackagePath>Images\Today\29.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\12.png">
+      <PackagePath>Images\Today\12.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\02.png">
+      <PackagePath>Images\Today\02.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\06.png">
+      <PackagePath>Images\Today\06.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\05.png">
+      <PackagePath>Images\Today\05.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\53.png">
+      <PackagePath>Images\Today\53.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Today\901.png">
+      <PackagePath>Images\Today\901.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\00.png">
+      <PackagePath>Images\Tomorrow\00.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\03.png">
+      <PackagePath>Images\Tomorrow\03.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\05.png">
+      <PackagePath>Images\Tomorrow\05.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\09.png">
+      <PackagePath>Images\Tomorrow\09.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\10.png">
+      <PackagePath>Images\Tomorrow\10.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\11.png">
+      <PackagePath>Images\Tomorrow\11.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\12.png">
+      <PackagePath>Images\Tomorrow\12.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\20.png">
+      <PackagePath>Images\Tomorrow\20.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\06.png">
+      <PackagePath>Images\Tomorrow\06.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\14.png">
+      <PackagePath>Images\Tomorrow\14.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\15.png">
+      <PackagePath>Images\Tomorrow\15.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\16.png">
+      <PackagePath>Images\Tomorrow\16.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\900.png">
+      <PackagePath>Images\Tomorrow\900.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\17.png">
+      <PackagePath>Images\Tomorrow\17.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\29.png">
+      <PackagePath>Images\Tomorrow\29.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\30.png">
+      <PackagePath>Images\Tomorrow\30.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\23.png">
+      <PackagePath>Images\Tomorrow\23.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\31.png">
+      <PackagePath>Images\Tomorrow\31.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\02.png">
+      <PackagePath>Images\Tomorrow\02.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\04.png">
+      <PackagePath>Images\Tomorrow\04.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\18.png">
+      <PackagePath>Images\Tomorrow\18.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\01.png">
+      <PackagePath>Images\Tomorrow\01.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\53.png">
+      <PackagePath>Images\Tomorrow\53.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\07.png">
+      <PackagePath>Images\Tomorrow\07.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\08.png">
+      <PackagePath>Images\Tomorrow\08.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Tomorrow\901.png">
+      <PackagePath>Images\Tomorrow\901.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Weather-Clouds-icon.png">
+      <PackagePath>Images\Weather-Clouds-icon.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Data\Cities.txt">
+      <PackagePath>Data\Cities.txt</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Temp\20141209.txt">
+      <PackagePath>Temp\20141209.txt</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Temp\20141210050000.txt">
+      <PackagePath>Temp\20141210050000.txt</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\User\User.txt">
+      <PackagePath>User\User.txt</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Data\WeatherTypes.txt">
+      <PackagePath>Data\WeatherTypes.txt</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Background\01.jpg">
+      <PackagePath>Images\Background\01.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Background\02.jpg">
+      <PackagePath>Images\Background\02.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Background\08.jpg">
+      <PackagePath>Images\Background\08.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Background\10.jpg">
+      <PackagePath>Images\Background\10.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Background\07.jpg">
+      <PackagePath>Images\Background\07.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Background\00.jpg">
+      <PackagePath>Images\Background\00.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Background\06.jpg">
+      <PackagePath>Images\Background\06.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Background\09.jpg">
+      <PackagePath>Images\Background\09.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Background\04.jpg">
+      <PackagePath>Images\Background\04.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Background\11.jpg">
+      <PackagePath>Images\Background\11.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\Background\12.jpg">
+      <PackagePath>Images\Background\12.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\OtherIcon\wdj.jpg">
+      <PackagePath>Images\OtherIcon\wdj.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Images\OtherIcon\xdsd.jpg">
+      <PackagePath>Images\OtherIcon\xdsd.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\StoreManifest.xml">
+      <PackagePath>StoreManifest.xml</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\DataModel\SampleData.json">
+      <PackagePath>DataModel\SampleData.json</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\bin\Debug\App.xbf">
+      <PackagePath>App.xbf</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\bin\Debug\ItemPage.xbf">
+      <PackagePath>ItemPage.xbf</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\bin\Debug\PivotPage.xbf">
+      <PackagePath>PivotPage.xbf</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\bin\Debug\Weather.xr.xml">
+      <PackagePath>Weather.xr.xml</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\bin\Debug\resources.pri">
+      <PackagePath>resources.pri</PackagePath>
+    </AppxPackagedFile>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+</Project>

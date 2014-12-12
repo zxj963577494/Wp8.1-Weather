@@ -1,0 +1,17 @@
+D:\GitHub\Projects\Windows Phone 8.1\Weather\PushNotificationsHelper\bin\Debug\PushNotificationsHelper.dll
+D:\GitHub\Projects\Windows Phone 8.1\Weather\PushNotificationsHelper\bin\Debug\PushNotificationsHelper.pdb
+D:\GitHub\Projects\Windows Phone 8.1\Weather\PushNotificationsHelper\bin\Debug\PushNotificationsHelper.pri
+D:\GitHub\Projects\Windows Phone 8.1\Weather\PushNotificationsHelper\obj\Debug\PushNotificationsHelper.csprojResolveAssemblyReference.cache
+D:\GitHub\Projects\Windows Phone 8.1\Weather\PushNotificationsHelper\obj\Debug\PushNotificationsHelper.dll
+D:\GitHub\Projects\Windows Phone 8.1\Weather\PushNotificationsHelper\obj\Debug\PushNotificationsHelper.pdb
+D:\GitHub\Projects\Windows Phone 8.1\Weather\PushNotificationsHelper\obj\Debug\priconfig.xml
+D:\GitHub\Projects\Windows Phone 8.1\Weather\PushNotificationsHelper\obj\Debug\priconfig.xml.intermediate
+D:\GitHub\Projects\Windows Phone 8.1\Weather\PushNotificationsHelper\obj\Debug\layout.resfiles
+D:\GitHub\Projects\Windows Phone 8.1\Weather\PushNotificationsHelper\obj\Debug\layout.resfiles.intermediate
+D:\GitHub\Projects\Windows Phone 8.1\Weather\PushNotificationsHelper\obj\Debug\resources.resfiles
+D:\GitHub\Projects\Windows Phone 8.1\Weather\PushNotificationsHelper\obj\Debug\resources.resfiles.intermediate
+D:\GitHub\Projects\Windows Phone 8.1\Weather\PushNotificationsHelper\obj\Debug\pri.resfiles
+D:\GitHub\Projects\Windows Phone 8.1\Weather\PushNotificationsHelper\obj\Debug\pri.resfiles.intermediate
+D:\GitHub\Projects\Windows Phone 8.1\Weather\PushNotificationsHelper\obj\Debug\qualifiers.txt
+D:\GitHub\Projects\Windows Phone 8.1\Weather\PushNotificationsHelper\obj\Debug\qualifiers.txt.intermediate
+D:\GitHub\Projects\Windows Phone 8.1\Weather\PushNotificationsHelper\obj\Debug\MultipleQualifiersPerDimensionFound.txt

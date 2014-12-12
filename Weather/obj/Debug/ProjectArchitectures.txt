@@ -1,0 +1,9 @@
+D:\GitHub\Projects\Windows Phone 8.1\Weather\Common\Weather.Utils.csproj;neutral
+D:\GitHub\Projects\Windows Phone 8.1\Weather\Common\Weather.Utils.csproj;neutral
+D:\GitHub\Projects\Windows Phone 8.1\Weather\Model\Weather.Model.csproj;neutral
+D:\GitHub\Projects\Windows Phone 8.1\Weather\Model\Weather.Model.csproj;neutral
+D:\GitHub\Projects\Windows Phone 8.1\Weather\NotificationsExtensions\NotificationsExtensions.csproj;neutral
+D:\GitHub\Projects\Windows Phone 8.1\Weather\NotificationsExtensions\NotificationsExtensions.csproj;neutral
+D:\GitHub\Projects\Windows Phone 8.1\Weather\NotificationsExtensions\NotificationsExtensions.csproj;neutral
+D:\GitHub\Projects\Windows Phone 8.1\Weather\Service\Weather.Service.csproj;neutral
+D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\Weather.App.csproj;neutral

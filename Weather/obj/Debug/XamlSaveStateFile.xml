@@ -1,0 +1,9 @@
+<XamlCompilerSaveState>
+  <ReferenceAssemblyList>
+    <LocalAssembly PathName="d:\github\projects\windows phone 8.1\weather\weather\obj\debug\intermediatexaml\weather.app.exe" HashGuid="e7f23c06-9264-49b8-c268-6c7425683f89" />
+    <ReferenceAssembly PathName="d:\github\projects\windows phone 8.1\weather\notificationsextensions\bin\debug\notificationsextensions.dll" HashGuid="48741885-2398-af47-a9bf-a77350375fdb" />
+    <ReferenceAssembly PathName="d:\github\projects\windows phone 8.1\weather\model\bin\debug\weather.model.dll" HashGuid="4e056bb9-b0c7-767f-a0a0-98c3847ba480" />
+    <ReferenceAssembly PathName="d:\github\projects\windows phone 8.1\weather\service\bin\debug\weather.service.dll" HashGuid="4e6d7228-df50-b377-78d1-3525a3bc41a8" />
+    <ReferenceAssembly PathName="d:\github\projects\windows phone 8.1\weather\common\bin\debug\weather.utils.dll" HashGuid="af7e3ca9-2b33-2f00-6bdd-9b769424582b" />
+  </ReferenceAssemblyList>
+</XamlCompilerSaveState>
