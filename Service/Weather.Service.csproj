@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Weather\bin\</OutputPath>
+    <OutputPath>..\Weather\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -28,14 +28,14 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\Weather\bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <ProjectReference Include="..\Common\Weather.Utils.csproj">
+    <ProjectReference Include="..\Utils\Weather.Utils.csproj">
       <Project>{5351dd4f-5218-4e3d-99fc-fcd485696da9}</Project>
       <Name>Weather.Utils</Name>
     </ProjectReference>
@@ -49,9 +49,11 @@
     <TargetPlatform Include="Windows, Version=8.1" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implementations\CityService.cs" />
     <Compile Include="Implementations\Forecast3hService.cs" />
     <Compile Include="Implementations\SettingService.cs" />
     <Compile Include="Implementations\WeatherService.cs" />
+    <Compile Include="Message\City\GetCityRespose.cs" />
     <Compile Include="Message\Forecast3h\GetForecast3hByCityNameRepose.cs" />
     <Compile Include="Message\Forecast3h\GetForecast3hByCityNameRequest.cs" />
     <Compile Include="Message\General\GetWeatherByCityNameOrIdRequest.cs" />
@@ -65,9 +67,7 @@
     <Compile Include="Message\Setting\GetSettingSwitchesRespose.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModel\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

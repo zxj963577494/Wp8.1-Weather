@@ -26,8 +26,8 @@
       <qualifier name="Configuration" value="" />
       <qualifier name="AlternateForm" value="" />
     </default>
-    <indexer-config type="RESW" convertDotsToSlashes="true" initialPath="Tasks" />
-    <indexer-config type="RESJSON" initialPath="Tasks" />
+    <indexer-config type="RESW" convertDotsToSlashes="true" initialPath="Weather.Tasks" />
+    <indexer-config type="RESJSON" initialPath="Weather.Tasks" />
     <indexer-config type="RESFILES" qualifierDelimiter="." />
   </index>
   <index root="\" startIndexAt="obj\Debug\pri.resfiles">

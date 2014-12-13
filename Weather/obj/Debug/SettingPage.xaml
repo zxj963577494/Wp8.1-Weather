@@ -33,14 +33,14 @@ CommonNavigationTransitionInfo.IsStaggerElement="True">
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Grid.Row="1">
-                        <ComboBox x:ConnectionId='2' x:Name="cbbWifiConnnection"  ItemsSource="{Binding Switches}" MinWidth="400"                                                     SelectedValuePath="Id"  DisplayMemberPath="Content">
+                        <ComboBox x:ConnectionId='2' x:Name="cbbWifiConnnection"  ItemsSource="{Binding AutoUpdatePage.Switches}" MinWidth="400"                                                     SelectedValuePath="Id"  DisplayMemberPath="Content">
                         </ComboBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="2">
                         <TextBlock Grid.Row="0" Grid.Column="0"  Text="自动更新频率"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="3">
-                        <ComboBox x:Name="cbbAutoUpdateTime" MinWidth="400" ItemsSource="{Binding AutoUpdateTimes}" SelectedValuePath="Id"  DisplayMemberPath="Content">
+                        <ComboBox x:Name="cbbAutoUpdateTime" MinWidth="400" ItemsSource="{Binding AutoUpdatePage.AutoUpdateTimes}" SelectedValuePath="Id"  DisplayMemberPath="Content">
                         </ComboBox>
                     </StackPanel>
                 </Grid>

@@ -84,13 +84,13 @@
     </Compile>
     <Compile Include="BackgroundTask\BackgroundTaskHelper.cs" />
     <Compile Include="BackgroundTask\BackgroundTaskExecute.cs" />
+    <Compile Include="SelectCityPage.xaml.cs">
+      <DependentUpon>SelectCityPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
-    <Compile Include="ContentDialog1.xaml.cs">
-      <DependentUpon>ContentDialog1.xaml</DependentUpon>
-    </Compile>
     <Compile Include="DataModel\SampleDataSource.cs" />
     <Compile Include="DTO\TileModel.cs" />
     <Compile Include="ItemPage.xaml.cs">
@@ -105,6 +105,8 @@
     </Compile>
     <Compile Include="ViewModel\AutoUpdatePage.cs" />
     <Compile Include="ViewModel\HomePageModel.cs" />
+    <Compile Include="ViewModel\SelectCityPage.cs" />
+    <Compile Include="ViewModel\SettingPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -138,8 +140,10 @@
     <Content Include="Assets\WideLogo.scale-100.png" />
     <Content Include="Assets\WideLogo.scale-140.png" />
     <Content Include="Assets\WideLogo.scale-240.png" />
+    <Content Include="Data\Application.txt" />
     <Content Include="Data\AutoUpdateTimes.txt" />
     <Content Include="Data\Cities.txt" />
+    <Content Include="Data\HotCities.txt" />
     <Content Include="Data\Switches.txt" />
     <Content Include="Images\Background\01.jpg" />
     <Content Include="Images\Background\02.jpg" />
@@ -205,6 +209,22 @@
     <Content Include="Images\Tomorrow\07.png" />
     <Content Include="Images\Tomorrow\08.png" />
     <Content Include="Images\Tomorrow\901.png" />
+    <Content Include="Images\Toolkit\ApplicationBar.settings.png" />
+    <Content Include="Images\Toolkit\Beignets.jpg" />
+    <Content Include="Images\Toolkit\Copenhagen.jpg" />
+    <Content Include="Images\Toolkit\Dessert.jpg" />
+    <Content Include="Images\Toolkit\Fruits.jpg" />
+    <Content Include="Images\Toolkit\Movie.jpg" />
+    <Content Include="Images\Toolkit\Mürren.jpg" />
+    <Content Include="Images\Toolkit\Neuschwanstein.jpg" />
+    <Content Include="Images\Toolkit\Paris.jpg" />
+    <Content Include="Images\Toolkit\Person.jpg" />
+    <Content Include="Images\Toolkit\Pretzel.jpg" />
+    <Content Include="Images\Toolkit\Search.png" />
+    <Content Include="Images\Toolkit\Seattle.jpg" />
+    <Content Include="Images\Toolkit\Shrimp.jpg" />
+    <Content Include="Images\Toolkit\SteakSandwich.jpg" />
+    <Content Include="Images\Toolkit\Venice.jpg" />
     <Content Include="Images\Weather-Clouds-icon.png" />
     <Content Include="StoreManifest.xml" />
     <Content Include="Temp\20141209.txt" />
@@ -222,7 +242,7 @@
     <PRIResource Include="Strings\zh-CN\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="ContentDialog1.xaml">
+    <Page Include="SelectCityPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -243,7 +263,11 @@
     <Content Include="Data\WeatherTypes.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Weather.Utils.csproj">
+    <ProjectReference Include="..\Tasks\Weather.Tasks.csproj">
+      <Project>{a0d20d8b-3716-4d67-a4d2-c8a0043805dc}</Project>
+      <Name>Weather.Tasks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utils\Weather.Utils.csproj">
       <Project>{5351dd4f-5218-4e3d-99fc-fcd485696da9}</Project>
       <Name>Weather.Utils</Name>
     </ProjectReference>
@@ -259,8 +283,14 @@
       <Project>{c8ca90e8-3721-4b4f-b406-8a44841b79fc}</Project>
       <Name>Weather.Service</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Weather.Control\Weather.Control.csproj">
+      <Project>{7097B169-92EF-46CD-A092-166103417C91}</Project>
+      <Name>Weather.Control</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

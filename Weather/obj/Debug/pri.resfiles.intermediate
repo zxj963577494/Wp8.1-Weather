@@ -1,4 +1,6 @@
-D:\GitHub\Weather\bin\NotificationsExtensions.pri
-D:\GitHub\Weather\bin\Weather.Model.pri
-D:\GitHub\Weather\bin\Weather.Service.pri
-D:\GitHub\Weather\bin\Weather.Utils.pri
+D:\GitHub\Weather\Wp8.1-Weather\Weather.Control\bin\Debug\Weather.Control.pri
+D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\NotificationsExtensions.pri
+D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Weather.Model.pri
+D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Weather.Service.pri
+D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Weather.Tasks.pri
+D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Weather.Utils.pri

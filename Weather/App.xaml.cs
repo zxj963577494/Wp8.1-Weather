@@ -104,7 +104,7 @@ namespace Weather.App
                 // 当导航堆栈尚未还原时，导航到第一页，
                 // 并通过将所需信息作为导航参数传入来配置
                 // 新页面。
-                if (!rootFrame.Navigate(typeof(SettingPage), e.Arguments))
+                if (!rootFrame.Navigate(typeof(SelectCityPage), e.Arguments))
                 {
                     throw new Exception("Failed to create initial page");
                 }

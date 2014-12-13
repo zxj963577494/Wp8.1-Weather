@@ -30,6 +30,7 @@ namespace Weather.App
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        private readonly SettingService service = null;
 
         public SettingPage()
         {
@@ -39,6 +40,7 @@ namespace Weather.App
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
 
+            service = new SettingService();
         }
 
         /// <summary>
@@ -121,11 +123,11 @@ namespace Weather.App
 
         #endregion
 
-        private async  void SettingPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void SettingPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (SettingPivot.SelectedIndex == 1)
             {
-                SettingService service = new SettingService();
+
                 GetSettingSwitchesRespose switchesRespose = new GetSettingSwitchesRespose();
                 switchesRespose = await service.GetSettingSwitchesAsync();
                 GetSettingAutoUpdateTimeRepose autoUpdateTimeRepose = new GetSettingAutoUpdateTimeRepose();
@@ -133,7 +135,13 @@ namespace Weather.App
                 ViewModel.AutoUpdatePage autoUpdatePage = new ViewModel.AutoUpdatePage();
                 autoUpdatePage.Switches = switchesRespose.Switches;
                 autoUpdatePage.AutoUpdateTimes = autoUpdateTimeRepose.AutoUpdateTimes;
-                SecondPivot.DataContext = autoUpdatePage;
+
+                ViewModel.SettingPage settingPage = new ViewModel.SettingPage()
+                {
+                    AutoUpdatePage = autoUpdatePage
+                };
+
+                SecondPivot.DataContext = settingPage;
             }
 
         }
@@ -145,7 +153,8 @@ namespace Weather.App
 
     }
 
-    public class Order{
+    public class Order
+    {
         public List<OrderModel> Orders { get; set; }
     }
 

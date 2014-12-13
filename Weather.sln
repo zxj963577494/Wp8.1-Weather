@@ -7,13 +7,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weather.App", "Weather\Weat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationsExtensions", "NotificationsExtensions\NotificationsExtensions.csproj", "{5C6BEB72-588F-4C4B-A230-6CF60C0BACA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weather.Utils", "Common\Weather.Utils.csproj", "{5351DD4F-5218-4E3D-99FC-FCD485696DA9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weather.Utils", "Utils\Weather.Utils.csproj", "{5351DD4F-5218-4E3D-99FC-FCD485696DA9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weather.Model", "Model\Weather.Model.csproj", "{4FD61305-5BE3-4BB1-8487-CB8FC6216F03}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weather.Service", "Service\Weather.Service.csproj", "{C8CA90E8-3721-4B4F-B406-8A44841B79FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tasks", "Tasks\Tasks.csproj", "{A0D20D8B-3716-4D67-A4D2-C8A0043805DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weather.Tasks", "Tasks\Weather.Tasks.csproj", "{A0D20D8B-3716-4D67-A4D2-C8A0043805DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weather.Control", "Weather.Control\Weather.Control.csproj", "{7097B169-92EF-46CD-A092-166103417C91}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,14 @@ Global
 		{A0D20D8B-3716-4D67-A4D2-C8A0043805DC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A0D20D8B-3716-4D67-A4D2-C8A0043805DC}.Release|ARM.ActiveCfg = Release|Any CPU
 		{A0D20D8B-3716-4D67-A4D2-C8A0043805DC}.Release|x86.ActiveCfg = Release|Any CPU
+		{7097B169-92EF-46CD-A092-166103417C91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7097B169-92EF-46CD-A092-166103417C91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7097B169-92EF-46CD-A092-166103417C91}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{7097B169-92EF-46CD-A092-166103417C91}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7097B169-92EF-46CD-A092-166103417C91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7097B169-92EF-46CD-A092-166103417C91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7097B169-92EF-46CD-A092-166103417C91}.Release|ARM.ActiveCfg = Release|Any CPU
+		{7097B169-92EF-46CD-A092-166103417C91}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
