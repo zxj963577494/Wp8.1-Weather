@@ -1,11 +1,11 @@
 <XamlCompilerSaveState>
   <ReferenceAssemblyList>
-    <LocalAssembly PathName="d:\github\weather\wp8.1-weather\weather\obj\debug\intermediatexaml\weather.app.exe" HashGuid="25ed18fc-0cd5-71a2-b9ee-bc9c8c5608f7" />
+    <LocalAssembly PathName="d:\github\weather\wp8.1-weather\weather\obj\debug\intermediatexaml\weather.app.exe" HashGuid="7f9f4098-eeeb-6ba3-6366-31b415b89da5" />
     <ReferenceAssembly PathName="d:\github\weather\wp8.1-weather\weather\bin\notificationsextensions.dll" HashGuid="48741885-2398-af47-a9bf-a77350375fdb" />
     <ReferenceAssembly PathName="d:\github\weather\wp8.1-weather\weather.control\bin\debug\weather.control.winmd" HashGuid="b8e5bedf-dcf2-89fd-3be0-8a01fac51024" />
-    <ReferenceAssembly PathName="d:\github\weather\wp8.1-weather\weather\bin\weather.model.dll" HashGuid="4e056bb9-b0c7-767f-a0a0-98c3847ba480" />
-    <ReferenceAssembly PathName="d:\github\weather\wp8.1-weather\weather\bin\weather.service.dll" HashGuid="ea17b3ea-c86e-9586-6058-fab6080f2017" />
-    <ReferenceAssembly PathName="d:\github\weather\wp8.1-weather\weather\bin\weather.tasks.winmd" HashGuid="44d76121-580d-fd9b-2c0d-9604190de3b2" />
-    <ReferenceAssembly PathName="d:\github\weather\wp8.1-weather\weather\bin\weather.utils.dll" HashGuid="d5d045df-45b0-8c2e-d667-06ff3ed9d3f2" />
+    <ReferenceAssembly PathName="d:\github\weather\wp8.1-weather\weather\bin\weather.model.dll" HashGuid="60cc49e9-c065-c7e4-b740-2dbe12defd2d" />
+    <ReferenceAssembly PathName="d:\github\weather\wp8.1-weather\weather\bin\weather.service.dll" HashGuid="55dd2e8d-2384-3af7-1df3-22824e7e2e82" />
+    <ReferenceAssembly PathName="d:\github\weather\wp8.1-weather\weather\bin\weather.tasks.winmd" HashGuid="7de7cb52-f47f-0300-b50c-3fb5e8df28d4" />
+    <ReferenceAssembly PathName="d:\github\weather\wp8.1-weather\weather\bin\weather.utils.dll" HashGuid="2ea6abad-514a-3fe9-8e9a-b3be04b2add5" />
   </ReferenceAssemblyList>
 </XamlCompilerSaveState>

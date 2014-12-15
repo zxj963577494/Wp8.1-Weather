@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Weather.Model;
-using Weather.Service.Message.Forecast3h;
+using Weather.Service.Message;
 
 namespace Service.Implementations
 {

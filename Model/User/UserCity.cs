@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace Weather.Model
 {
     /// <summary>
-    /// 用户类
+    /// 用户常用城市
     /// </summary>
-    public class User
+    public class UserCity
     {
-
+        public string CityName { get; set; }
     }
 }

@@ -313,14 +313,14 @@
     <AppxPackagedFile Include="D:\GitHub\Weather\Wp8.1-Weather\Weather\Data\Switches.txt">
       <PackagePath>Data\Switches.txt</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\GitHub\Weather\Wp8.1-Weather\Weather\Temp\20141209.txt">
-      <PackagePath>Temp\20141209.txt</PackagePath>
+    <AppxPackagedFile Include="D:\GitHub\Weather\Wp8.1-Weather\Weather\Temp\杭州_20141209.txt">
+      <PackagePath>Temp\杭州_20141209.txt</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\GitHub\Weather\Wp8.1-Weather\Weather\Temp\20141210050000.txt">
-      <PackagePath>Temp\20141210050000.txt</PackagePath>
+    <AppxPackagedFile Include="D:\GitHub\Weather\Wp8.1-Weather\Weather\Temp\杭州_20141210050000.txt">
+      <PackagePath>Temp\杭州_20141210050000.txt</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\GitHub\Weather\Wp8.1-Weather\Weather\User\User.txt">
-      <PackagePath>User\User.txt</PackagePath>
+    <AppxPackagedFile Include="D:\GitHub\Weather\Wp8.1-Weather\Weather\User\UserConfig.txt">
+      <PackagePath>User\UserConfig.txt</PackagePath>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\GitHub\Weather\Wp8.1-Weather\Weather\Data\WeatherTypes.txt">
       <PackagePath>Data\WeatherTypes.txt</PackagePath>
@@ -415,11 +415,11 @@
     <AppxPackagedFile Include="D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Debug\App.xbf">
       <PackagePath>App.xbf</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Debug\SelectCityPage.xbf">
-      <PackagePath>SelectCityPage.xbf</PackagePath>
+    <AppxPackagedFile Include="D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Debug\AddCityPage.xbf">
+      <PackagePath>AddCityPage.xbf</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Debug\ItemPage.xbf">
-      <PackagePath>ItemPage.xbf</PackagePath>
+    <AppxPackagedFile Include="D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Debug\MyCityPage.xbf">
+      <PackagePath>MyCityPage.xbf</PackagePath>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Debug\PivotPage.xbf">
       <PackagePath>PivotPage.xbf</PackagePath>

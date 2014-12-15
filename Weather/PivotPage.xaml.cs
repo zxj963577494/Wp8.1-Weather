@@ -19,9 +19,10 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-using Weather.Service.Message.General;
 using Weather.Utils;
 using Windows.ApplicationModel.Background;
+using Weather.Service.Message;
+using Weather.Service.Implementations;
 
 // “透视应用程序”模板在 http://go.microsoft.com/fwlink/?LinkID=391641 上有介绍
 
@@ -45,6 +46,7 @@ namespace Weather.App
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
         }
 
         /// <summary>
@@ -77,9 +79,9 @@ namespace Weather.App
         /// 的字典。首次访问页面时，该状态将为 null。</param>
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            // TODO: 创建适用于问题域的合适数据模型以替换示例数据
-            var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-1");
-            this.DefaultViewModel[FirstGroupName] = sampleDataGroup;
+
+
+
 
             //foreach (var task in BackgroundTaskRegistration.AllTasks)
             //{
@@ -109,19 +111,6 @@ namespace Weather.App
             Common.ToastHelper.CreateToast(toastText);
             */
 
-            //磁贴通知
-            //DTO.TileModel tileModel = new DTO.TileModel();
-            //tileModel.ImagerSrc = "ms-appx:///Assets/Logo.scale-100.png";
-            //tileModel.TextHeading = "气温 17";
-            //tileModel.TextBody1 = "风向 东北风";
-            //tileModel.TextBody2 = "风力 2级";
-            //tileModel.TextBody3 = "湿度 4%";
-            //Common.TileHelper.UpdateTileNotifications(tileModel);
-            //Common.TileHelper.UpdateBadgeWithNumber(10);
-            
-
-
-
             //await Common.FileHelper.IsExistFile("Temp", "20141210.txt");
             //Message.General.GetWeatherRespose respose = new Message.General.GetWeatherRespose();
             //respose = await Common.JsonSerializeHelper.JsonDeSerializeForFile<Message.General.GetWeatherRespose>("20141210.txt", "Temp");
@@ -140,12 +129,38 @@ namespace Weather.App
                 //string resposeString = await Weather.Utils.HttpHelper.GetUrlRespose(requestUrl);
                 //respose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(resposeString);
                 //await FileHelper.CreateFileForFolder("Temp", DateTime.Now.ToString("yyyyMMdd"), resposeString);
+
+                #region 后台更新任务
+
+                UserService userService = new UserService();
+                GetUserRespose userRespose = await userService.GetUserAsync();
+                if (userRespose.UserConfig.IsAutoUpdate == "1")
+                {
+                    SettingService settingService = new SettingService();
+                    GetSettingAutoUpdateTimeRepose settingAutoUpdateTimeRepose = await settingService.GetSettingAutoUpdateTimeAsync();
+                    BackgroundTaskExecute backgroundTaskExecute = new BackgroundTaskExecute();
+                    string taskName = "ZXJUpdateTile";
+                    string taskEntryPoint = "Weather.Tasks.UpdateTileTask";
+                    int time = settingAutoUpdateTimeRepose.AutoUpdateTimes.FirstOrDefault(x => x.Id == int.Parse(userRespose.UserConfig.AutoUpdateTime)).Time;
+                    if (BackgroundTaskHelper.IsExist(taskName))
+                    {
+                        backgroundTaskExecute.Execute(taskName);
+                    }
+                    else
+                    {
+                        backgroundTaskExecute.Create(taskName, taskEntryPoint, time, null);
+                    }
+                } 
+                #endregion
             }
             else
             {
+
             }
 
         }
+
+
 
         /// <summary>
         /// 保留与此页关联的状态，以防挂起应用程序或
@@ -161,42 +176,36 @@ namespace Weather.App
         }
 
         /// <summary>
-        /// 在单击应用程序栏按钮时将项添加到列表中。
+        /// 刷新
         /// </summary>
-        private void AddAppBarButton_Click(object sender, RoutedEventArgs e)
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void abbRefresh_Click(object sender, RoutedEventArgs e)
         {
-            string groupName = this.pivot.SelectedIndex == 0 ? FirstGroupName : SecondGroupName;
-            var group = this.DefaultViewModel[groupName] as SampleDataGroup;
-            var nextItemId = group.Items.Count + 1;
-            var newItem = new SampleDataItem(
-                string.Format(CultureInfo.InvariantCulture, "Group-{0}-Item-{1}", this.pivot.SelectedIndex + 1, nextItemId),
-                string.Format(CultureInfo.CurrentCulture, this.resourceLoader.GetString("NewItemTitle"), nextItemId),
-                string.Empty,
-                string.Empty,
-                this.resourceLoader.GetString("NewItemDescription"),
-                string.Empty);
-
-            group.Items.Add(newItem);
-
-            // 将新的项滚动到视图中。
-            var container = this.pivot.ContainerFromIndex(this.pivot.SelectedIndex) as ContentControl;
-            var listView = container.ContentTemplateRoot as ListView;
-            listView.ScrollIntoView(newItem, ScrollIntoViewAlignment.Leading);
         }
 
         /// <summary>
-        /// 在单击节内的项时调用。
+        /// 天气指数
         /// </summary>
-        private void ItemView_ItemClick(object sender, ItemClickEventArgs e)
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void abbWeatherIndex_Click(object sender, RoutedEventArgs e)
         {
-            // 导航至相应的目标页，并
-            // 通过将所需信息作为导航参数传入来配置新页
-            var itemId = ((SampleDataItem)e.ClickedItem).UniqueId;
-            if (!Frame.Navigate(typeof(ItemPage), itemId))
-            {
-                throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
-            }
+
         }
+
+        /// <summary>
+        /// 常用城市
+        /// /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void abbCity_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(MyCityPage));
+        }
+
+
+
 
         /// <summary>
         /// 滚动到视图中后，为第二个数据透视项加载内容。
@@ -205,6 +214,15 @@ namespace Weather.App
         {
             var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-2");
             this.DefaultViewModel[SecondGroupName] = sampleDataGroup;
+        }
+
+        void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
+        {
+            e.Handled = true;
+            if (Frame.CanGoBack)
+            {
+                Frame.GoBack();
+            }
         }
 
         #region NavigationHelper 注册

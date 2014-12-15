@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Weather.Service.Message.General
+namespace Weather.Service.Message
 {
     /// <summary>
     /// 天气响应类

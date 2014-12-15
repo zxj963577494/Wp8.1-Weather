@@ -54,4 +54,3 @@ D:\GitHub\Weather\Wp8.1-Weather\Model\obj\Debug\pri.resfiles.intermediate
 D:\GitHub\Weather\Wp8.1-Weather\Model\obj\Debug\qualifiers.txt
 D:\GitHub\Weather\Wp8.1-Weather\Model\obj\Debug\qualifiers.txt.intermediate
 D:\GitHub\Weather\Wp8.1-Weather\Model\obj\Debug\MultipleQualifiersPerDimensionFound.txt
-D:\GitHub\Weather\Wp8.1-Weather\Model\obj\Debug\Weather.Model.csprojResolveAssemblyReference.cache

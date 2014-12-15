@@ -16,7 +16,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Collections.ObjectModel;
-using Weather.Service.Message.City;
+using Weather.Service.Message;
 
 // “基本页”项模板在 http://go.microsoft.com/fwlink/?LinkID=390556 上有介绍
 
@@ -25,14 +25,14 @@ namespace Weather.App
     /// <summary>
     /// 可独立使用或用于导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class SelectCityPage : Page
+    public sealed partial class AddCityPage : Page
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private readonly Service.Implementations.CityService service = null;
         private ViewModel.SelectCityPage page = null;
 
-        public SelectCityPage()
+        public AddCityPage()
         {
             this.InitializeComponent();
 
@@ -117,20 +117,32 @@ namespace Weather.App
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
+            Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedFrom(e);
+            Windows.Phone.UI.Input.HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
+        }
+
+        void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
+        {
+            e.Handled = true; // We've handled this button press
+
+
+            // Standard page backward navigation
+            if (Frame.CanGoBack)
+                Frame.GoBack();
+
         }
 
         #endregion
 
-    
+
         private void asbCity_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
             if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
-
             {
                 string filter = sender.Text;
                 asbCity.ItemsSource = page.Cities.Where(s => s.District.Contains(filter));
@@ -140,9 +152,9 @@ namespace Weather.App
 
         private void asbCity_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
-            
+
             Model.WeatherCity city = args.SelectedItem as Model.WeatherCity;
-            if (city!=null)
+            if (city != null)
             {
                 asbCity.Text = city.District;
             }

@@ -24,10 +24,10 @@ Assets\StoreLogo.scale-240.png
 Assets\WideLogo.scale-100.png
 Assets\WideLogo.scale-140.png
 Assets\WideLogo.scale-240.png
+AddCityPage.xbf
 App.xbf
-ItemPage.xbf
+MyCityPage.xbf
 PivotPage.xbf
-SelectCityPage.xbf
 SettingPage.xbf
 Weather.App.xr.xml
 Data\Application.txt
@@ -119,6 +119,6 @@ Images\Toolkit\SteakSandwich.jpg
 Images\Toolkit\Venice.jpg
 Images\Weather-Clouds-icon.png
 StoreManifest.xml
-Temp\20141209.txt
-Temp\20141210050000.txt
-User\User.txt
+Temp\杭州_20141209.txt
+Temp\杭州_20141210050000.txt
+User\UserConfig.txt

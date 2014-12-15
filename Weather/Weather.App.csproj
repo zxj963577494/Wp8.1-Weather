@@ -82,19 +82,20 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BackgroundTask\BackgroundTaskHelper.cs" />
-    <Compile Include="BackgroundTask\BackgroundTaskExecute.cs" />
-    <Compile Include="SelectCityPage.xaml.cs">
-      <DependentUpon>SelectCityPage.xaml</DependentUpon>
+    <Compile Include="Common\BackgroundTaskExecute.cs" />
+    <Compile Include="AddCityPage.xaml.cs">
+      <DependentUpon>AddCityPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
+    <Compile Include="Common\ResposeFacede.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="DataModel\SampleDataSource.cs" />
     <Compile Include="DTO\TileModel.cs" />
-    <Compile Include="ItemPage.xaml.cs">
-      <DependentUpon>ItemPage.xaml</DependentUpon>
+    <Compile Include="Facade\Weather\WeatherInvoker.cs" />
+    <Compile Include="MyCityPage.xaml.cs">
+      <DependentUpon>MyCityPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="PivotPage.xaml.cs">
       <DependentUpon>PivotPage.xaml</DependentUpon>
@@ -227,9 +228,9 @@
     <Content Include="Images\Toolkit\Venice.jpg" />
     <Content Include="Images\Weather-Clouds-icon.png" />
     <Content Include="StoreManifest.xml" />
-    <Content Include="Temp\20141209.txt" />
-    <Content Include="Temp\20141210050000.txt" />
-    <Content Include="User\User.txt" />
+    <Content Include="Temp\杭州_20141209.txt" />
+    <Content Include="Temp\杭州_20141210050000.txt" />
+    <Content Include="User\UserConfig.txt" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -242,11 +243,11 @@
     <PRIResource Include="Strings\zh-CN\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="SelectCityPage.xaml">
+    <Page Include="AddCityPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ItemPage.xaml">
+    <Page Include="MyCityPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -291,6 +292,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

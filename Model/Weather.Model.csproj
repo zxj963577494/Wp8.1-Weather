@@ -55,7 +55,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setting\AutoUpdateTime.cs" />
     <Compile Include="Setting\Switchable.cs" />
-    <Compile Include="User\User.cs" />
+    <Compile Include="User\UserConfig.cs" />
+    <Compile Include="User\UserCity.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

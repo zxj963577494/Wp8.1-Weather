@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Weather.Service.Message.City;
+using Weather.Service.Message;
 
 namespace Weather.Service.Implementations
 {

@@ -3,21 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Weather.Service.Message.General;
 
-namespace Weather.Service.Message.General
+namespace Weather.Service.Message
 {
     /// <summary>
-    /// 根据城市名称或城市Id获取天气
+    /// 根据GPS获取天气
     /// </summary>
-    public class GetWeatherByCityNameOrIdRequest : IGetWeatherRequest
+    public class GetWeatherByGpsRequest : IGetWeatherRequest
     {
+
         #region Field
         private string _format = "1";
 
         private string _dtype = "json";
 
         private string _key = "fbaccffcb1100c884418266f011bf55e";
+
+        /// <summary>
+        /// 经度
+        /// </summary>
+        public string lon { get; set; }
+
+        /// <summary>
+        /// 纬度
+        /// </summary>
+        public string lat { get; set; }
 
         /// <summary>
         /// 未来6天预报(future)两种返回格式，1或2，默认1
@@ -50,11 +60,6 @@ namespace Weather.Service.Message.General
         }
 
         /// <summary>
-        /// 城市名或城市ID
-        /// </summary>
-        public string cityname { get; set; }
-
-        /// <summary>
         /// key
         /// </summary>
         public string key
@@ -72,18 +77,16 @@ namespace Weather.Service.Message.General
 
         #region Method
 
-        public GetWeatherByCityNameOrIdRequest()
+
+        public GetWeatherByGpsRequest()
         {
 
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="cityname">城市名称</param>
-        public GetWeatherByCityNameOrIdRequest(string cityname)
+        public GetWeatherByGpsRequest(string lon, string lat)
         {
-            this.cityname = cityname;
+            this.lon = lon;
+            this.lat = lat;
         }
 
         /// <summary>
@@ -92,9 +95,9 @@ namespace Weather.Service.Message.General
         /// <returns></returns>
         public string GetRequestUrl()
         {
-            string url = "http://v.juhe.cn/weather/index?dtype=json&format=" + format + "&cityname=" + Utils.StringHelper.GetUrlString(cityname) + "&key=" + key;
+            string url = "http://v.juhe.cn/weather/geo?dtype=json&format=" + format + "&lon=" + lon + "&lat" + lat + "&key=" + key;
             return url;
-        }
+        } 
         #endregion
     }
 }

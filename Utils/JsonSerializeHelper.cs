@@ -97,8 +97,21 @@ namespace Weather.Utils
             {
                 Uri uri = new Uri("ms-appx:///" + fileFolder + "/" + fileName + "");
                 IStorageFile storageFile = await StorageFile.GetFileFromApplicationUriAsync(uri);
-                string text = await FileIO.ReadTextAsync(storageFile);
-                return JsonDeserialize<T>(text);
+                var stream = await storageFile.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
+                var size = stream.Size;
+                using (var inputStream = stream.GetInputStreamAt(0))
+                {
+                    // Add code to use the stream to read your file
+                    DataReader dataReader = new DataReader(inputStream);
+                    uint numBytesLoaded = await dataReader.LoadAsync((uint)size);
+                    string text = dataReader.ReadString(numBytesLoaded);
+                    return JsonDeserialize<T>(text);
+                }
+
+
+
+                //string text = await FileIO.ReadTextAsync(storageFile);
+                //return JsonDeserialize<T>(text);
             }
             catch (Exception ex)
             {

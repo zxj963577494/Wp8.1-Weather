@@ -33,8 +33,19 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <ProjectReference Include="..\Model\Weather.Model.csproj">
+      <Project>{4fd61305-5be3-4bb1-8487-cb8fc6216f03}</Project>
+      <Name>Weather.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Service\Weather.Service.csproj">
+      <Project>{c8ca90e8-3721-4b4f-b406-8a44841b79fc}</Project>
+      <Name>Weather.Service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utils\Weather.Utils.csproj">
       <Project>{5351dd4f-5218-4e3d-99fc-fcd485696da9}</Project>
       <Name>Weather.Utils</Name>

@@ -16,7 +16,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Weather.Utils;
-using Weather.Service.Message.Setting;
+using Weather.Service.Message;
 using Weather.Service.Implementations;
 
 // “基本页”项模板在 http://go.microsoft.com/fwlink/?LinkID=390556 上有介绍
@@ -120,6 +120,8 @@ namespace Weather.App
         {
             this.navigationHelper.OnNavigatedFrom(e);
         }
+
+
 
         #endregion
 
