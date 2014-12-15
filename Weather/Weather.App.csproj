@@ -230,6 +230,7 @@
     <Content Include="StoreManifest.xml" />
     <Content Include="Temp\杭州_20141209.txt" />
     <Content Include="Temp\杭州_20141210050000.txt" />
+    <Content Include="UserConfig.txt" />
     <Content Include="User\UserConfig.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -283,10 +284,6 @@
     <ProjectReference Include="..\Service\Weather.Service.csproj">
       <Project>{c8ca90e8-3721-4b4f-b406-8a44841b79fc}</Project>
       <Name>Weather.Service</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Weather.Control\Weather.Control.csproj">
-      <Project>{7097B169-92EF-46CD-A092-166103417C91}</Project>
-      <Name>Weather.Control</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -21,7 +21,7 @@ namespace Weather.Utils
         /// <returns></returns>
         public static string JsonSerialize<T>(T target)
         {
-            
+
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(target.GetType());
 
             using (MemoryStream stream = new MemoryStream())
@@ -95,23 +95,49 @@ namespace Weather.Utils
         {
             try
             {
-                Uri uri = new Uri("ms-appx:///" + fileFolder + "/" + fileName + "");
-                IStorageFile storageFile = await StorageFile.GetFileFromApplicationUriAsync(uri);
-                var stream = await storageFile.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
-                var size = stream.Size;
-                using (var inputStream = stream.GetInputStreamAt(0))
-                {
-                    // Add code to use the stream to read your file
-                    DataReader dataReader = new DataReader(inputStream);
-                    uint numBytesLoaded = await dataReader.LoadAsync((uint)size);
-                    string text = dataReader.ReadString(numBytesLoaded);
-                    return JsonDeserialize<T>(text);
-                }
+                Uri uri = new Uri(@"ms-appx:///" + fileFolder + "/" + fileName + "");
+                IStorageFile storageFile = await StorageFile.GetFileFromApplicationUriAsync(uri).AsTask().ConfigureAwait(false);
+                //string filePath = fileFolder + "\\" + fileName;
+                //IStorageFile storageFile = await FileHelper.GetFileAccess(filePath);
+
+                //using (IRandomAccessStream readStream = await storageFile.OpenAsync(FileAccessMode.Read))
+                //{
+                //    using (DataReader dataReader=new DataReader(readStream))
+                //    {
+                //        await dataReader.LoadAsync(sizeof(Int32));
+                //        Int32 stringSize = dataReader.ReadInt32();
+                //        await dataReader.LoadAsync((UInt32)stringSize);
+                //        string fileContent = dataReader.ReadString((uint)stringSize);
+                //        return JsonDeserialize<T>(fileContent);
+                //    }
+                //}
+
+                //using (var fs = await storageFile.OpenAsync(FileAccessMode.Read))
+                //{
+                //    using (var inStream = fs.GetInputStreamAt(0))
+                //    {
+                //        using (var reader = new DataReader(inStream))
+                //        {
+                //            await reader.LoadAsync((uint)fs.Size);
+                //            string data = reader.ReadString((uint)fs.Size);
+                //            reader.DetachStream();
+                //            return JsonDeserialize<T>(data); ;
+                //        }
+                //    }
+                //}
 
 
+                //IBuffer buffer = await FileIO.ReadBufferAsync(storageFile);
+                //using (DataReader dataReader = DataReader.FromBuffer(buffer))
+                //{
+                //    int stringSize = dataReader.ReadInt32();
+                //    string fileContent = dataReader.ReadString((uint)stringSize);
+                //    return JsonDeserialize<T>(fileContent);
+                //}
 
-                //string text = await FileIO.ReadTextAsync(storageFile);
-                //return JsonDeserialize<T>(text);
+
+                string text = await FileIO.ReadTextAsync(storageFile);
+                return JsonDeserialize<T>(text);
             }
             catch (Exception ex)
             {
@@ -119,7 +145,7 @@ namespace Weather.Utils
                 throw ex;
             }
 
-        } 
+        }
         #endregion
 
         #region Cities.json和WeatherTypes.json反序列化

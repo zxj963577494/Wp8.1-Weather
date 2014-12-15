@@ -23,6 +23,7 @@ using Weather.Utils;
 using Windows.ApplicationModel.Background;
 using Weather.Service.Message;
 using Weather.Service.Implementations;
+using Windows.Storage;
 
 // “透视应用程序”模板在 http://go.microsoft.com/fwlink/?LinkID=391641 上有介绍
 
@@ -134,6 +135,7 @@ namespace Weather.App
 
                 UserService userService = new UserService();
                 GetUserRespose userRespose = await userService.GetUserAsync();
+                ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
                 if (userRespose.UserConfig.IsAutoUpdate == "1")
                 {
                     SettingService settingService = new SettingService();

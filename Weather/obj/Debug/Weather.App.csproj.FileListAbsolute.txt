@@ -60,8 +60,6 @@ D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\obj\Debug\ContentDialog1.g.
 D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\obj\Debug\ContentDialog1.xaml
 D:\GitHub\Projects\Windows Phone 8.1\Weather\Weather\obj\Debug\ContentDialog1.xbf
 D:\GitHub\Wp8.1-Weather\Weather\bin\Debug\App.xbf
-D:\GitHub\Wp8.1-Weather\Weather\bin\Debug\ContentDialog1.xbf
-D:\GitHub\Wp8.1-Weather\Weather\bin\Debug\ItemPage.xbf
 D:\GitHub\Wp8.1-Weather\Weather\bin\Debug\PivotPage.xbf
 D:\GitHub\Wp8.1-Weather\Weather\bin\Debug\SettingPage.xbf
 D:\GitHub\Wp8.1-Weather\Weather\bin\Debug\Weather.App.xr.xml
@@ -82,22 +80,14 @@ D:\GitHub\Wp8.1-Weather\Weather\bin\Debug\Weather.Service.pri
 D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\Weather.App.csprojResolveAssemblyReference.cache
 D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\App.g.i.cs
 D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\App.g.cs
-D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\ContentDialog1.g.i.cs
-D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\ContentDialog1.g.cs
-D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\ItemPage.g.i.cs
-D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\ItemPage.g.cs
 D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\PivotPage.g.i.cs
 D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\PivotPage.g.cs
 D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\SettingPage.g.i.cs
 D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\SettingPage.g.cs
 D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\XamlTypeInfo.g.cs
 D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\App.xaml
-D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\ContentDialog1.xaml
-D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\ItemPage.xaml
 D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\PivotPage.xaml
 D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\App.xbf
-D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\ContentDialog1.xbf
-D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\ItemPage.xbf
 D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\PivotPage.xbf
 D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\XamlSaveStateFile.xml
 D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\SettingPage.xaml
@@ -187,3 +177,16 @@ D:\GitHub\Weather\Wp8.1-Weather\Weather\obj\Debug\qualifiers.txt.intermediate
 D:\GitHub\Weather\Wp8.1-Weather\Weather\obj\Debug\MultipleQualifiersPerDimensionFound.txt
 D:\GitHub\Weather\Wp8.1-Weather\Weather\obj\Debug\ProjectArchitectures.txt
 D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Debug\Weather.Tasks.winmd
+D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\AddCityPage.g.i.cs
+D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\AddCityPage.g.cs
+D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\MyCityPage.g.i.cs
+D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\MyCityPage.g.cs
+D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\AddCityPage.xaml
+D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\MyCityPage.xaml
+D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\AddCityPage.xbf
+D:\GitHub\Wp8.1-Weather\Weather\obj\Debug\MyCityPage.xbf
+D:\GitHub\Wp8.1-Weather\Weather\bin\Debug\AddCityPage.xbf
+D:\GitHub\Wp8.1-Weather\Weather\bin\Debug\MyCityPage.xbf
+D:\GitHub\Wp8.1-Weather\Weather\bin\Debug\Weather.Tasks.winmd
+D:\GitHub\Wp8.1-Weather\Weather\bin\Debug\Weather.Tasks.pdb
+D:\GitHub\Wp8.1-Weather\Weather\bin\Debug\Weather.Tasks.pri

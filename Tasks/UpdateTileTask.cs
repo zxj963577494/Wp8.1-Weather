@@ -16,6 +16,7 @@ using Windows.Data.Xml.Dom;
 using Windows.Foundation;
 using Windows.UI.Notifications;
 using Windows.Web.Syndication;
+using System.Collections.Generic;
 
 namespace Weather.Tasks
 {
@@ -34,9 +35,13 @@ namespace Weather.Tasks
 
         public async void UpdateTile()
         {
-            UserService userService = new UserService();
-            GetUserRespose userRespose = await userService.GetUserAsync();
-            var cityList = userRespose.UserConfig.UserCities;
+            //UserService userService = new UserService();
+            //GetUserRespose userRespose = await userService.GetUserAsync();
+            //var cityList = userRespose.UserConfig.UserCities;
+            var cityList = new List<Model.UserCity>(){
+             new Model.UserCity(){ CityName="杭州"},
+             new Model.UserCity(){ CityName="北京"}
+            };
             if (NetHelper.IsNetworkAvailable())
             {
                 GetWeatherRespose respose = null;
