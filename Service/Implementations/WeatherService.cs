@@ -13,7 +13,7 @@ namespace Weather.Service.Implementations
         {
             GetWeatherRespose respose = new GetWeatherRespose();
             string requestUrl = request.GetRequestUrl();
-            string resposeString = await Weather.Utils.HttpHelper.GetUrlRespose(requestUrl);
+            string resposeString = await Weather.Utils.HttpHelper.GetUrlResposeAsnyc(requestUrl);
             respose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(resposeString);
             return respose;
         }

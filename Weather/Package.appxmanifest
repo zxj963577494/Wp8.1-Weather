@@ -31,9 +31,7 @@
       <Extensions>
         <Extension Category="windows.backgroundTasks" EntryPoint="Weather.Tasks.UpdateTileTask">
           <BackgroundTasks>
-            <Task Type="systemEvent" />
             <Task Type="timer" />
-            <m2:Task Type="location" />
           </BackgroundTasks>
         </Extension>
       </Extensions>

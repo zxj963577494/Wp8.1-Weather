@@ -20,59 +20,40 @@ using System.Collections.Generic;
 
 namespace Weather.Tasks
 {
+
+    /*
+     * 在这里特别要注意，异步方法的调用函数需要放入Run的方法中，并且一个异步方法只能有一个异步调用
+     * 另外，里面的方法需要是private static.
+     */
     public sealed class UpdateTileTask : IBackgroundTask
     {
-        public void Run(IBackgroundTaskInstance taskInstance)
+        public async void Run(IBackgroundTaskInstance taskInstance)
         {
             BackgroundTaskDeferral _deferral = taskInstance.GetDeferral();
 
-            UpdateTile();
+            var cityList = await GetCityList();
 
-            //表示完成任务
-            _deferral.Complete();
-        }
-
-
-        public async void UpdateTile()
-        {
-            //UserService userService = new UserService();
-            //GetUserRespose userRespose = await userService.GetUserAsync();
-            //var cityList = userRespose.UserConfig.UserCities;
-            var cityList = new List<Model.UserCity>(){
-             new Model.UserCity(){ CityName="杭州"},
-             new Model.UserCity(){ CityName="北京"}
-            };
+            GetWeatherRespose respose = null;
+            string realResposeString = null;
             if (NetHelper.IsNetworkAvailable())
             {
-                GetWeatherRespose respose = null;
                 int i = 0;
                 foreach (var item in cityList)
                 {
                     if (i == 0)
                     {
-                        //respose = await GetUrlRespose(item.CityName) as GetWeatherRespose;
-                        //if (respose != null)
-                        //{
-                        //    UpdateTile(respose);
-                        //}
-
-                        IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, item.CityName);
-                        string requestUrl = request.GetRequestUrl();
-                        string resposeString = await Weather.Utils.HttpHelper.GetUrlRespose(requestUrl);
-                        respose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(resposeString);
-                        await FileHelper.CreateFileForFolder("Temp", item.CityName + "_" + DateTime.Now.ToString("yyyyMMdd"), resposeString);
+                        realResposeString = await GetRealResposeString(item.CityName);
+                        respose = GetUrlRespose(item.CityName, realResposeString);
                         UpdateTile(respose);
-
+                        await CreateFile(item.CityName, realResposeString);
                     }
                     else
                     {
-                        //await GetUrlRespose(item.CityName);
-                        IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, item.CityName);
-                        string requestUrl = request.GetRequestUrl();
-                        string resposeString = await Weather.Utils.HttpHelper.GetUrlRespose(requestUrl);
-                        respose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(resposeString);
-                        await FileHelper.CreateFileForFolder("Temp", item.CityName + "_" + DateTime.Now.ToString("yyyyMMdd"), resposeString);
+                        realResposeString = await GetRealResposeString(item.CityName);
+                        respose = GetUrlRespose(item.CityName, realResposeString);
+                        await CreateFile(item.CityName, realResposeString);
                     }
+                    i++;
                 }
             }
             else
@@ -82,56 +63,68 @@ namespace Weather.Tasks
                 {
                     if (j == 0)
                     {
-                       UpdateTileForClient(item.CityName);
+                        respose = await GetWeatherForFile(item.CityName);
+                        UpdateTile(respose);
                     }
                     else
                     {
-                       
+
                     }
+                    j++;
                 }
-                
             }
+
+            //表示完成任务
+            _deferral.Complete();
+        }
+
+        private static async Task<List<Model.UserCity>> GetCityList()
+        {
+            UserService userService = new UserService();
+            GetUserRespose userRespose = await userService.GetUserAsync();
+            var cityList = userRespose.UserConfig.UserCities;
+            return cityList;
+        }
+
+        private static async Task<String> GetRealResposeString(string cityName)
+        {
+            IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, cityName);
+            string requestUrl = request.GetRequestUrl();
+            string resposeString = await Weather.Utils.HttpHelper.GetUrlResposeAsnyc(requestUrl);
+            string realResposeString = HttpHelper.ResposeStringReplace(resposeString);
+            return realResposeString;
+        }
+
+        private static GetWeatherRespose GetUrlRespose(string cityName, string realResposeString)
+        {
+            GetWeatherRespose respose = new GetWeatherRespose();
+            respose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(realResposeString);
+            return respose;
         }
 
 
-
-        //public async Task<Object> GetUrlRespose(string cityName)
-        //{
-        //    GetWeatherRespose respose = new GetWeatherRespose();
-        //    IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, cityName);
-        //    string requestUrl = request.GetRequestUrl();
-        //    string resposeString = await Weather.Utils.HttpHelper.GetUrlRespose(requestUrl);
-        //    respose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(resposeString);
-        //    await FileHelper.CreateFileForFolder("Temp", cityName + "_" + DateTime.Now.ToString("yyyyMMdd"), resposeString);
-        //    return respose;
-        //}
-
-        public void UpdateTile(Object respose)
+        private static async Task<bool> CreateFile(string cityName, string realResposeString)
         {
-            GetWeatherRespose res = respose as GetWeatherRespose;
-            if (res != null)
+            return await FileHelper.CreateFileForFolder("Temp", cityName + "_" + DateTime.Now.ToString("yyyyMMdd"), realResposeString);
+        }
+
+
+        private static void UpdateTile(GetWeatherRespose respose)
+        {
+            var tileModel = new
             {
-                var tileModel = new
-                {
-                    ImagerSrc = "ms-appx:///Assets/Logo.scale-100.png",
-                    TextHeading = res.result.today.city,
-                    TextBody1 = res.result.today.temperature,
-                    TextBody2 = res.result.today.weather,
-                    TextBody3 = res.result.today.wind
-                };
+                ImagerSrc = "ms-appx:///Assets/Logo.scale-100.png",
+                TextHeading = respose.result.today.city,
+                TextBody1 = respose.result.today.temperature,
+                TextBody2 = respose.result.today.weather,
+                TextBody3 = respose.result.today.wind
+            };
 
-                TileHelper.UpdateTileNotifications(tileModel.ImagerSrc, tileModel.TextHeading, tileModel.TextBody1, tileModel.TextBody2, tileModel.TextBody3);
-            }
+            TileHelper.UpdateTileNotifications(tileModel.ImagerSrc, tileModel.TextHeading, tileModel.TextBody1, tileModel.TextBody2, tileModel.TextBody3);
+
         }
 
-
-        public async void GetWeatherForFile(string fileName)
-        {
-            GetWeatherRespose respose = await JsonSerializeHelper.JsonDeSerializeForFile<GetWeatherRespose>(fileName, "Temp");
-            UpdateTile(respose);
-        }
-
-        public async void UpdateTileForClient(string cityName)
+        private static async void UpdateTileForClient(string cityName)
         {
             for (int i = 0; i < 7; i++)
             {
@@ -143,6 +136,12 @@ namespace Weather.Tasks
                     GetWeatherForFile(fileName);
                 }
             }
+        }
+
+        private static async Task<GetWeatherRespose> GetWeatherForFile(string fileName)
+        {
+            GetWeatherRespose respose = await JsonSerializeHelper.JsonDeSerializeForFile<GetWeatherRespose>(fileName, "Temp");
+            return respose;
         }
     }
 }

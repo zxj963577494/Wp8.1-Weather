@@ -14,7 +14,7 @@ namespace Service.Implementations
         {
             GetForecast3hByCityNameRepose respose = new GetForecast3hByCityNameRepose();
             string requestUrl = request.GetRequestUrl();
-            string resposeString = await Weather.Utils.HttpHelper.GetUrlRespose(requestUrl);
+            string resposeString = await Weather.Utils.HttpHelper.GetUrlResposeAsnyc(requestUrl);
             respose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetForecast3hByCityNameRepose>(resposeString);
             return respose;
         }

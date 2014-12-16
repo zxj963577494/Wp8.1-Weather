@@ -143,7 +143,6 @@ D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Debug\resources.pri
 D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Debug\AppxManifest.xml
 D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Debug\Weather.App.build.appxrecipe
 D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Debug\NotificationsExtensions.dll
-D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Debug\Weather.Control.winmd
 D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Debug\Weather.Model.dll
 D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Debug\Weather.Service.dll
 D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Debug\Weather.Utils.dll
@@ -157,8 +156,6 @@ D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Debug\NotificationsExtensions.pdb
 D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Debug\NotificationsExtensions.pri
 D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Debug\Weather.Service.pdb
 D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Debug\Weather.Service.pri
-D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Debug\Weather.Control.pdb
-D:\GitHub\Weather\Wp8.1-Weather\Weather\bin\Debug\Weather.Control.pri
 D:\GitHub\Weather\Wp8.1-Weather\Weather\obj\Debug\MyCityPage.xaml
 D:\GitHub\Weather\Wp8.1-Weather\Weather\obj\Debug\MyCityPage.xbf
 D:\GitHub\Weather\Wp8.1-Weather\Weather\obj\Debug\Weather.App.exe

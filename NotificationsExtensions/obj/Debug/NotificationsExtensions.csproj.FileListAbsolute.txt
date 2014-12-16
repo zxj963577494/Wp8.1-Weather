@@ -55,3 +55,4 @@ D:\GitHub\Wp8.1-Weather\NotificationsExtensions\obj\Debug\pri.resfiles.intermedi
 D:\GitHub\Wp8.1-Weather\NotificationsExtensions\obj\Debug\qualifiers.txt
 D:\GitHub\Wp8.1-Weather\NotificationsExtensions\obj\Debug\qualifiers.txt.intermediate
 D:\GitHub\Wp8.1-Weather\NotificationsExtensions\obj\Debug\MultipleQualifiersPerDimensionFound.txt
+D:\GitHub\Weather\Wp8.1-Weather\NotificationsExtensions\obj\Debug\NotificationsExtensions.csprojResolveAssemblyReference.cache

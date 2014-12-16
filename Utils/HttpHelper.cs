@@ -16,7 +16,7 @@ namespace Weather.Utils
         /// 获取返回字符串获取网络的返回的字符串数据
         /// </summary>
         /// <param name="url"></param>
-        public async static Task<string> GetUrlRespose(string url)
+        public async static Task<string> GetUrlResposeAsnyc(string url)
         {
             Uri uri = new Uri(url);
             HttpClient httpClient = new HttpClient();
