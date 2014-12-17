@@ -31,8 +31,7 @@ namespace Weather.App
 {
     public sealed partial class PivotPage : Page
     {
-        private const string FirstGroupName = "FirstGroup";
-        private const string SecondGroupName = "SecondGroup";
+        public const string appbarTileId = "FirstSecondaryTile";
 
         private readonly NavigationHelper navigationHelper;
         private readonly ObservableDictionary defaultViewModel = new ObservableDictionary();
@@ -253,6 +252,11 @@ namespace Weather.App
         }
 
         #endregion
+
+        private void SecondaryTileCommandBar_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
 
 
 

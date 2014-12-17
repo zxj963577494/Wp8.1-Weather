@@ -16,6 +16,21 @@ namespace Weather.Utils
     public class TileHelper
     {
 
+
+
+
+
+
+        //public static CreateSecondaryTile(string tileId)
+        //{
+
+        //}
+
+
+
+
+
+
         /// <summary>
         /// 更新默认磁贴内容(不通用)
         /// </summary>

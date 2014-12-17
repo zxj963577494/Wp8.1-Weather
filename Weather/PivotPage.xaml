@@ -113,7 +113,7 @@ CommonNavigationTransitionInfo.IsStaggerElement="True">
             <AppBarButton x:Name="abbWeatherIndex" Label="天气指数" Icon="Refresh" Click="abbWeatherIndex_Click" />
             <AppBarButton x:Name="abbCity" Label="常用城市" Icon="Refresh" Click="abbCity_Click" />
             <CommandBar.SecondaryCommands>
-                <AppBarButton x:Uid="SecondaryButton1" x:Name="SecondaryButton1" Label="固定到桌面屏幕" />
+                <AppBarButton x:Uid="SecondaryButton1" x:Name="SecondaryButton1" Label="固定到桌面屏幕"  Click="SecondaryTileCommandBar_Click"/>
                 <AppBarButton x:Uid="SecondaryButton2" x:Name="SecondaryButton2" Label="设置" />
             </CommandBar.SecondaryCommands>
         </CommandBar>

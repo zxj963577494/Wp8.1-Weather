@@ -22,27 +22,30 @@
         </Grid.RowDefinitions>
 
         <!-- 标题面板 -->
-        <StackPanel Grid.Row="0" Margin="19,0,0,0">
+        <StackPanel Grid.Row="0" Margin="15,0,0,0">
             <TextBlock Text="天气在线" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
             <TextBlock Text="常用城市" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
         </StackPanel>
-        <StackPanel Grid.Row="1">
-            <GridView x:Name="gvCity" ItemsSource="{Binding UserCities}">
-                <GridView.ItemTemplate>
+            <GridView x:Name="gvCity" Margin="20,0" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Hidden"  ItemsSource="{Binding UserCities}">
+                <GridView.ItemTemplate> 
                     <DataTemplate>
-                        <TextBlock Text="{Binding CityName}" Width="100" Height="100"></TextBlock>
+                        <ScrollViewer>
+                        <TextBlock Text="{Binding CityName}"></TextBlock>
+                        </ScrollViewer>
                     </DataTemplate>
                 </GridView.ItemTemplate>
                 <GridView.ItemContainerStyle>
                     <Style TargetType="GridViewItem">
                         <Setter Property="BorderBrush" Value="Gray"/>
                         <Setter Property="BorderThickness" Value="1"/>
-                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                        <Setter Property="VerticalContentAlignment" Value="Center"/>
-                    </Style>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Margin" Value="10"/>
+                    <Setter Property="Width" Value="150"/>
+                    <Setter Property="Height" Value="150"/>
+                </Style>
                 </GridView.ItemContainerStyle>
             </GridView>
-        </StackPanel>
     </Grid>
     <Page.BottomAppBar>
         <CommandBar>

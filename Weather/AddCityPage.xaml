@@ -7,81 +7,55 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-	<Page.Resources>
-		<FontFamily x:Key="PhoneFontFamilyNormal">Segoe WP</FontFamily>
-		<x:Double x:Key="TextStyleLargeFontSize">18.14</x:Double>
-		<Style x:Key="BaseTextBlockStyle" TargetType="TextBlock">
-			<Setter Property="FontFamily" Value="{ThemeResource PhoneFontFamilyNormal}"/>
-			<Setter Property="FontSize" Value="{ThemeResource TextStyleLargeFontSize}"/>
-			<Setter Property="Foreground" Value="{ThemeResource PhoneForegroundBrush}"/>
-			<Setter Property="TextTrimming" Value="Clip"/>
-			<Setter Property="TextWrapping" Value="WrapWholeWords"/>
-			<Setter Property="LineHeight" Value="21.5"/>
-			<Setter Property="LineStackingStrategy" Value="BaselineToBaseline"/>
-			<Setter Property="TextLineBounds" Value="Full"/>
-			<Setter Property="OpticalMarginAlignment" Value="TrimSideBearings"/>
-		</Style>
-		<FontFamily x:Key="PhoneFontFamilySemiLight">Segoe WP SemiLight</FontFamily>
-		<Style x:Key="TextBlockStyle1" BasedOn="{StaticResource BaseTextBlockStyle}" TargetType="TextBlock">
-			<Setter Property="FontFamily" Value="{ThemeResource PhoneFontFamilySemiLight}"/>
-			<Setter Property="FontSize" Value="57.5"/>
-			<Setter Property="FontWeight" Value="SemiLight"/>
-			<Setter Property="LineHeight" Value="57.5"/>
-			<Setter Property="TextWrapping" Value="NoWrap"/>
-			<Setter Property="Margin" Value="10"/>
-		</Style>
-	</Page.Resources>
+    <Grid x:Name="LayoutRoot">
 
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition/>
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
 
-	<Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-		<Grid.ChildrenTransitions>
-			<TransitionCollection>
-				<EntranceThemeTransition/>
-			</TransitionCollection>
-		</Grid.ChildrenTransitions>
+        <!-- 标题面板 -->
+        <StackPanel Grid.Row="0" Margin="15,0,0,0">
+            <TextBlock Text="天气在线" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
+            <TextBlock Text="城市选择" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+        </StackPanel>
 
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
-		</Grid.RowDefinitions>
-
-		<!-- 标题面板 -->
-		<StackPanel Grid.Row="0" Margin="20,0,0,0">
-			<TextBlock Text="天气在线" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
-			<TextBlock Text="城市选择" Margin="0,-6.5,0,26.5" Style="{StaticResource TextBlockStyle1}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" HorizontalAlignment="Right" Width="380"/>
-		</StackPanel>
-
-		<!--TODO: 应将内容放入以下网格-->
-		<Grid Grid.Row="1" x:Name="ContentRoot" Margin="20,0,20,0">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="4*"/>
-			</Grid.RowDefinitions>
-			<StackPanel>
-				<AutoSuggestBox x:Name="asbCity" Header="请输入中文" FontSize="20" TextChanged="asbCity_TextChanged"    PlaceholderText="请输入城市" SuggestionChosen="asbCity_SuggestionChosen">
-				</AutoSuggestBox>
-			</StackPanel>
-			<StackPanel Grid.Row="1">
-				<GridView x:Name="gvCity" ItemsSource="{Binding HotCities}" HorizontalAlignment="Left" VerticalAlignment="Center" Header="热门城市" FontSize="20">
-					<GridView.ItemTemplate>
-						<DataTemplate>
-							<TextBlock Text="{Binding District}" ></TextBlock>
-						</DataTemplate>
-					</GridView.ItemTemplate>
-					<GridView.ItemContainerStyle>
-						<Style TargetType="GridViewItem">
-							<Setter Property="BorderBrush" Value="Gray"/>
-							<Setter Property="BorderThickness" Value="1"/>
-							<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-							<Setter Property="VerticalContentAlignment" Value="Stretch"/>
-							<Setter Property="Margin" Value="5"/>
-							<Setter Property="MinWidth" Value="80"/>
-							<Setter Property="MinHeight" Value="80"/>
-						</Style>
-					</GridView.ItemContainerStyle>
-				</GridView>
-			</StackPanel>
-		</Grid>
-	</Grid>
+        <!--TODO: 应将内容放入以下网格-->
+        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="20,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="3*"/>
+            </Grid.RowDefinitions>
+            <StackPanel>
+                <AutoSuggestBox x:Name="asbCity" Header="请输入中文" FontSize="20" TextChanged="asbCity_TextChanged"    PlaceholderText="请输入城市" SuggestionChosen="asbCity_SuggestionChosen" Margin="5,0">
+                </AutoSuggestBox>
+            </StackPanel>
+            <StackPanel Grid.Row="1">
+                <GridView x:Name="gvCity" ItemsSource="{Binding HotCities}" HorizontalAlignment="Left" VerticalAlignment="Center" Header="热门城市" FontSize="20">
+                    <GridView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding District}" ></TextBlock>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                    <GridView.ItemContainerStyle>
+                        <Style TargetType="GridViewItem">
+                            <Setter Property="BorderBrush" Value="Gray"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Margin" Value="5"/>
+                            <Setter Property="MinWidth" Value="80"/>
+                            <Setter Property="MinHeight" Value="80"/>
+                        </Style>
+                    </GridView.ItemContainerStyle>
+                </GridView>
+            </StackPanel>
+        </Grid>
+    </Grid>
 </Page>

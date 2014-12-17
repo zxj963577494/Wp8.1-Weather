@@ -172,7 +172,8 @@ namespace Weather.App
             string cityname = args.SelectedItem.ToString();
             if (!string.IsNullOrEmpty(cityname))
             {
-                if (await UpdateUserCity(cityname))
+                bool isSuccess=await UpdateUserCity(cityname);
+                if (isSuccess)
                 {
                     Frame.Navigate(typeof(MyCityPage));
                 }
