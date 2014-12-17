@@ -57,6 +57,7 @@
     <Compile Include="Message\City\GetCityRespose.cs" />
     <Compile Include="Message\Forecast3h\GetForecast3hByCityNameRepose.cs" />
     <Compile Include="Message\Forecast3h\GetForecast3hByCityNameRequest.cs" />
+    <Compile Include="Message\User\GetUserCityRespose.cs" />
     <Compile Include="Message\Weather\GetWeatherByCityNameOrIdRequest.cs" />
     <Compile Include="Message\Weather\GetWeatherByGpsRequest.cs" />
     <Compile Include="Message\Weather\GetWeatherByIpRequest.cs" />

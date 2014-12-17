@@ -69,12 +69,8 @@ namespace Weather.Utils
             {
                 //序列化
                 string jsonContent = JsonSerialize<T>(target);
-                //获取本地文件夹，目录文件夹
-                IStorageFolder local = Windows.Storage.ApplicationData.Current.LocalFolder;
-                IStorageFolder storageFolder = await local.GetFolderAsync(fileFolder);
-                IStorageFile storageFile = await storageFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
-                //Uri uri = new Uri("ms-appx:///" + fileFolder + "/" + fileName + "");
-                //IStorageFile storageFile = await StorageFile.GetFileFromApplicationUriAsync(uri);
+                 Uri uri = new Uri(@"ms-appx:///" + fileFolder + "/" + fileName + "");
+                IStorageFile storageFile = await StorageFile.GetFileFromApplicationUriAsync(uri);
                 await FileIO.WriteTextAsync(storageFile, jsonContent);
             }
             catch (Exception ex)
@@ -96,8 +92,7 @@ namespace Weather.Utils
             try
             {
                 Uri uri = new Uri(@"ms-appx:///" + fileFolder + "/" + fileName + "");
-                IStorageFile storageFile = await StorageFile.GetFileFromApplicationUriAsync(uri).AsTask().ConfigureAwait(false);
-               
+                IStorageFile storageFile = await StorageFile.GetFileFromApplicationUriAsync(uri);
                 string text = await FileIO.ReadTextAsync(storageFile);
                 return JsonDeserialize<T>(text);
             }

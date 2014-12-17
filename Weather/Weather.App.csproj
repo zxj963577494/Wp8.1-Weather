@@ -230,7 +230,7 @@
     <Content Include="StoreManifest.xml" />
     <Content Include="Temp\杭州_20141209.txt" />
     <Content Include="Temp\杭州_20141210050000.txt" />
-    <Content Include="UserConfig.txt" />
+    <Content Include="User\UserCities.txt" />
     <Content Include="User\UserConfig.txt" />
   </ItemGroup>
   <ItemGroup>

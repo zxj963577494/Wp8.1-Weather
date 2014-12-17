@@ -15,5 +15,18 @@ namespace Weather.Service.Implementations
             respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFile<GetUserRespose>("UserConfig.txt", "User");
             return respose;
         }
+
+        public async Task<GetUserCityRespose> GetUserCityAsync()
+        {
+            GetUserCityRespose respose = new GetUserCityRespose();
+            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFile<GetUserCityRespose>("UserCities.txt", "User");
+            return respose;
+        }
+
+        public void SaveUserCity(GetUserCityRespose getUserCityRespose)
+        {
+            Weather.Utils.JsonSerializeHelper.JsonSerializeForFile<GetUserCityRespose>(getUserCityRespose, "UserCities.txt", "User");
+
+        }
     }
 }

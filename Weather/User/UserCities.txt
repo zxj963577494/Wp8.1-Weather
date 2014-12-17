@@ -1,0 +1,1 @@
+﻿{"UserCities":[{"CityName":"北京","AddTime":"2014/12/17 14:14:24","IsDefault":"0"},{"CityName":"杭州","AddTime":"2014/12/17 14:14:24","IsDefault":"1"}]}

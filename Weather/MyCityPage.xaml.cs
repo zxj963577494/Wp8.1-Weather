@@ -15,6 +15,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Weather.Service.Implementations;
+using Weather.Service.Message;
 
 // “基本页”项模板在 http://go.microsoft.com/fwlink/?LinkID=390556 上有介绍
 
@@ -27,6 +29,7 @@ namespace Weather.App
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        private readonly UserService userService = null;
 
         public MyCityPage()
         {
@@ -35,6 +38,8 @@ namespace Weather.App
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+
+            userService = new UserService();
         }
 
         /// <summary>
@@ -65,8 +70,11 @@ namespace Weather.App
         /// <see cref="Frame.Navigate(Type, Object)"/> 的导航参数，又提供
         /// 此页在以前会话期间保留的状态的
         /// 字典。 首次访问页面时，该状态将为 null。</param>
-        private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            GetUserCityRespose respose = new GetUserCityRespose();
+            respose = await userService.GetUserCityAsync();
+            LayoutRoot.DataContext = respose;
         }
 
         /// <summary>
@@ -110,13 +118,12 @@ namespace Weather.App
 
         void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
         {
-            e.Handled = true; // We've handled this button press
+            e.Handled = true;
 
-
-            // Standard page backward navigation
             if (Frame.CanGoBack)
+            {
                 Frame.GoBack();
-
+            }
         }
 
         #endregion

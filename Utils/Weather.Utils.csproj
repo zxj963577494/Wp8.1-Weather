@@ -48,6 +48,7 @@
     <Compile Include="ApplicationHelper.cs" />
     <Compile Include="BackgroundTaskHelper.cs" />
     <Compile Include="CacheHelper.cs" />
+    <Compile Include="EnumerableExtensionMethods.cs" />
     <Compile Include="FileHelper.cs" />
     <Compile Include="GeolocationHelper.cs" />
     <Compile Include="HttpHelper.cs" />

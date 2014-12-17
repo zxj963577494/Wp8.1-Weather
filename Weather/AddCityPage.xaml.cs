@@ -17,6 +17,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Collections.ObjectModel;
 using Weather.Service.Message;
+using Windows.UI.Popups;
+using System.Threading.Tasks;
 
 // “基本页”项模板在 http://go.microsoft.com/fwlink/?LinkID=390556 上有介绍
 
@@ -30,7 +32,9 @@ namespace Weather.App
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private readonly Service.Implementations.CityService service = null;
+        private readonly Service.Implementations.UserService userService = null;
         private ViewModel.SelectCityPage page = null;
+
 
         public AddCityPage()
         {
@@ -41,6 +45,8 @@ namespace Weather.App
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
 
             service = new Service.Implementations.CityService();
+            userService = new Service.Implementations.UserService();
+
         }
 
         /// <summary>
@@ -118,6 +124,8 @@ namespace Weather.App
         {
             this.navigationHelper.OnNavigatedTo(e);
             Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+
+
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -142,26 +150,62 @@ namespace Weather.App
 
         private void asbCity_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
+            string userInput = sender.Text.Trim();
+            if (args.Reason == AutoSuggestionBoxTextChangeReason.SuggestionChosen)
+            {
+                return;
+            }
+            if (userInput.Length == 0)
+            {
+                return;
+            }
             if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
             {
-                string filter = sender.Text;
-                asbCity.ItemsSource = page.Cities.Where(s => s.District.Contains(filter));
+                sender.ItemsSource = from d in page.Cities
+                                     where d.District.Contains(userInput)
+                                     select d.District;
+            }
+        }
+
+        private async void asbCity_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        {
+            string cityname = args.SelectedItem.ToString();
+            if (!string.IsNullOrEmpty(cityname))
+            {
+                if (await UpdateUserCity(cityname))
+                {
+                    Frame.Navigate(typeof(MyCityPage));
+                }
             }
         }
 
 
-        private void asbCity_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        public async Task<bool> UpdateUserCity(string cityName)
         {
-
-            Model.WeatherCity city = args.SelectedItem as Model.WeatherCity;
-            if (city != null)
+            bool isAdd = false;
+            Model.UserCity userCity = new Model.UserCity()
             {
-                asbCity.Text = city.District;
+                AddTime = DateTime.Now,
+                CityName = cityName.Trim(),
+                IsDefault = 0
+            };
+            GetUserCityRespose respose = new GetUserCityRespose();
+            respose = await userService.GetUserCityAsync();
+
+            var count=respose.UserCities.Count(x=>x.CityName.Contains(cityName.Trim()));
+
+            if (count== 0)
+            {
+                respose.UserCities.Add(userCity);
+                userService.SaveUserCity(respose);
+                isAdd = true;
             }
             else
             {
-                asbCity.Text = "";
+                MessageDialog msg = new MessageDialog("该城市已加入常用城市列表");
+                await msg.ShowAsync();
             }
+            return isAdd;
         }
     }
 }

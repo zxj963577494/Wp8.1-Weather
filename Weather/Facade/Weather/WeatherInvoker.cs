@@ -15,13 +15,5 @@ namespace Weather.App.Facade
         {
             weatherService = new WeatherService();
         }
-
-        //public Task<GetWeatherRespose> GetWeatherAsync()
-        //{
-
-        //    GetWeatherRespose weatherRespose = new GetWeatherRespose();
-        //    weatherRespose = await weatherService.GetWeatherAsync();
-        //    return weatherRespose;
-        //}
     }
 }
