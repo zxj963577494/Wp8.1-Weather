@@ -151,7 +151,7 @@ namespace Weather.App
                     {
                         backgroundTaskExecute.Create(taskName, taskEntryPoint, time, null);
                     }
-                } 
+                }
                 #endregion
             }
             else
@@ -211,10 +211,8 @@ namespace Weather.App
         /// <summary>
         /// 滚动到视图中后，为第二个数据透视项加载内容。
         /// </summary>
-        private async void SecondPivot_Loaded(object sender, RoutedEventArgs e)
+        private void SecondPivot_Loaded(object sender, RoutedEventArgs e)
         {
-            var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-2");
-            this.DefaultViewModel[SecondGroupName] = sampleDataGroup;
         }
 
         void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
@@ -253,12 +251,15 @@ namespace Weather.App
 
         #endregion
 
-        private void SecondaryTileCommandBar_Click(object sender, RoutedEventArgs e)
+        private async void SecondaryTileCommandBar_Click(object sender, RoutedEventArgs e)
         {
-            
+            string tileId = "ZxjWeather";
+            if (!SecondaryTileHelper.IsExists(tileId))
+            {
+                string displayName = "天气在线";
+                string tileActivationArguments = "ZxjWeather" + DateTime.Now;
+                SecondaryTileHelper.CreateSecondaryTileAsync(tileId, displayName, tileActivationArguments);
+            }
         }
-
-
-
     }
 }

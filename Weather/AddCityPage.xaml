@@ -40,7 +40,12 @@
                 <GridView x:Name="gvCity" ItemsSource="{Binding HotCities}" HorizontalAlignment="Left" VerticalAlignment="Center" Header="热门城市" FontSize="20">
                     <GridView.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding District}" ></TextBlock>
+                            <Grid>
+                                <TextBlock/>
+                                <StackPanel Margin="6,3,0,0">
+                                    <Button Content="{Binding District}" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                </StackPanel>
+                            </Grid>
                         </DataTemplate>
                     </GridView.ItemTemplate>
                     <GridView.ItemContainerStyle>

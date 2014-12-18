@@ -29,9 +29,11 @@
             <GridView x:Name="gvCity" Margin="20,0" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Hidden"  ItemsSource="{Binding UserCities}">
                 <GridView.ItemTemplate> 
                     <DataTemplate>
-                        <ScrollViewer>
-                        <TextBlock Text="{Binding CityName}"></TextBlock>
-                        </ScrollViewer>
+                    <Grid>
+                        <StackPanel Margin="10,5,0,0">
+                            <TextBlock Text="{Binding CityName}" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Top"></TextBlock>
+                        </StackPanel>
+                    </Grid>
                     </DataTemplate>
                 </GridView.ItemTemplate>
                 <GridView.ItemContainerStyle>

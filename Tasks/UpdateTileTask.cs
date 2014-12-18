@@ -102,7 +102,6 @@ namespace Weather.Tasks
             return respose;
         }
 
-
         private static async Task<bool> CreateFile(string cityName, string realResposeString)
         {
             return await FileHelper.CreateFileForFolder("Temp", cityName + "_" + DateTime.Now.ToString("yyyyMMdd"), realResposeString);

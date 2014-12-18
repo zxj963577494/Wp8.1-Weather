@@ -172,7 +172,7 @@ namespace Weather.App
             string cityname = args.SelectedItem.ToString();
             if (!string.IsNullOrEmpty(cityname))
             {
-                bool isSuccess=await UpdateUserCity(cityname);
+                bool isSuccess = await UpdateUserCity(cityname);
                 if (isSuccess)
                 {
                     Frame.Navigate(typeof(MyCityPage));
@@ -184,8 +184,12 @@ namespace Weather.App
         public async Task<bool> UpdateUserCity(string cityName)
         {
             bool isAdd = false;
+
             Model.UserCity userCity = new Model.UserCity()
             {
+                CityId = (from c in page.Cities
+                         where c.District == cityName
+                         select c.Id).FirstOrDefault(),
                 AddTime = DateTime.Now,
                 CityName = cityName.Trim(),
                 IsDefault = 0
@@ -193,9 +197,9 @@ namespace Weather.App
             GetUserCityRespose respose = new GetUserCityRespose();
             respose = await userService.GetUserCityAsync();
 
-            var count=respose.UserCities.Count(x=>x.CityName.Contains(cityName.Trim()));
+            var count = respose.UserCities.Count(x => x.CityName.Contains(cityName.Trim()));
 
-            if (count== 0)
+            if (count == 0)
             {
                 respose.UserCities.Add(userCity);
                 userService.SaveUserCity(respose);
@@ -208,5 +212,6 @@ namespace Weather.App
             }
             return isAdd;
         }
+
     }
 }

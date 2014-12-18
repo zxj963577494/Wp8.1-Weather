@@ -12,6 +12,11 @@ namespace Weather.Model
     public class UserCity
     {
         /// <summary>
+        /// 城市ID
+        /// </summary>
+        public int CityId { get; set; }
+
+        /// <summary>
         /// 城市名称
         /// </summary>
         public string CityName { get; set; }
