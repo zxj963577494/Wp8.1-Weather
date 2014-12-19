@@ -98,17 +98,24 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
+        <Popup x:Name="popup"  Grid.Row="0" >
+            <StackPanel Width="Auto" MinWidth="400" >
+                <Border x:Name="StatusBorder" >
+                    <TextBlock x:Name="StatusBlock" Foreground="White" FontSize="20" FontWeight="Bold" Margin="15, 10, 15, 10" TextWrapping="Wrap"/>
+                </Border>
+            </StackPanel>
+        </Popup>
         <!-- 标题面板 -->
-        <StackPanel Grid.Row="0" Margin="15,0,0,0">
+        <StackPanel Grid.Row="1" Margin="15,0,0,0">
             <TextBlock Text="天气在线" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
             <TextBlock Text="城市选择" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
         </StackPanel>
 
         <!--TODO: 应将内容放入以下网格-->
-        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="20,0">
+        <Grid Grid.Row="2" x:Name="ContentRoot" Margin="20,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="3*"/>
@@ -118,10 +125,10 @@
                 </AutoSuggestBox>
             </StackPanel>
             <StackPanel Grid.Row="1">
-                <GridView x:Name="gvCity" ItemsSource="{Binding HotCities}" HorizontalAlignment="Left" VerticalAlignment="Center" Header="热门城市" FontSize="20">
+                <GridView x:Name="gvCity" ItemsSource="{Binding HotCities}" HorizontalAlignment="Left" VerticalAlignment="Center" Header="热门城市" FontSize="20" IsItemClickEnabled="True" ItemClick="gvCity_ItemClick">
                     <GridView.ItemTemplate>
                         <DataTemplate>
-                            <Button Content="{Binding District}" FontSize="14" Style="{StaticResource ButtonTileStyle}"/>
+                            <Button Content="{Binding District}"  FontSize="14" Style="{StaticResource ButtonTileStyle}"/>
                         </DataTemplate>
                     </GridView.ItemTemplate>
                     <GridView.ItemContainerStyle>

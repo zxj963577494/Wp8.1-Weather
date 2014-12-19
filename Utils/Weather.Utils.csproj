@@ -54,6 +54,7 @@
     <Compile Include="HttpHelper.cs" />
     <Compile Include="JsonSerializeHelper.cs" />
     <Compile Include="LockScreenHelper.cs" />
+    <Compile Include="MessageHelper.cs" />
     <Compile Include="NetHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResolutionHelper.cs" />

@@ -167,6 +167,8 @@ namespace Weather.App
             }
         }
 
+
+
         private async void asbCity_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
             string cityname = args.SelectedItem.ToString();
@@ -180,6 +182,18 @@ namespace Weather.App
             }
         }
 
+        private async void gvCity_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            Model.WeatherCity city = (Model.WeatherCity)e.ClickedItem;
+            if (!string.IsNullOrEmpty(city.District))
+            {
+                bool isSuccess = await UpdateUserCity(city.District);
+                if (isSuccess)
+                {
+                    Frame.Navigate(typeof(MyCityPage));
+                }
+            }
+        }
 
         public async Task<bool> UpdateUserCity(string cityName)
         {
@@ -207,11 +221,36 @@ namespace Weather.App
             }
             else
             {
-                MessageDialog msg = new MessageDialog("该城市已加入常用城市列表");
-                await msg.ShowAsync();
+                NotifyUser("该城市已加入常用城市列表");
             }
             return isAdd;
         }
 
+        private void NotifyUser(string strMessage)
+        {
+            StatusBorder.Background = new SolidColorBrush(Windows.UI.Colors.Green);
+
+            StatusBlock.Text = strMessage;
+
+            if (StatusBlock.Text != String.Empty)
+            {
+                popup.IsOpen = true;
+                // 创建一个DispatcherTimer实例。
+                DispatcherTimer newTimer = new DispatcherTimer();
+                // 将DispatcherTimer的Interval设为5秒。
+                newTimer.Interval = TimeSpan.FromSeconds(5);
+                // 这样一来OnTimerTick方法每秒都会被调用一次。
+                newTimer.Tick += (o, e) =>
+                {
+                    popup.IsOpen = false;
+                };
+                // 开始计时。
+                newTimer.Start();
+            }
+            else
+            {
+                popup.IsOpen = false;
+            }
+        }
     }
 }

@@ -17,6 +17,9 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Weather.Service.Implementations;
 using Weather.Service.Message;
+using System.Threading.Tasks;
+
+using Weather.App;
 
 // “基本页”项模板在 http://go.microsoft.com/fwlink/?LinkID=390556 上有介绍
 
@@ -30,6 +33,7 @@ namespace Weather.App
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private readonly UserService userService = null;
+        private GetUserCityRespose respose = null;
 
         public MyCityPage()
         {
@@ -70,11 +74,10 @@ namespace Weather.App
         /// <see cref="Frame.Navigate(Type, Object)"/> 的导航参数，又提供
         /// 此页在以前会话期间保留的状态的
         /// 字典。 首次访问页面时，该状态将为 null。</param>
-        private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            GetUserCityRespose respose = new GetUserCityRespose();
-            respose = await userService.GetUserCityAsync();
-            LayoutRoot.DataContext = respose;
+
+
         }
 
         /// <summary>
@@ -104,10 +107,12 @@ namespace Weather.App
         /// </summary>
         /// <param name="e">提供导航方法数据和
         /// 无法取消导航请求的事件处理程序。</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
             Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+            respose = await GetUserCity();
+            LayoutRoot.DataContext = respose;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -131,6 +136,101 @@ namespace Weather.App
         private void abbAdd_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(AddCityPage));
+        }
+
+        private void Grid_Holding(object sender, Windows.UI.Xaml.Input.HoldingRoutedEventArgs e)
+        {
+            if (e.HoldingState == Windows.UI.Input.HoldingState.Started)
+            {
+                FrameworkElement senderElement = sender as FrameworkElement;
+                FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+
+                flyoutBase.ShowAt(senderElement);
+            }
+        }
+        private async void DefaultCity_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                MenuFlyoutItem selectedItem = sender as MenuFlyoutItem;
+                if (selectedItem != null)
+                {
+                    int cityId = int.Parse(selectedItem.CommandParameter.ToString());
+                    respose = await GetUserCity();
+                    var DefaultCityed = respose.UserCities.FirstOrDefault(x => x.IsDefault == 1);
+                    if (DefaultCityed.CityId != cityId)
+                    {
+                        respose.UserCities.FirstOrDefault(x => x.CityId == DefaultCityed.CityId).IsDefault = 0;
+                        respose.UserCities.FirstOrDefault(x => x.CityId == cityId).IsDefault = 1;
+                        userService.SaveUserCity(respose);
+                        Frame.Navigate(typeof(MyCityPage));
+                    }
+                    else
+                    {
+                        NotifyUser("该城市已是默认城市");
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+            
+        }
+
+        private void DesTopTile_Click(object sender, RoutedEventArgs e)
+        {
+            MenuFlyoutItem selectedItem = sender as MenuFlyoutItem;
+            if (selectedItem != null)
+            {
+                int cityId = int.Parse(selectedItem.CommandParameter.ToString());
+
+            }
+        }
+
+        private async Task<GetUserCityRespose> GetUserCity()
+        {
+            GetUserCityRespose respose = new GetUserCityRespose();
+            respose = await userService.GetUserCityAsync();
+            var data = from c in respose.UserCities
+                       orderby c.IsDefault descending, c.AddTime descending
+                       select c;
+            respose.UserCities = data.ToList();
+            return respose;
+        }
+
+
+        /// <summary>
+        /// Used to display messages to the user
+        /// </summary>
+        /// <param name="strMessage"></param>
+        /// <param name="type"></param>
+        private void NotifyUser(string strMessage)
+        {
+            StatusBorder.Background = new SolidColorBrush(Windows.UI.Colors.Green);
+
+            StatusBlock.Text = strMessage;
+
+            if (StatusBlock.Text != String.Empty)
+            {
+                popup.IsOpen = true;
+                // 创建一个DispatcherTimer实例。
+                DispatcherTimer newTimer = new DispatcherTimer();
+                // 将DispatcherTimer的Interval设为5秒。
+                newTimer.Interval = TimeSpan.FromSeconds(5);
+                // 这样一来OnTimerTick方法每秒都会被调用一次。
+                newTimer.Tick += (o, e) =>
+                {
+                    popup.IsOpen = false;
+                };
+                // 开始计时。
+                newTimer.Start();
+            }
+            else
+            {
+                popup.IsOpen = false;
+            }
         }
     }
 }

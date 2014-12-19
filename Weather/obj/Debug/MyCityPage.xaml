@@ -7,37 +7,61 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
     <Grid x:Name="LayoutRoot">
-
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>
             </TransitionCollection>
         </Grid.ChildrenTransitions>
-
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
-        <!-- 标题面板 -->
-        <StackPanel Grid.Row="0" Margin="19,0,0,0">
+        <Popup x:Name="popup"  Grid.Row="0" >
+            <StackPanel Width="Auto" MinWidth="400" >
+                <Border x:Name="StatusBorder" >
+                    <TextBlock x:Name="StatusBlock" Foreground="White" FontSize="20" FontWeight="Bold" Margin="15, 10, 15, 10" TextWrapping="Wrap"/>
+                </Border>
+            </StackPanel>
+        </Popup>
+        <StackPanel Grid.Row="1" Margin="15,0,0,0">
             <TextBlock Text="天气在线" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
             <TextBlock Text="常用城市" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
         </StackPanel>
-
-        <!--TODO: 应将内容放入以下网格-->
-        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-            <ListView>
-
-            </ListView>
-        </Grid>
-
+        <GridView x:Name="gvCity" Margin="20,0" Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Hidden"   ItemsSource="{Binding UserCities}">
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <Grid x:ConnectionId='1'                       >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <FlyoutBase.AttachedFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem x:ConnectionId='2' Text="设为默认城市"                           CommandParameter="{Binding CityId}" />
+                                <MenuFlyoutItem x:ConnectionId='3' Text="固定到桌面"                          CommandParameter="{Binding CityId}" />
+                            </MenuFlyout>
+                        </FlyoutBase.AttachedFlyout>
+                        <TextBlock Text="{Binding CityName}" FontSize="20" Margin="10,10,0,0"/>
+                    </Grid>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+            <GridView.ItemContainerStyle>
+                <Style TargetType="GridViewItem">
+                    <Setter Property="BorderBrush" Value="Gray"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Margin" Value="10"/>
+                    <Setter Property="Width" Value="150"/>
+                    <Setter Property="Height" Value="150"/>
+                </Style>
+            </GridView.ItemContainerStyle>
+        </GridView>
     </Grid>
     <Page.BottomAppBar>
         <CommandBar>
-            <AppBarButton x:ConnectionId='1' x:Name="abbRefresh" Label="添加" Icon="Add"                      />
+            <AppBarButton x:ConnectionId='4' x:Name="abbRefresh" Label="添加" Icon="Add"                      />
         </CommandBar>
     </Page.BottomAppBar>
 </Page>
