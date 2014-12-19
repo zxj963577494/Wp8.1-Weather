@@ -47,6 +47,8 @@ namespace Weather.App
             service = new Service.Implementations.CityService();
             userService = new Service.Implementations.UserService();
 
+
+
         }
 
         /// <summary>
@@ -77,20 +79,15 @@ namespace Weather.App
         /// <see cref="Frame.Navigate(Type, Object)"/> 的导航参数，又提供
         /// 此页在以前会话期间保留的状态的
         /// 字典。 首次访问页面时，该状态将为 null。</param>
-        private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            GetCityRespose resposeCities = new GetCityRespose();
-            resposeCities = await service.GetCityAsync();
-
-            GetCityRespose resposeHotCities = new GetCityRespose();
-            resposeHotCities = await service.GetHotCityAsync();
-
-            page = new ViewModel.SelectCityPage();
-            page.Cities = resposeCities.Cities;
-            page.HotCities = resposeHotCities.Cities;
-
-            LayoutRoot.DataContext = page;
-
+            if (e.PageState != null)
+            {
+                if (e.PageState.ContainsKey("txt_CityName"))
+                {
+                    asbCity.Text = e.PageState["txt_CityName"].ToString();
+                }
+            }
         }
 
         /// <summary>
@@ -103,6 +100,7 @@ namespace Weather.App
         ///的事件数据。</param>
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
+            e.PageState["txt_CityName"] = asbCity.Text;
         }
 
         #region NavigationHelper 注册
@@ -120,12 +118,22 @@ namespace Weather.App
         /// </summary>
         /// <param name="e">提供导航方法数据和
         /// 无法取消导航请求的事件处理程序。</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
             Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
 
+            GetCityRespose resposeCities = new GetCityRespose();
+            resposeCities = await service.GetCityAsync();
 
+            GetCityRespose resposeHotCities = new GetCityRespose();
+            resposeHotCities = await service.GetHotCityAsync();
+
+            page = new ViewModel.SelectCityPage();
+            page.Cities = resposeCities.Cities;
+            page.HotCities = resposeHotCities.Cities;
+
+            LayoutRoot.DataContext = page;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -202,8 +210,8 @@ namespace Weather.App
             Model.UserCity userCity = new Model.UserCity()
             {
                 CityId = (from c in page.Cities
-                         where c.District == cityName
-                         select c.Id).FirstOrDefault(),
+                          where c.District == cityName
+                          select c.Id).FirstOrDefault(),
                 AddTime = DateTime.Now,
                 CityName = cityName.Trim(),
                 IsDefault = 0
