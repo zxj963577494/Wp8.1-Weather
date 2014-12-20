@@ -1,1 +1,1 @@
-﻿{"UserConfig":{"UserCities":[{"CityName":"北京"},{"CityName":"杭州"}],"AutoUpdateTime":"1","IsAutoUpdate":"1"}}
+﻿{"UserConfig":{"IsWifiUpdate":"1","IsUpdateForCity":"1","IsAutoUpdateForCities":"0","IsWifiAutoUpdate":"1","AutoUpdateTime":"1","IsAutoUpdateForCity":"1"}}

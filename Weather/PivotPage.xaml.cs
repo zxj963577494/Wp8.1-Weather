@@ -31,11 +31,11 @@ namespace Weather.App
 {
     public sealed partial class PivotPage : Page
     {
-        public const string appbarTileId = "FirstSecondaryTile";
-
         private readonly NavigationHelper navigationHelper;
         private readonly ObservableDictionary defaultViewModel = new ObservableDictionary();
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
+
+        long LastExitAttemptTick = DateTime.Now.Ticks;
 
         public PivotPage()
         {
@@ -47,6 +47,8 @@ namespace Weather.App
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
             Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+
+          
         }
 
         /// <summary>
@@ -135,14 +137,14 @@ namespace Weather.App
                 UserService userService = new UserService();
                 GetUserRespose userRespose = await userService.GetUserAsync();
                 ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-                if (userRespose.UserConfig.IsAutoUpdate == "1")
+                if (userRespose.UserConfig.IsAutoUpdateForCity == 1)
                 {
                     SettingService settingService = new SettingService();
                     GetSettingAutoUpdateTimeRepose settingAutoUpdateTimeRepose = await settingService.GetSettingAutoUpdateTimeAsync();
                     BackgroundTaskExecute backgroundTaskExecute = new BackgroundTaskExecute();
                     string taskName = "ZXJUpdateTile";
                     string taskEntryPoint = "Weather.Tasks.UpdateTileTask";
-                    int time = settingAutoUpdateTimeRepose.AutoUpdateTimes.FirstOrDefault(x => x.Id == int.Parse(userRespose.UserConfig.AutoUpdateTime)).Time;
+                    int time = settingAutoUpdateTimeRepose.AutoUpdateTimes.FirstOrDefault(x => x.Id == userRespose.UserConfig.AutoUpdateTime).Time;
                     if (BackgroundTaskHelper.IsExist(taskName))
                     {
                         backgroundTaskExecute.Execute(taskName);
@@ -215,14 +217,22 @@ namespace Weather.App
         {
         }
 
-        void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
+        private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
         {
             e.Handled = true;
-            if (Frame.CanGoBack)
+
+            long thisTick = DateTime.Now.Ticks;
+            if (LastExitAttemptTick - thisTick < 2)
             {
-                Frame.GoBack();
+                //退出代码
+            }
+            else
+            {
+                LastExitAttemptTick = DateTime.Now.Ticks;
             }
         }
+
+
 
         #region NavigationHelper 注册
 
@@ -251,7 +261,7 @@ namespace Weather.App
 
         #endregion
 
-        private async void SecondaryTileCommandBar_Click(object sender, RoutedEventArgs e)
+        private void SecondaryTileCommandBar_Click(object sender, RoutedEventArgs e)
         {
             string tileId = "ZxjWeather";
             if (!SecondaryTileHelper.IsExists(tileId))
@@ -260,6 +270,12 @@ namespace Weather.App
                 string tileActivationArguments = "ZxjWeather" + DateTime.Now;
                 SecondaryTileHelper.CreateSecondaryTileAsync(tileId, displayName, tileActivationArguments);
             }
+        }
+
+
+        private void SettingCommandBar_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SettingPage));
         }
     }
 }

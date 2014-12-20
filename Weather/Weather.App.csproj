@@ -104,7 +104,8 @@
     <Compile Include="SettingPage.xaml.cs">
       <DependentUpon>SettingPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\AutoUpdatePage.cs" />
+    <Compile Include="ViewModel\AutoUpdateSettingPage.cs" />
+    <Compile Include="ViewModel\GeneralSettingPage.cs" />
     <Compile Include="ViewModel\HomePageModel.cs" />
     <Compile Include="ViewModel\SelectCityPage.cs" />
     <Compile Include="ViewModel\SettingPage.cs" />

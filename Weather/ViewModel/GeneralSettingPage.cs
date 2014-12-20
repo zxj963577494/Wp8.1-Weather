@@ -6,13 +6,8 @@ using System.Threading.Tasks;
 
 namespace Weather.App.ViewModel
 {
-    public class AutoUpdatePage
+    public class GeneralSettingPage
     {
-        /// <summary>
-        /// 自动频率更新
-        /// </summary>
-        public List<Model.AutoUpdateTime> AutoUpdateTimes { get; set; }
-
         /// <summary>
         /// 开关
         /// </summary>

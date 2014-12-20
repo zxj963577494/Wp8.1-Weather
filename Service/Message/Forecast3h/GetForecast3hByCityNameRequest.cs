@@ -69,6 +69,7 @@ namespace Weather.Service.Message
         /// <returns></returns>
         public string GetRequestUrl()
         {
+            // System.Uri.EscapeDataString
             string url = "http://v.juhe.cn/weather/forecast3h.php?dtype=json&cityname=" + Utils.StringHelper.GetUrlString(cityname) + "&key=" + key;
             return url;
         } 

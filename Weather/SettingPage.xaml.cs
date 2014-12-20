@@ -30,7 +30,14 @@ namespace Weather.App
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private readonly SettingService service = null;
+
+        private SettingService settingService = null;
+        private UserService userService = null;
+
+        private GetSettingSwitchesRespose switchesRespose = null;
+        private GetSettingAutoUpdateTimeRepose autoUpdateTimeRepose = null;
+
+        private GetUserRespose userRespose = null;
 
         public SettingPage()
         {
@@ -40,7 +47,12 @@ namespace Weather.App
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
 
-            service = new SettingService();
+            settingService = new SettingService();
+            userService = new UserService();
+            switchesRespose = new GetSettingSwitchesRespose();
+            autoUpdateTimeRepose = new GetSettingAutoUpdateTimeRepose();
+            userRespose = new GetUserRespose();
+
         }
 
         /// <summary>
@@ -73,7 +85,15 @@ namespace Weather.App
         /// 字典。 首次访问页面时，该状态将为 null。</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-
+            //if (e.PageState != null)
+            //{
+            //    cbbIsWifiUpdate.SelectedValue = int.Parse(e.PageState["IsWifiUpdate"].ToString());
+            //    cbbIsUpdateForCity.SelectedValue = int.Parse(e.PageState["IsUpdateForCity"].ToString());
+            //    cbbIsWifiAutoUpdate.SelectedValue = e.PageState["IsWifiAutoUpdate"];
+            //    cbbIsAutoUpdateForCity.SelectedValue = e.PageState["IsAutoUpdateForCity"];
+            //    cbbIsAutoUpdateForCities.SelectedValue = e.PageState["IsAutoUpdateForCities"];
+            //    cbbAutoUpdateTime.SelectedValue = e.PageState["AutoUpdateTime"];
+            //}
         }
 
         /// <summary>
@@ -86,15 +106,13 @@ namespace Weather.App
         ///的事件数据。</param>
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
+            e.PageState["IsWifiUpdate"] = cbbIsWifiUpdate.SelectedValue;
+            e.PageState["IsUpdateForCity"] = cbbIsUpdateForCity.SelectedValue;
+            e.PageState["IsWifiAutoUpdate"] = cbbIsWifiAutoUpdate.SelectedValue;
+            e.PageState["IsAutoUpdateForCity"] = cbbIsAutoUpdateForCity.SelectedValue;
+            e.PageState["IsAutoUpdateForCities"] = cbbIsAutoUpdateForCities.SelectedValue;
+            e.PageState["AutoUpdateTime"] = cbbAutoUpdateTime.SelectedValue;
         }
-
-        /// <summary>
-        /// 滚动到视图中后，为第二个数据透视项加载内容。
-        /// </summary>
-        //private async void SecondPivot_Loaded(object sender, RoutedEventArgs e)
-        //{
-
-        //}
 
         #region NavigationHelper 注册
 
@@ -114,55 +132,101 @@ namespace Weather.App
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
+
+            LoadData();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedFrom(e);
         }
-
-
-
         #endregion
 
-        private async void SettingPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void btnGeneral_Click(object sender, RoutedEventArgs e)
         {
-            if (SettingPivot.SelectedIndex == 1)
+            userRespose.UserConfig.IsWifiUpdate = int.Parse(cbbIsWifiUpdate.SelectedValue.ToString());
+            userRespose.UserConfig.IsUpdateForCity = int.Parse(cbbIsUpdateForCity.SelectedValue.ToString());
+            try
             {
-
-                GetSettingSwitchesRespose switchesRespose = new GetSettingSwitchesRespose();
-                switchesRespose = await service.GetSettingSwitchesAsync();
-                GetSettingAutoUpdateTimeRepose autoUpdateTimeRepose = new GetSettingAutoUpdateTimeRepose();
-                autoUpdateTimeRepose = await service.GetSettingAutoUpdateTimeAsync();
-                ViewModel.AutoUpdatePage autoUpdatePage = new ViewModel.AutoUpdatePage();
-                autoUpdatePage.Switches = switchesRespose.Switches;
-                autoUpdatePage.AutoUpdateTimes = autoUpdateTimeRepose.AutoUpdateTimes;
-
-                ViewModel.SettingPage settingPage = new ViewModel.SettingPage()
-                {
-                    AutoUpdatePage = autoUpdatePage
-                };
-
-                SecondPivot.DataContext = settingPage;
+                userService.SaveUser(userRespose);
+                NotifyUser("保存设置成功");
             }
-
+            catch (Exception)
+            {
+                NotifyUser("保存设置失败");
+            }
+            
+            
         }
 
-        private void cbbWifiConnnection_DropDownClosed(object sender, object e)
+
+        private void btnAutoUpdate_Click(object sender, RoutedEventArgs e)
         {
-            Model.Switchable wc = cbbWifiConnnection.SelectedItem as Model.Switchable;
+            userRespose.UserConfig.IsWifiAutoUpdate = int.Parse(cbbIsWifiAutoUpdate.SelectedValue.ToString());
+            userRespose.UserConfig.IsAutoUpdateForCity = int.Parse(cbbIsAutoUpdateForCity.SelectedValue.ToString());
+            userRespose.UserConfig.IsAutoUpdateForCities = int.Parse(cbbIsAutoUpdateForCities.SelectedValue.ToString());
+            userRespose.UserConfig.AutoUpdateTime = int.Parse(cbbAutoUpdateTime.SelectedValue.ToString());
+
+            userService.SaveUser(userRespose);
+            try
+            {
+                userService.SaveUser(userRespose);
+                NotifyUser("保存设置成功");
+            }
+            catch (Exception)
+            {
+                NotifyUser("保存设置失败");
+            }
         }
 
-    }
+        private async void LoadData()
+        {
+            switchesRespose = await settingService.GetSettingSwitchesAsync();
+            autoUpdateTimeRepose = await settingService.GetSettingAutoUpdateTimeAsync();
+            userRespose = await userService.GetUserAsync();
+            ViewModel.AutoUpdateSettingPage autoUpdateSettingPage = new ViewModel.AutoUpdateSettingPage()
+            {
+                Switches = switchesRespose.Switches,
+                AutoUpdateTimes = autoUpdateTimeRepose.AutoUpdateTimes
+            };
+            ViewModel.GeneralSettingPage generalSettingPage = new ViewModel.GeneralSettingPage()
+            {
+                Switches = switchesRespose.Switches
+            };
+            ViewModel.SettingPage settingPage = new ViewModel.SettingPage()
+            {
+                AutoUpdateSettingPage = autoUpdateSettingPage,
+                GeneralSettingPage = generalSettingPage,
+                UserConfig = userRespose.UserConfig
+            };
+            LayoutRoot.DataContext = settingPage;
+        }
 
-    public class Order
-    {
-        public List<OrderModel> Orders { get; set; }
-    }
+        private void NotifyUser(string strMessage)
+        {
+            StatusBorder.Background = new SolidColorBrush(Windows.UI.Colors.Green);
 
-    public class OrderModel
-    {
-        public string Id { get; set; }
-        public string Content { get; set; }
+            StatusBlock.Text = strMessage;
+
+            if (StatusBlock.Text != String.Empty)
+            {
+                popup.IsOpen = true;
+                // 创建一个DispatcherTimer实例。
+                DispatcherTimer newTimer = new DispatcherTimer();
+                // 将DispatcherTimer的Interval设为5秒。
+                newTimer.Interval = TimeSpan.FromSeconds(5);
+                // 这样一来OnTimerTick方法每秒都会被调用一次。
+                newTimer.Tick += (o, e) =>
+                {
+                    popup.IsOpen = false;
+                };
+                // 开始计时。
+                newTimer.Start();
+            }
+            else
+            {
+                popup.IsOpen = false;
+            }
+        }
     }
 }

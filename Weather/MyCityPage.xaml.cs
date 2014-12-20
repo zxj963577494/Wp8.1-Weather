@@ -130,7 +130,6 @@ namespace Weather.App
                 Frame.GoBack();
             }
         }
-
         #endregion
 
         private void abbAdd_Click(object sender, RoutedEventArgs e)
@@ -148,6 +147,7 @@ namespace Weather.App
                 flyoutBase.ShowAt(senderElement);
             }
         }
+
         private async void DefaultCity_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -163,7 +163,8 @@ namespace Weather.App
                         respose.UserCities.FirstOrDefault(x => x.CityId == DefaultCityed.CityId).IsDefault = 0;
                         respose.UserCities.FirstOrDefault(x => x.CityId == cityId).IsDefault = 1;
                         userService.SaveUserCity(respose);
-                        Frame.Navigate(typeof(MyCityPage));
+                        NotifyUser("设置成功");
+                        LayoutRoot.DataContext = SortUserCity(respose);
                     }
                     else
                     {
@@ -173,10 +174,10 @@ namespace Weather.App
             }
             catch (Exception)
             {
-                
+
                 throw;
             }
-            
+
         }
 
         private void DesTopTile_Click(object sender, RoutedEventArgs e)
@@ -185,7 +186,19 @@ namespace Weather.App
             if (selectedItem != null)
             {
                 int cityId = int.Parse(selectedItem.CommandParameter.ToString());
-
+                string titleId = selectedItem.CommandParameter.ToString() + "_Weather";
+                Model.UserCity userCity = (from u in respose.UserCities
+                                           where u.CityId == cityId
+                                           select u).FirstOrDefault();
+                string displayName = userCity.CityName;
+                if (!Utils.SecondaryTileHelper.IsExists(titleId))
+                {
+                    Utils.SecondaryTileHelper.CreateSecondaryTileAsync(titleId, displayName, displayName);
+                }
+                else
+                {
+                    NotifyUser("该城市磁贴已固定在桌面");
+                }
             }
         }
 
@@ -193,13 +206,18 @@ namespace Weather.App
         {
             GetUserCityRespose respose = new GetUserCityRespose();
             respose = await userService.GetUserCityAsync();
+            return SortUserCity(respose);
+        }
+
+
+        private GetUserCityRespose SortUserCity(GetUserCityRespose respose)
+        {
             var data = from c in respose.UserCities
                        orderby c.IsDefault descending, c.AddTime descending
                        select c;
             respose.UserCities = data.ToList();
             return respose;
         }
-
 
         /// <summary>
         /// Used to display messages to the user

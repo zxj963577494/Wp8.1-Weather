@@ -32,7 +32,9 @@ CommonNavigationTransitionInfo.IsStaggerElement="True">
                         <RowDefinition Height="9*" />
                     </Grid.RowDefinitions>
                     <StackPanel Margin="0,0,0,0.167" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <TextBlock Text="杭州" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border Background="Black">
+                            <TextBlock Text="杭州" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
                     </StackPanel>
                     <Grid Grid.Row="2">
                         <Grid.RowDefinitions>
@@ -108,13 +110,13 @@ CommonNavigationTransitionInfo.IsStaggerElement="True">
         </Pivot>
     </Grid>
     <Page.BottomAppBar>
-        <CommandBar>
+        <CommandBar IsOpen="False">
             <AppBarButton x:Name="abbRefresh" Label="刷新" Icon="Refresh" Click="abbRefresh_Click" />
-            <AppBarButton x:Name="abbWeatherIndex" Label="天气指数" Icon="Refresh" Click="abbWeatherIndex_Click" />
-            <AppBarButton x:Name="abbCity" Label="常用城市" Icon="Refresh" Click="abbCity_Click" />
+            <AppBarButton x:Name="abbWeatherIndex" Label="天气指数" Click="abbWeatherIndex_Click" Icon="Refresh" />
+            <AppBarButton x:Name="abbCity" Label="常用城市" Icon="Favorite" Click="abbCity_Click" />
             <CommandBar.SecondaryCommands>
-                <AppBarButton x:Uid="SecondaryButton1" x:Name="SecondaryButton1" Label="固定到桌面屏幕"  Click="SecondaryTileCommandBar_Click"/>
-                <AppBarButton x:Uid="SecondaryButton2" x:Name="SecondaryButton2" Label="设置" />
+                <AppBarButton x:Uid="SecondaryTileCommandBar" x:Name="SecondaryTileCommandBar" Label="固定到桌面屏幕"  Click="SecondaryTileCommandBar_Click"/>
+                <AppBarButton x:Uid="SettingCommandBar" x:Name="SettingCommandBar" Click="SettingCommandBar_Click" Label="设置" />
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>

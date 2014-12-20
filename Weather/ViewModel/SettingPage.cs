@@ -8,6 +8,10 @@ namespace Weather.App.ViewModel
 {
     public class SettingPage
     {
-        public AutoUpdatePage AutoUpdatePage { get; set; }
+        public AutoUpdateSettingPage AutoUpdateSettingPage { get; set; }
+
+        public GeneralSettingPage GeneralSettingPage { get; set; }
+
+        public Model.UserConfig UserConfig { get; set; }
     }
 }

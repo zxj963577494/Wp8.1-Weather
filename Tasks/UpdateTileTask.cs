@@ -81,8 +81,8 @@ namespace Weather.Tasks
         private static async Task<List<Model.UserCity>> GetCityList()
         {
             UserService userService = new UserService();
-            GetUserRespose userRespose = await userService.GetUserAsync();
-            var cityList = userRespose.UserConfig.UserCities;
+            GetUserCityRespose userRespose = await userService.GetUserCityAsync();
+            var cityList = userRespose.UserCities;
             return cityList;
         }
 

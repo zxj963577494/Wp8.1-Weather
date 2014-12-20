@@ -1,1 +1,1 @@
-﻿{"Switches":[{"Id":"1","Content":"开"},{"Id":"2","Content":"关"}]}
+﻿{"Switches":[{"Id":"1","Content":"开"},{"Id":"0","Content":"关"}]}
