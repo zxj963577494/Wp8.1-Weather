@@ -69,9 +69,11 @@ namespace Weather.Utils
             {
                 //序列化
                 string jsonContent = JsonSerialize<T>(target);
-                 Uri uri = new Uri(@"ms-appx:///" + fileFolder + "/" + fileName + "");
-                IStorageFile storageFile = await StorageFile.GetFileFromApplicationUriAsync(uri);
-                await FileIO.WriteTextAsync(storageFile, jsonContent);
+                await FileHelper.CreateFileForFolder(fileFolder, fileName, jsonContent);
+
+                // Uri uri = new Uri(@"ms-appx:///" + fileFolder + "/" + fileName + "");
+                //IStorageFile storageFile = await StorageFile.GetFileFromApplicationUriAsync(uri);
+                //await FileIO.WriteTextAsync(storageFile, jsonContent);
             }
             catch (Exception ex)
             {
@@ -92,6 +94,7 @@ namespace Weather.Utils
             try
             {
                 Uri uri = new Uri(@"ms-appx:///" + fileFolder + "/" + fileName + "");
+
                 IStorageFile storageFile = await StorageFile.GetFileFromApplicationUriAsync(uri);
                 string text = await FileIO.ReadTextAsync(storageFile);
                 return JsonDeserialize<T>(text);

@@ -46,35 +46,22 @@ namespace Weather.Utils
         /// <param name="dirName">目录名称，目录为null时，搜索根目录是否存在文件</param>
         /// <param name="fileName">文件名称</param>
         /// <returns></returns>
-        public async static Task<bool> IsExistFile(string dirName, string fileName)
+        public async static Task<bool> IsExistFile(string filePath)
         {
             bool isExistFile = false;
             try
             {
                 //当前应用程序包位置
                 IStorageFolder local = Windows.ApplicationModel.Package.Current.InstalledLocation;
-                if (!string.IsNullOrEmpty(dirName))
+                IStorageFile storageFile = await local.GetFileAsync(filePath);
+                if (storageFile != null)
                 {
-                    StorageFolder storageFolder = await local.GetFolderAsync(dirName);
-
-                    if (storageFolder != null)
-                    {
-                        StorageFile storageFile = await storageFolder.GetFileAsync(fileName);
-                        if (storageFile != null)
-                        {
-                            isExistFile = true;
-                        }
-                    }
+                    isExistFile = true;
                 }
                 else
                 {
-                    StorageFile storageFile = await local.GetFileAsync(fileName);
-                    if (storageFile != null)
-                    {
-                        isExistFile = true;
-                    }
+                    isExistFile = false;
                 }
-
             }
             catch (Exception)
             {
@@ -108,7 +95,7 @@ namespace Weather.Utils
 
 
         /// <summary>
-        /// 存在目录时创建txt文件
+        /// 创建文件
         /// </summary>
         /// <param name="dirname">目录名称</param>
         /// <param name="filename">文件名称</param>
@@ -121,86 +108,11 @@ namespace Weather.Utils
             {
                 //当前应用程序包位置
                 IStorageFolder local = Windows.ApplicationModel.Package.Current.InstalledLocation;
-                string filePath = filename + ".txt";
-                StorageFolder storageFolder = await local.GetFolderAsync(dirname);
-                StorageFile storageFile = await storageFolder.CreateFileAsync(filePath, CreationCollisionOption.ReplaceExisting);
+                string filePath = dirname + "\\" + filename;
+                StorageFile storageFile = await local.CreateFileAsync(filePath, CreationCollisionOption.ReplaceExisting);
                 var buffer = Windows.Security.Cryptography.CryptographicBuffer.ConvertStringToBinary(
     content, Windows.Security.Cryptography.BinaryStringEncoding.Utf8);
                 await Windows.Storage.FileIO.WriteBufferAsync(storageFile, buffer);
-                isCreateFile = true;
-            }
-            catch (Exception)
-            {
-                isCreateFile = false;
-            }
-
-            return isCreateFile;
-        }
-
-
-        /// <summary>
-        /// 不存在目录时创建txt文件
-        /// </summary>
-        /// <param name="dirname">目录名称</param>
-        /// <param name="filename">文件名称</param>
-        /// <param name="getDataStream">文件内容</param>
-        /// <returns>是否创建</returns>
-        public async static Task<bool> CreateFileForNoFolder(string dirname, string filename, string content)
-        {
-            bool isCreateFile = false;
-            try
-            {
-                //当前应用程序包位置
-                IStorageFolder local = Windows.ApplicationModel.Package.Current.InstalledLocation;
-                string filePath = filename + ".txt";
-                StorageFolder storageFolder = await local.CreateFolderAsync(dirname);
-                StorageFile storageFile = await storageFolder.CreateFileAsync(filePath, CreationCollisionOption.ReplaceExisting);
-                var buffer = Windows.Security.Cryptography.CryptographicBuffer.ConvertStringToBinary(
-    content, Windows.Security.Cryptography.BinaryStringEncoding.Utf8);
-                await Windows.Storage.FileIO.WriteBufferAsync(storageFile, buffer);
-
-                isCreateFile = true;
-            }
-            catch (Exception)
-            {
-                isCreateFile = false;
-            }
-
-            return isCreateFile;
-        }
-
-        /// <summary>
-        /// 创建txt文件
-        /// </summary>
-        /// <param name="dirname">目录名称</param>
-        /// <param name="filename">文件名称</param>
-        /// <param name="getDataStream">文件内容</param>
-        /// <returns>是否创建</returns>
-        public async static Task<bool> CreateFile(string dirname, string filename, string content)
-        {
-            bool isCreateFile = false;
-            try
-            {
-                //当前应用程序包位置
-                IStorageFolder local = Windows.ApplicationModel.Package.Current.InstalledLocation;
-                string filePath = filename + ".txt";
-                StorageFolder storageFolder = await local.GetFolderAsync(dirname);
-                if (storageFolder != null)
-                {
-                    StorageFile storageFile = await storageFolder.CreateFileAsync(filePath, CreationCollisionOption.ReplaceExisting);
-                    var buffer = Windows.Security.Cryptography.CryptographicBuffer.ConvertStringToBinary(
-        content, Windows.Security.Cryptography.BinaryStringEncoding.Utf8);
-                    await Windows.Storage.FileIO.WriteBufferAsync(storageFile, buffer);
-                }
-                else
-                {
-                    StorageFolder s = await local.CreateFolderAsync(dirname);
-                    StorageFile storageFile = await storageFolder.CreateFileAsync(filePath, CreationCollisionOption.ReplaceExisting);
-                    var buffer = Windows.Security.Cryptography.CryptographicBuffer.ConvertStringToBinary(
-        content, Windows.Security.Cryptography.BinaryStringEncoding.Utf8);
-                    await Windows.Storage.FileIO.WriteBufferAsync(storageFile, buffer);
-
-                }
                 isCreateFile = true;
             }
             catch (Exception)

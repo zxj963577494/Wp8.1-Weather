@@ -264,11 +264,9 @@ namespace Weather.App
             {
                 weatherRespose = await weatherService.GetWeatherByClientAsync(userCity.CityId.ToString());
             }
-            string fileName = userCity.CityId + "_" + DateTime.Now.ToString("yyyyMMdd") + ".txt";
-            JsonSerializeHelper.JsonSerializeForFile<GetWeatherRespose>(weatherRespose, fileName, "Temp");
+            weatherService.SaveWeather(weatherRespose, userCity.CityId.ToString());
             ViewModel.HomePageModel homePageModel = new ViewModel.HomePageModel();
             homePageModel.WeatherType = weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa);
-
             weatherRespose.result.sk.temp =  weatherRespose.result.sk.temp+"°";
             homePageModel.Sk = weatherRespose.result.sk;
             homePageModel.Today = weatherRespose.result.today;
