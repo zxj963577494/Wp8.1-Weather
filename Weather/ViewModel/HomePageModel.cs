@@ -11,6 +11,12 @@ namespace Weather.App.ViewModel
     /// </summary>
     public class HomePageModel
     {
+        public Model.WeatherType WeatherType { get; set; }
 
+        public List<Model.Future> Futures { get; set; }
+
+        public Model.Sk Sk { get; set; }
+
+        public Model.Today Today { get; set; }
     }
 }

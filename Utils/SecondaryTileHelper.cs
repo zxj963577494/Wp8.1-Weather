@@ -35,6 +35,7 @@ namespace Weather.Utils
                                                 TileSize.Square150x150);
             secondaryTile.VisualElements.Square30x30Logo = square30x30Logo;
             secondaryTile.VisualElements.ShowNameOnSquare150x150Logo = true;
+            secondaryTile.VisualElements.ShowNameOnWide310x150Logo = true;
             await secondaryTile.RequestCreateAsync();
         }
 
@@ -80,30 +81,6 @@ namespace Weather.Utils
             }
             return tileIdListString;
         }
-
-        /// <summary>
-        /// 更新默认磁贴内容(不通用)
-        /// </summary>
-        /// <param name="tileModel"></param>
-        public static void UpdateSecondaryTileNotifications(string tileId, string ImageSrc, string TextHeading, string TextBody1, string TextBody2, string TextBody3)
-        {
-
-            ITileWide310x150ImageAndText01 tileWide310x150ImageAndText01 = TileContentFactory.CreateTileWide310x150ImageAndText01();
-
-            ITileSquare150x150PeekImageAndText01 tileSquare150x150PeekImageAndText01 = TileContentFactory.CreateTileSquare150x150PeekImageAndText01();
-            //磁铁内容赋值
-            tileSquare150x150PeekImageAndText01.Image.Src = ImageSrc;
-            tileSquare150x150PeekImageAndText01.TextHeading.Text = TextHeading;
-            tileSquare150x150PeekImageAndText01.TextBody1.Text = TextBody1;
-            tileSquare150x150PeekImageAndText01.TextBody2.Text = TextBody2;
-            tileSquare150x150PeekImageAndText01.TextBody3.Text = TextBody3;
-            tileWide310x150ImageAndText01.Square150x150Content = tileSquare150x150PeekImageAndText01;
-            tileWide310x150ImageAndText01.Image.Src = "ms-appx:///Assets/WideLogo.scale-100.png";
-            tileWide310x150ImageAndText01.TextCaptionWrap.Text = TextHeading + TextBody1 + TextBody2 + TextBody3;
-            //更新至磁贴
-            TileUpdateManager.CreateTileUpdaterForSecondaryTile(tileId).Update(tileWide310x150ImageAndText01.CreateNotification());
-        }
-
 
         /// <summary>
         /// 通过Xml磁贴模版文件更新默认磁贴内容

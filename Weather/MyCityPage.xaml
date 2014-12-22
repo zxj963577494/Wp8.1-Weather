@@ -39,6 +39,7 @@
                             <MenuFlyout>
                                 <MenuFlyoutItem Text="设为默认城市" Click="DefaultCity_Click" CommandParameter="{Binding CityId}" />
                                 <MenuFlyoutItem Text="固定到桌面" Click="DesTopTile_Click" CommandParameter="{Binding CityId}" />
+                                <MenuFlyoutItem Text="移除" Click="RemoveCity_Click" CommandParameter="{Binding CityId}" />
                             </MenuFlyout>
                         </FlyoutBase.AttachedFlyout>
                         <TextBlock Text="{Binding CityName}" FontSize="20" Margin="10,10,0,0"/>

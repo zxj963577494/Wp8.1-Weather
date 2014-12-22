@@ -16,6 +16,9 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using Weather.Service.Implementations;
+using Weather.Service.Message;
+using Weather.Utils;
 
 // “透视应用程序”模板在 http://go.microsoft.com/fwlink/?LinkID=391641 上有介绍
 
@@ -27,6 +30,11 @@ namespace Weather.App
     public sealed partial class App : Application
     {
         private TransitionCollection transitions;
+        private UserService userService;
+        private GetUserRespose userRespose;
+        private GetSettingAutoUpdateTimeRepose settingAutoUpdateTimeRepose;
+
+
 
         /// <summary>
         /// 初始化单一实例应用程序对象。这是执行的创作代码的第一行，
@@ -36,6 +44,10 @@ namespace Weather.App
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
+
+            userService = new UserService();
+            userRespose = new GetUserRespose();
+            settingAutoUpdateTimeRepose = new GetSettingAutoUpdateTimeRepose();
         }
 
         /// <summary>
@@ -112,6 +124,9 @@ namespace Weather.App
 
             // 确保当前窗口处于活动状态。
             Window.Current.Activate();
+
+            CreateUpdateTileTask();
+            CreateUpdateSecondaryTileTask();
         }
 
         /// <summary>
@@ -136,6 +151,54 @@ namespace Weather.App
             var deferral = e.SuspendingOperation.GetDeferral();
             await SuspensionManager.SaveAsync();
             deferral.Complete();
+        }
+
+
+
+        /// <summary>
+        /// 创建更新应用磁贴后台任务
+        /// </summary>
+        private void CreateUpdateTileTask()
+        {
+            string taskName = "ZXJUpdateTile";
+            string taskEntryPoint = "Weather.Tasks.UpdateTileTask";
+            CreateTask(taskName, taskEntryPoint);
+        }
+
+        /// <summary>
+        /// 创建更新辅助磁贴后台任务
+        /// </summary>
+        private void CreateUpdateSecondaryTileTask()
+        {
+            string taskName = "ZXJUpdateSecondaryTile";
+            string taskEntryPoint = "Weather.Tasks.UpdateSecondaryTileTask";
+            CreateTask(taskName, taskEntryPoint);
+        }
+
+
+        /// <summary>
+        /// 创建后台任务
+        /// </summary>
+        /// <param name="taskName"></param>
+        /// <param name="taskEntryPoint"></param>
+        private async void CreateTask(string taskName, string taskEntryPoint)
+        {
+            userRespose = await userService.GetUserAsync();
+            if (userRespose.UserConfig.IsAutoUpdateForCity == 1)
+            {
+                SettingService settingService = new SettingService();
+                settingAutoUpdateTimeRepose = await settingService.GetSettingAutoUpdateTimeAsync();
+                BackgroundTaskExecute backgroundTaskExecute = new BackgroundTaskExecute();
+                int time = settingAutoUpdateTimeRepose.AutoUpdateTimes.FirstOrDefault(x => x.Id == userRespose.UserConfig.AutoUpdateTime).Time;
+                if (BackgroundTaskHelper.IsExist(taskName))
+                {
+                    backgroundTaskExecute.Execute(taskName);
+                }
+                else
+                {
+                    backgroundTaskExecute.Create(taskName, taskEntryPoint, time, null);
+                }
+            }
         }
        
     }

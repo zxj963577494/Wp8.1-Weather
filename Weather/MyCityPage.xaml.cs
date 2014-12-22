@@ -193,7 +193,7 @@ namespace Weather.App
                 string displayName = userCity.CityName;
                 if (!Utils.SecondaryTileHelper.IsExists(titleId))
                 {
-                    Utils.SecondaryTileHelper.CreateSecondaryTileAsync(titleId, displayName, displayName);
+                    Utils.SecondaryTileHelper.CreateSecondaryTileAsync(titleId, displayName, cityId.ToString());
                 }
                 else
                 {
@@ -249,6 +249,29 @@ namespace Weather.App
             {
                 popup.IsOpen = false;
             }
+        }
+
+        private void RemoveCity_Click(object sender, RoutedEventArgs e)
+        {
+             MenuFlyoutItem selectedItem = sender as MenuFlyoutItem;
+             if (selectedItem != null)
+             {
+                 int cityId = int.Parse(selectedItem.CommandParameter.ToString());
+                 GetUserCityRespose list = SortUserCity(respose);
+                 Model.UserCity city = list.UserCities.FirstOrDefault(x => x.CityId == cityId);
+                 if (list.UserCities.FirstOrDefault().IsDefault == 1)
+                 {
+                     list.UserCities.Remove(city);
+                     list.UserCities.FirstOrDefault().IsDefault = 1;
+                 }
+                 else
+                 {
+                     list.UserCities.Remove(city);
+                 }
+                 LayoutRoot.DataContext = null;
+                 LayoutRoot.DataContext = list;
+                 userService.SaveUserCity(list);
+             }
         }
     }
 }

@@ -41,6 +41,7 @@ namespace Weather.Model
         /// 日期 [20140804]
         /// </summary>
         public string date { get; set; }
+
     }
 
 }

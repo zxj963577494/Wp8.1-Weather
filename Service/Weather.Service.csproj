@@ -64,6 +64,7 @@
     <Compile Include="Message\Weather\GetWeatherFactory.cs" />
     <Compile Include="Message\Weather\GetWeatherMode.cs" />
     <Compile Include="Message\Weather\GetWeatherRespose.cs" />
+    <Compile Include="Message\Weather\GetWeatherTypeRespose.cs" />
     <Compile Include="Message\Weather\IGetWeatherRequest.cs" />
     <Compile Include="Message\Setting\GetSettingAutoUpdateTimeRepose.cs" />
     <Compile Include="Message\Setting\GetSettingSwitchesRespose.cs" />

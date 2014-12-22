@@ -35,6 +35,13 @@ namespace Weather.App
         private readonly ObservableDictionary defaultViewModel = new ObservableDictionary();
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
 
+        private UserService userService;
+        private WeatherService weatherService;
+        private GetUserRespose userRespose;
+        private GetUserCityRespose userCityRespose;
+        private GetWeatherRespose weatherRespose;
+        private GetWeatherTypeRespose weatherTypeRespose;
+
         long LastExitAttemptTick = DateTime.Now.Ticks;
 
         public PivotPage()
@@ -48,7 +55,13 @@ namespace Weather.App
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
             Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
 
-          
+
+            userService = new UserService();
+            weatherService = new WeatherService();
+            userRespose = new GetUserRespose();
+            userCityRespose = new GetUserCityRespose();
+            weatherRespose = new GetWeatherRespose();
+            weatherTypeRespose = new GetWeatherTypeRespose();
         }
 
         /// <summary>
@@ -79,7 +92,7 @@ namespace Weather.App
         /// <see cref="Frame.Navigate(Type, Object)"/> 的导航参数，又提供
         /// 此页在以前会话期间保留的状态的
         /// 的字典。首次访问页面时，该状态将为 null。</param>
-        private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
 
 
@@ -134,26 +147,7 @@ namespace Weather.App
 
                 #region 后台更新任务
 
-                UserService userService = new UserService();
-                GetUserRespose userRespose = await userService.GetUserAsync();
-                ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-                if (userRespose.UserConfig.IsAutoUpdateForCity == 1)
-                {
-                    SettingService settingService = new SettingService();
-                    GetSettingAutoUpdateTimeRepose settingAutoUpdateTimeRepose = await settingService.GetSettingAutoUpdateTimeAsync();
-                    BackgroundTaskExecute backgroundTaskExecute = new BackgroundTaskExecute();
-                    string taskName = "ZXJUpdateTile";
-                    string taskEntryPoint = "Weather.Tasks.UpdateTileTask";
-                    int time = settingAutoUpdateTimeRepose.AutoUpdateTimes.FirstOrDefault(x => x.Id == userRespose.UserConfig.AutoUpdateTime).Time;
-                    if (BackgroundTaskHelper.IsExist(taskName))
-                    {
-                        backgroundTaskExecute.Execute(taskName);
-                    }
-                    else
-                    {
-                        backgroundTaskExecute.Create(taskName, taskEntryPoint, time, null);
-                    }
-                }
+
                 #endregion
             }
             else
@@ -249,9 +243,38 @@ namespace Weather.App
         /// </summary>
         /// <param name="e">提供导航方法数据和
         /// 无法取消导航请求的事件处理程序。</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
+
+            if (!String.IsNullOrWhiteSpace(e.Parameter.ToString()))
+            {
+                string cityId = e.Parameter.ToString();
+            }
+            progressBar.Visibility = Visibility.Visible;
+            userCityRespose = await userService.GetUserCityAsync();
+            Model.UserCity userCity = userCityRespose.UserCities.FirstOrDefault(x => x.IsDefault == 1);
+            IGetWeatherRequest weatherRequest = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, userCity.CityName);
+            weatherTypeRespose =await weatherService.GetWeatherTypeAsync();
+            if (!NetHelper.IsNetworkAvailable())
+            {
+                weatherRespose = await weatherService.GetWeatherAsync(weatherRequest);
+            }
+            else
+            {
+                weatherRespose = await weatherService.GetWeatherByClientAsync(userCity.CityId.ToString());
+            }
+            string fileName = userCity.CityId + "_" + DateTime.Now.ToString("yyyyMMdd") + ".txt";
+            JsonSerializeHelper.JsonSerializeForFile<GetWeatherRespose>(weatherRespose, fileName, "Temp");
+            ViewModel.HomePageModel homePageModel = new ViewModel.HomePageModel();
+            homePageModel.WeatherType = weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa);
+
+            weatherRespose.result.sk.temp =  weatherRespose.result.sk.temp+"°";
+            homePageModel.Sk = weatherRespose.result.sk;
+            homePageModel.Today = weatherRespose.result.today;
+            homePageModel.Futures = weatherRespose.result.future.ForEach(x =>x.weather_id.fa = weatherTypeRespose.WeatherTypes.Find(w => w.Wid == x.weather_id.fa).TomorrowPic).ToList();
+            pivot.DataContext = homePageModel;
+            progressBar.Visibility =Visibility.Collapsed;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

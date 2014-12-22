@@ -166,8 +166,6 @@ namespace Weather.App
             userRespose.UserConfig.IsAutoUpdateForCity = int.Parse(cbbIsAutoUpdateForCity.SelectedValue.ToString());
             userRespose.UserConfig.IsAutoUpdateForCities = int.Parse(cbbIsAutoUpdateForCities.SelectedValue.ToString());
             userRespose.UserConfig.AutoUpdateTime = int.Parse(cbbAutoUpdateTime.SelectedValue.ToString());
-
-            userService.SaveUser(userRespose);
             try
             {
                 userService.SaveUser(userRespose);
