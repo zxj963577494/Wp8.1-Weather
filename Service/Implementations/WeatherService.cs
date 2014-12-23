@@ -33,6 +33,12 @@ namespace Weather.Service.Implementations
             return respose;
         }
 
+        public void SaveWeather<T>(T target, string cityId)
+        {
+            string fileName = cityId + "_" + DateTime.Now.ToString("yyyyMMdd") + ".txt";
+            Weather.Utils.JsonSerializeHelper.JsonSerializeForFile(target, fileName, "Temp");
+        }
+
         public async Task<GetWeatherTypeRespose> GetWeatherTypeAsync()
         {
             GetWeatherTypeRespose respose = new GetWeatherTypeRespose();

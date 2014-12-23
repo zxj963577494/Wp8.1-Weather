@@ -179,7 +179,7 @@ namespace Weather.Tasks
 
         private static async Task<bool> CreateFile(int cityId, string realResposeString)
         {
-            return await FileHelper.CreateFileForFolder("Temp", cityId.ToString() + "_" + DateTime.Now.ToString("yyyyMMdd"), realResposeString);
+            return await FileHelper.CreateFileForFolder("Temp", cityId.ToString() + "_" + DateTime.Now.ToString("yyyyMMdd")+".txt", realResposeString);
         }
 
 
