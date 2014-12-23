@@ -124,31 +124,35 @@ namespace Weather.App.Weather_App_XamlTypeInfo
 
         private void InitTypeTables()
         {
-            _typeNameTable = new string[11];
-            _typeNameTable[0] = "Weather.App.AddCityPage";
-            _typeNameTable[1] = "Windows.UI.Xaml.Controls.Page";
-            _typeNameTable[2] = "Windows.UI.Xaml.Controls.UserControl";
-            _typeNameTable[3] = "Weather.App.Common.NavigationHelper";
-            _typeNameTable[4] = "Windows.UI.Xaml.DependencyObject";
-            _typeNameTable[5] = "Weather.App.Common.ObservableDictionary";
-            _typeNameTable[6] = "Object";
-            _typeNameTable[7] = "String";
-            _typeNameTable[8] = "Weather.App.MyCityPage";
-            _typeNameTable[9] = "Weather.App.PivotPage";
-            _typeNameTable[10] = "Weather.App.SettingPage";
+            _typeNameTable = new string[13];
+            _typeNameTable[0] = "Windows.UI.Text.FontWeight";
+            _typeNameTable[1] = "System.ValueType";
+            _typeNameTable[2] = "Object";
+            _typeNameTable[3] = "Weather.App.AddCityPage";
+            _typeNameTable[4] = "Windows.UI.Xaml.Controls.Page";
+            _typeNameTable[5] = "Windows.UI.Xaml.Controls.UserControl";
+            _typeNameTable[6] = "Weather.App.Common.NavigationHelper";
+            _typeNameTable[7] = "Windows.UI.Xaml.DependencyObject";
+            _typeNameTable[8] = "Weather.App.Common.ObservableDictionary";
+            _typeNameTable[9] = "String";
+            _typeNameTable[10] = "Weather.App.MyCityPage";
+            _typeNameTable[11] = "Weather.App.PivotPage";
+            _typeNameTable[12] = "Weather.App.SettingPage";
 
-            _typeTable = new global::System.Type[11];
-            _typeTable[0] = typeof(global::Weather.App.AddCityPage);
-            _typeTable[1] = typeof(global::Windows.UI.Xaml.Controls.Page);
-            _typeTable[2] = typeof(global::Windows.UI.Xaml.Controls.UserControl);
-            _typeTable[3] = typeof(global::Weather.App.Common.NavigationHelper);
-            _typeTable[4] = typeof(global::Windows.UI.Xaml.DependencyObject);
-            _typeTable[5] = typeof(global::Weather.App.Common.ObservableDictionary);
-            _typeTable[6] = typeof(global::System.Object);
-            _typeTable[7] = typeof(global::System.String);
-            _typeTable[8] = typeof(global::Weather.App.MyCityPage);
-            _typeTable[9] = typeof(global::Weather.App.PivotPage);
-            _typeTable[10] = typeof(global::Weather.App.SettingPage);
+            _typeTable = new global::System.Type[13];
+            _typeTable[0] = typeof(global::Windows.UI.Text.FontWeight);
+            _typeTable[1] = typeof(global::System.ValueType);
+            _typeTable[2] = typeof(global::System.Object);
+            _typeTable[3] = typeof(global::Weather.App.AddCityPage);
+            _typeTable[4] = typeof(global::Windows.UI.Xaml.Controls.Page);
+            _typeTable[5] = typeof(global::Windows.UI.Xaml.Controls.UserControl);
+            _typeTable[6] = typeof(global::Weather.App.Common.NavigationHelper);
+            _typeTable[7] = typeof(global::Windows.UI.Xaml.DependencyObject);
+            _typeTable[8] = typeof(global::Weather.App.Common.ObservableDictionary);
+            _typeTable[9] = typeof(global::System.String);
+            _typeTable[10] = typeof(global::Weather.App.MyCityPage);
+            _typeTable[11] = typeof(global::Weather.App.PivotPage);
+            _typeTable[12] = typeof(global::Weather.App.SettingPage);
         }
 
         private int LookupTypeIndexByName(string typeName)
@@ -183,12 +187,12 @@ namespace Weather.App.Weather_App_XamlTypeInfo
             return -1;
         }
 
-        private object Activate_0_AddCityPage() { return new global::Weather.App.AddCityPage(); }
-        private object Activate_5_ObservableDictionary() { return new global::Weather.App.Common.ObservableDictionary(); }
-        private object Activate_8_MyCityPage() { return new global::Weather.App.MyCityPage(); }
-        private object Activate_9_PivotPage() { return new global::Weather.App.PivotPage(); }
-        private object Activate_10_SettingPage() { return new global::Weather.App.SettingPage(); }
-        private void MapAdd_5_ObservableDictionary(object instance, object key, object item)
+        private object Activate_3_AddCityPage() { return new global::Weather.App.AddCityPage(); }
+        private object Activate_8_ObservableDictionary() { return new global::Weather.App.Common.ObservableDictionary(); }
+        private object Activate_10_MyCityPage() { return new global::Weather.App.MyCityPage(); }
+        private object Activate_11_PivotPage() { return new global::Weather.App.PivotPage(); }
+        private object Activate_12_SettingPage() { return new global::Weather.App.SettingPage(); }
+        private void MapAdd_8_ObservableDictionary(object instance, object key, object item)
         {
             var collection = (global::System.Collections.Generic.IDictionary<global::System.String, global::System.Object>)instance;
             var newKey = (global::System.String)key;
@@ -206,71 +210,81 @@ namespace Weather.App.Weather_App_XamlTypeInfo
             switch (typeIndex)
             {
 
-            case 0:   //  Weather.App.AddCityPage
+            case 0:   //  Windows.UI.Text.FontWeight
+                userType = new global::Weather.App.Weather_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("System.ValueType"));
+                xamlType = userType;
+                break;
+
+            case 1:   //  System.ValueType
+                userType = new global::Weather.App.Weather_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
+                xamlType = userType;
+                break;
+
+            case 2:   //  Object
+                xamlType = new global::Weather.App.Weather_App_XamlTypeInfo.XamlSystemBaseType(typeName, type);
+                break;
+
+            case 3:   //  Weather.App.AddCityPage
                 userType = new global::Weather.App.Weather_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Windows.UI.Xaml.Controls.Page"));
-                userType.Activator = Activate_0_AddCityPage;
+                userType.Activator = Activate_3_AddCityPage;
                 userType.AddMemberName("NavigationHelper");
                 userType.AddMemberName("DefaultViewModel");
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 1:   //  Windows.UI.Xaml.Controls.Page
+            case 4:   //  Windows.UI.Xaml.Controls.Page
                 xamlType = new global::Weather.App.Weather_App_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 2:   //  Windows.UI.Xaml.Controls.UserControl
+            case 5:   //  Windows.UI.Xaml.Controls.UserControl
                 xamlType = new global::Weather.App.Weather_App_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 3:   //  Weather.App.Common.NavigationHelper
+            case 6:   //  Weather.App.Common.NavigationHelper
                 userType = new global::Weather.App.Weather_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Windows.UI.Xaml.DependencyObject"));
                 userType.SetIsReturnTypeStub();
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 4:   //  Windows.UI.Xaml.DependencyObject
+            case 7:   //  Windows.UI.Xaml.DependencyObject
                 xamlType = new global::Weather.App.Weather_App_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 5:   //  Weather.App.Common.ObservableDictionary
+            case 8:   //  Weather.App.Common.ObservableDictionary
                 userType = new global::Weather.App.Weather_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
-                userType.DictionaryAdd = MapAdd_5_ObservableDictionary;
+                userType.DictionaryAdd = MapAdd_8_ObservableDictionary;
                 userType.SetIsReturnTypeStub();
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 6:   //  Object
+            case 9:   //  String
                 xamlType = new global::Weather.App.Weather_App_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 7:   //  String
-                xamlType = new global::Weather.App.Weather_App_XamlTypeInfo.XamlSystemBaseType(typeName, type);
-                break;
-
-            case 8:   //  Weather.App.MyCityPage
+            case 10:   //  Weather.App.MyCityPage
                 userType = new global::Weather.App.Weather_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Windows.UI.Xaml.Controls.Page"));
-                userType.Activator = Activate_8_MyCityPage;
+                userType.Activator = Activate_10_MyCityPage;
                 userType.AddMemberName("NavigationHelper");
                 userType.AddMemberName("DefaultViewModel");
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 9:   //  Weather.App.PivotPage
+            case 11:   //  Weather.App.PivotPage
                 userType = new global::Weather.App.Weather_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Windows.UI.Xaml.Controls.Page"));
-                userType.Activator = Activate_9_PivotPage;
+                userType.Activator = Activate_11_PivotPage;
                 userType.AddMemberName("NavigationHelper");
                 userType.AddMemberName("DefaultViewModel");
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 10:   //  Weather.App.SettingPage
+            case 12:   //  Weather.App.SettingPage
                 userType = new global::Weather.App.Weather_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Windows.UI.Xaml.Controls.Page"));
-                userType.Activator = Activate_10_SettingPage;
+                userType.Activator = Activate_12_SettingPage;
                 userType.AddMemberName("NavigationHelper");
                 userType.AddMemberName("DefaultViewModel");
                 userType.SetIsLocalType();
