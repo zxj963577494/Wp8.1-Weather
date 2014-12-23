@@ -48,8 +48,10 @@
             </GridView.ItemTemplate>
             <GridView.ItemContainerStyle>
                 <Style TargetType="GridViewItem">
-                    <Setter Property="BorderBrush" Value="Gray"/>
-                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="Opacity" Value="0.7"></Setter>
+                    <Setter Property="Background" Value="{ThemeResource PhoneAccentBrush}"></Setter>
+                    <Setter Property="BorderBrush" Value="{ThemeResource PhoneAccentBrush}"/>
+                    <Setter Property="BorderThickness" Value="0"/>
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                     <Setter Property="VerticalContentAlignment" Value="Stretch"/>
                     <Setter Property="Margin" Value="10"/>

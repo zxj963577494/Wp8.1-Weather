@@ -20,6 +20,7 @@ using Weather.Service.Message;
 using System.Threading.Tasks;
 
 using Weather.App;
+using Windows.Phone.UI.Input;
 
 // “基本页”项模板在 http://go.microsoft.com/fwlink/?LinkID=390556 上有介绍
 
@@ -42,6 +43,7 @@ namespace Weather.App
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            HardwareButtons.BackPressed += HardwareButtons_BackPressed;//注册重写后退按钮事件
 
             userService = new UserService();
         }
@@ -110,7 +112,6 @@ namespace Weather.App
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
-            Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
             respose = await GetUserCity();
             LayoutRoot.DataContext = respose;
         }
@@ -118,19 +119,21 @@ namespace Weather.App
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedFrom(e);
-            Windows.Phone.UI.Input.HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
         }
 
-        void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
+        private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
         {
-            e.Handled = true;
-
-            if (Frame.CanGoBack)
+            Frame rootFrame = Window.Current.Content as Frame;
+            if (rootFrame != null && rootFrame.CanGoBack)
             {
-                Frame.GoBack();
+                rootFrame.GoBack();
+                e.Handled = true;
             }
         }
         #endregion
+
+
+
 
         private void abbAdd_Click(object sender, RoutedEventArgs e)
         {
@@ -253,25 +256,25 @@ namespace Weather.App
 
         private void RemoveCity_Click(object sender, RoutedEventArgs e)
         {
-             MenuFlyoutItem selectedItem = sender as MenuFlyoutItem;
-             if (selectedItem != null)
-             {
-                 int cityId = int.Parse(selectedItem.CommandParameter.ToString());
-                 GetUserCityRespose list = SortUserCity(respose);
-                 Model.UserCity city = list.UserCities.FirstOrDefault(x => x.CityId == cityId);
-                 if (list.UserCities.FirstOrDefault().IsDefault == 1)
-                 {
-                     list.UserCities.Remove(city);
-                     list.UserCities.FirstOrDefault().IsDefault = 1;
-                 }
-                 else
-                 {
-                     list.UserCities.Remove(city);
-                 }
-                 LayoutRoot.DataContext = null;
-                 LayoutRoot.DataContext = list;
-                 userService.SaveUserCity(list);
-             }
+            MenuFlyoutItem selectedItem = sender as MenuFlyoutItem;
+            if (selectedItem != null)
+            {
+                int cityId = int.Parse(selectedItem.CommandParameter.ToString());
+                GetUserCityRespose list = SortUserCity(respose);
+                Model.UserCity city = list.UserCities.FirstOrDefault(x => x.CityId == cityId);
+                if (list.UserCities.FirstOrDefault().IsDefault == 1)
+                {
+                    list.UserCities.Remove(city);
+                    list.UserCities.FirstOrDefault().IsDefault = 1;
+                }
+                else
+                {
+                    list.UserCities.Remove(city);
+                }
+                LayoutRoot.DataContext = null;
+                LayoutRoot.DataContext = list;
+                userService.SaveUserCity(list);
+            }
         }
     }
 }

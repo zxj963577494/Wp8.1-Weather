@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Navigation;
 using Weather.Utils;
 using Weather.Service.Message;
 using Weather.Service.Implementations;
+using Windows.Phone.UI.Input;
 
 // “基本页”项模板在 http://go.microsoft.com/fwlink/?LinkID=390556 上有介绍
 
@@ -46,6 +47,8 @@ namespace Weather.App
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            HardwareButtons.BackPressed += HardwareButtons_BackPressed;//注册重写后退按钮事件
+
 
             settingService = new SettingService();
             userService = new UserService();
@@ -139,6 +142,16 @@ namespace Weather.App
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedFrom(e);
+        }
+
+        private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
+        {
+            Frame rootFrame = Window.Current.Content as Frame;
+            if (rootFrame != null && rootFrame.CanGoBack)
+            {
+                rootFrame.GoBack();
+                e.Handled = true;
+            }
         }
         #endregion
 

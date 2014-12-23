@@ -14,6 +14,8 @@
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxBundlePlatforms>neutral</AppxBundlePlatforms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -82,6 +84,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BlankPage1.xaml.cs">
+      <DependentUpon>BlankPage1.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Common\BackgroundTaskExecute.cs" />
     <Compile Include="AddCityPage.xaml.cs">
       <DependentUpon>AddCityPage.xaml</DependentUpon>
@@ -147,17 +152,27 @@
     <Content Include="Data\Cities.txt" />
     <Content Include="Data\HotCities.txt" />
     <Content Include="Data\Switches.txt" />
-    <Content Include="Images\Background\01.jpg" />
-    <Content Include="Images\Background\02.jpg" />
+    <Content Include="Images\001.jpg" />
     <Content Include="Images\Background\08.jpg" />
     <Content Include="Images\Background\10.jpg" />
     <Content Include="Images\Background\07.jpg" />
-    <Content Include="Images\Background\00.jpg" />
-    <Content Include="Images\Background\06.jpg" />
     <Content Include="Images\Background\09.jpg" />
-    <Content Include="Images\Background\04.jpg" />
-    <Content Include="Images\Background\11.jpg" />
+    <Content Include="Images\Background\00.jpg" />
+    <Content Include="Images\Background\01.jpg" />
+    <Content Include="Images\Background\02.jpg" />
     <Content Include="Images\Background\12.jpg" />
+    <Content Include="Images\Background\11.jpg" />
+    <Content Include="Images\Background\13.jpg" />
+    <Content Include="Images\Background\04.jpg" />
+    <Content Include="Images\Background\06.jpg" />
+    <Content Include="Images\Index\lvyou.png" />
+    <Content Include="Images\Index\chenlian.png" />
+    <Content Include="Images\Index\chuanyi.png" />
+    <Content Include="Images\Index\shushidu.png" />
+    <Content Include="Images\Index\xiche.png" />
+    <Content Include="Images\Index\ziwaixian.png" />
+    <Content Include="Images\Index\fengli.png" />
+    <Content Include="Images\Index\shidu.png" />
     <Content Include="Images\OtherIcon\wdj.jpg" />
     <Content Include="Images\OtherIcon\xdsd.jpg" />
     <Content Include="Images\Today\03.png" />
@@ -246,6 +261,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="AddCityPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BlankPage1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -27,9 +27,20 @@ namespace Weather.Service.Implementations
 
         public async Task<GetWeatherRespose> GetWeatherByClientAsync(string cityId)
         {
-            GetWeatherRespose respose = new GetWeatherRespose();
-            string fileName = cityId + "_" + DateTime.Now.ToString("yyyyMMdd")+".txt";
-            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFile<GetWeatherRespose>(fileName,"Temp");
+            string fileName = null;
+            string filePath = null;
+            GetWeatherRespose respose = null;
+            for (int i = 0; i < 7; i--)
+            {
+                fileName = cityId + "_" + DateTime.Now.AddDays(i).ToString("yyyyMMdd") + ".txt";
+                filePath = "Temp\\" + fileName;
+                bool x = await FileHelper.IsExistFile(filePath);
+                if (x)
+                {
+                    respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFile<GetWeatherRespose>(fileName, "Temp");
+                    break;
+                }
+            }
             return respose;
         }
 

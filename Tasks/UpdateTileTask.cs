@@ -190,8 +190,8 @@ namespace Weather.Tasks
             {
                 string fileName = cityId + "_" + DateTime.Now.AddDays(i).ToString("yyyyMMdd")+".txt";
                 string filePath = "Temp\\" + fileName;
-                var file = await FileHelper.GetFileAccess(filePath);
-                if (file != null)
+                var x = await FileHelper.IsExistFile(filePath);
+                if (x)
                 {
                     str = fileName;
                     break;

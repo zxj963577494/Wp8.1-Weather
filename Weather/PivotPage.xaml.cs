@@ -33,7 +33,6 @@ namespace Weather.App
     {
         private readonly NavigationHelper navigationHelper;
         private readonly ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
 
         private UserService userService;
         private WeatherService weatherService;
@@ -41,6 +40,7 @@ namespace Weather.App
         private GetUserCityRespose userCityRespose;
         private GetWeatherRespose weatherRespose;
         private GetWeatherTypeRespose weatherTypeRespose;
+        private string cityId = null;
 
         long LastExitAttemptTick = DateTime.Now.Ticks;
 
@@ -81,6 +81,7 @@ namespace Weather.App
             get { return this.defaultViewModel; }
         }
 
+        #region 状态
         /// <summary>
         /// 使用在导航过程中传递的内容填充页。在从以前的会话
         /// 重新创建页时，也会提供任何已保存状态。
@@ -94,66 +95,9 @@ namespace Weather.App
         /// 的字典。首次访问页面时，该状态将为 null。</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-
-
-
-
-            //foreach (var task in BackgroundTaskRegistration.AllTasks)
-            //{
-            //    if (task.Value.Name == BackgroundTaskSample.SampleBackgroundTaskName)
-            //    {
-            //        AttachProgressAndCompletedHandlers(task.Value);
-            //        BackgroundTaskSample.UpdateBackgroundTaskStatus(BackgroundTaskSample.SampleBackgroundTaskName, true);
-            //        break;
-            //    }
-            //}
-
-
-            //BackgroundTask.BackgroundTaskExecute execute = new BackgroundTask.BackgroundTaskExecute();
-            //execute.Crete("ZXJUpdateForTile", "Weather.Tasks.UpdateTileTask", new TimeTrigger(15, false), null);
-
-
-            //execute.RegisterBackgroundTask();
-
-            //BackgroundTask.BackgroundTaskTaskModel task = new BackgroundTask.BackgroundTaskTaskModel();
-            //task.BackgroundTaskName = "UpdateTileTask";
-            //task.BackgroundTaskEntryPoint = "Weather.BackgroundTask.UpdateTileTask";
-            //task.
-
-
-            /* 通知
-            string toastText = "明天冷空气南下，请注意保暖";
-            Common.ToastHelper.CreateToast(toastText);
-            */
-
-            //await Common.FileHelper.IsExistFile("Temp", "20141210.txt");
-            //Message.General.GetWeatherRespose respose = new Message.General.GetWeatherRespose();
-            //respose = await Common.JsonSerializeHelper.JsonDeSerializeForFile<Message.General.GetWeatherRespose>("20141210.txt", "Temp");
-
-            //Message.Forecast3h.GetForecast3hByCityNameRepose respose = new Message.Forecast3h.GetForecast3hByCityNameRepose();
-            //respose = await Common.JsonSerializeHelper.JsonDeSerializeForFile<Message.Forecast3h.GetForecast3hByCityNameRepose>("20141210050000.txt", "Temp");
-
-
-            //string cityname = "杭州";
-
-            if (NetHelper.IsNetworkAvailable())
-            {
-                //GetWeatherRespose respose = new GetWeatherRespose();
-                //IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, cityname);
-                //string requestUrl = request.GetRequestUrl();
-                //string resposeString = await Weather.Utils.HttpHelper.GetUrlRespose(requestUrl);
-                //respose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(resposeString);
-                //await FileHelper.CreateFileForFolder("Temp", DateTime.Now.ToString("yyyyMMdd"), resposeString);
-
-                #region 后台更新任务
-
-
-                #endregion
-            }
-            else
-            {
-
-            }
+            //通知
+            //string toastText = "明天冷空气南下，请注意保暖";
+            //ToastHelper.CreateToast(toastText);
 
         }
 
@@ -171,45 +115,9 @@ namespace Weather.App
         {
             // TODO: 在此处保存页面的唯一状态。
         }
-
-        /// <summary>
-        /// 刷新
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void abbRefresh_Click(object sender, RoutedEventArgs e)
-        {
-        }
-
-        /// <summary>
-        /// 天气指数
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void abbWeatherIndex_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        /// <summary>
-        /// 常用城市
-        /// /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void abbCity_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(MyCityPage));
-        }
+        #endregion
 
 
-
-
-        /// <summary>
-        /// 滚动到视图中后，为第二个数据透视项加载内容。
-        /// </summary>
-        private void SecondPivot_Loaded(object sender, RoutedEventArgs e)
-        {
-        }
 
         private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
         {
@@ -243,36 +151,13 @@ namespace Weather.App
         /// </summary>
         /// <param name="e">提供导航方法数据和
         /// 无法取消导航请求的事件处理程序。</param>
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
 
-            if (!String.IsNullOrWhiteSpace(e.Parameter.ToString()))
-            {
-                string cityId = e.Parameter.ToString();
-            }
-            progressBar.Visibility = Visibility.Visible;
-            userCityRespose = await userService.GetUserCityAsync();
-            Model.UserCity userCity = userCityRespose.UserCities.FirstOrDefault(x => x.IsDefault == 1);
-            IGetWeatherRequest weatherRequest = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, userCity.CityName);
-            weatherTypeRespose =await weatherService.GetWeatherTypeAsync();
-            if (!NetHelper.IsNetworkAvailable())
-            {
-                weatherRespose = await weatherService.GetWeatherAsync(weatherRequest);
-            }
-            else
-            {
-                weatherRespose = await weatherService.GetWeatherByClientAsync(userCity.CityId.ToString());
-            }
-            weatherService.SaveWeather(weatherRespose, userCity.CityId.ToString());
-            ViewModel.HomePageModel homePageModel = new ViewModel.HomePageModel();
-            homePageModel.WeatherType = weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa);
-            weatherRespose.result.sk.temp =  weatherRespose.result.sk.temp+"°";
-            homePageModel.Sk = weatherRespose.result.sk;
-            homePageModel.Today = weatherRespose.result.today;
-            homePageModel.Futures = weatherRespose.result.future.ForEach(x =>x.weather_id.fa = weatherTypeRespose.WeatherTypes.Find(w => w.Wid == x.weather_id.fa).TomorrowPic).ToList();
-            pivot.DataContext = homePageModel;
-            progressBar.Visibility =Visibility.Collapsed;
+            cityId = e.Parameter.ToString();
+
+            GetWeather(cityId, 0);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -281,6 +166,88 @@ namespace Weather.App
         }
 
         #endregion
+
+        #region 获取天气数据
+
+        /// <summary>
+        /// 获取天气数据
+        /// </summary>
+        /// <param name="cityId"></param>
+        private async void GetWeather(string cityId, int flatRefresh)
+        {
+            Model.UserCity userCity = null;
+            progressBar.Visibility = Visibility.Visible;
+            userCityRespose = await userService.GetUserCityAsync();
+            userCity = string.IsNullOrEmpty(cityId) ? userCityRespose.UserCities.FirstOrDefault(x => x.IsDefault == 1) : userCityRespose.UserCities.FirstOrDefault(x => x.CityId == int.Parse(cityId));
+            IGetWeatherRequest weatherRequest = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, userCity.CityName);
+            weatherTypeRespose = await weatherService.GetWeatherTypeAsync();
+            if (!NetHelper.IsNetworkAvailable())
+            {
+                if (flatRefresh == 1)
+                {
+                    weatherRespose = await weatherService.GetWeatherAsync(weatherRequest);
+                }
+                else
+                {
+                    string filePath = "Temp\\" + cityId + "_" + DateTime.Now.ToString("yyyyMMdd") + ".txt";
+                    if (!await FileHelper.IsExistFile(filePath))
+                    {
+                        //不存在当天的天气数据，就从网络获取数据
+                        weatherRespose = await weatherService.GetWeatherAsync(weatherRequest);
+                    }
+                    else
+                    {
+                        weatherRespose = await weatherService.GetWeatherByClientAsync(userCity.CityId.ToString());
+                    }
+                }
+
+            }
+            else
+            {
+                weatherRespose = await weatherService.GetWeatherByClientAsync(userCity.CityId.ToString());
+            }
+            if (weatherRespose!=null)
+            {
+                weatherService.SaveWeather(weatherRespose, userCity.CityId.ToString());
+                ViewModel.HomePageModel homePageModel = new ViewModel.HomePageModel();
+                homePageModel.WeatherType = weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa);
+                weatherRespose.result.sk.temp = weatherRespose.result.sk.temp + "°";
+                weatherRespose.result.sk.time = weatherRespose.result.sk.time + "发布";
+                homePageModel.Sk = weatherRespose.result.sk;
+                homePageModel.Today = weatherRespose.result.today;
+
+                //var futures1 = weatherRespose.result.future.ForEach(x => x.weather_id.fa = weatherTypeRespose.WeatherTypes.Find(w => w.Wid == x.weather_id.fa).TomorrowPic);
+                //var futures2 = weatherRespose.result.future.ForEach(x => x.weather_id.fb = weatherTypeRespose.WeatherTypes.Find(w => w.Wid == x.weather_id.fa).BackgroundPic);
+                homePageModel.Futures = weatherRespose.result.future.AsParallel().ForEach(x => x.weather_id.fa = weatherTypeRespose.WeatherTypes.Find(w => w.Wid == x.weather_id.fa).TomorrowPic).ToList();
+                pivot.DataContext = homePageModel;
+            }
+            progressBar.Visibility = Visibility.Collapsed;
+        }
+        #endregion
+
+        #region 刷新+常用城市
+
+        /// <summary>
+        /// 刷新
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void abbRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            GetWeather(cityId, 1);
+        }
+
+        /// <summary>
+        /// 常用城市
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void abbCity_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(MyCityPage));
+        }
+        #endregion
+
+        #region CommandBar
 
         private void SecondaryTileCommandBar_Click(object sender, RoutedEventArgs e)
         {
@@ -298,5 +265,6 @@ namespace Weather.App
         {
             Frame.Navigate(typeof(SettingPage));
         }
+        #endregion
     }
 }
