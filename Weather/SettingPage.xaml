@@ -5,18 +5,20 @@
 	xmlns:local="using:Weather.App"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	mc:Ignorable="d"
-	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+	mc:Ignorable="d">
 
     <Grid x:Name="LayoutRoot">
+        <Grid.Background>
+            <ImageBrush Stretch="None" ImageSource="Images/Other/gaosi.jpg"/>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Popup x:Name="popup"  Grid.Row="0" >
-                <Border x:Name="StatusBorder" >
-                    <TextBlock x:Name="StatusBlock" Foreground="White" FontSize="20" FontWeight="Bold" Margin="15, 10, 15, 10" TextWrapping="Wrap"/>
-                </Border>
+            <Border x:Name="StatusBorder" >
+                <TextBlock x:Name="StatusBlock" Foreground="White" FontSize="20" FontWeight="Bold" Margin="15, 10, 15, 10" TextWrapping="Wrap"/>
+            </Border>
         </Popup>
         <Pivot Grid.Row="1" x:Name="SettingPivot" Title="应用设置">
             <!--枢轴项一-->
@@ -51,15 +53,30 @@ CommonNavigationTransitionInfo.IsStaggerElement="True">
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
-                        <ComboBox Header="是否允许自动更新默认城市" x:Name="cbbIsAutoUpdateForCity"  ItemsSource="{Binding AutoUpdateSettingPage.Switches}"  SelectedValuePath="Id"  DisplayMemberPath="Content" SelectedValue="{Binding UserConfig.IsAutoUpdateForCity}">
-                        </ComboBox>
-                        <ComboBox Header="是否允许自动更新所有常用城市" x:Name="cbbIsAutoUpdateForCities"  Grid.Row="1" ItemsSource="{Binding AutoUpdateSettingPage.Switches}"  SelectedValuePath="Id"  DisplayMemberPath="Content" SelectedValue="{Binding UserConfig.IsAutoUpdateForCities}">
-                        </ComboBox>
-                        <ComboBox  Grid.Row="2" Header="仅在WI-FI建立后自动更新" x:Name="cbbIsWifiAutoUpdate"  ItemsSource="{Binding AutoUpdateSettingPage.Switches}"  SelectedValuePath="Id"  DisplayMemberPath="Content" SelectedValue="{Binding UserConfig.IsWifiAutoUpdate}">
-                        </ComboBox>
-                        <ComboBox  Grid.Row="3" Header="自动更新频率" x:Name="cbbAutoUpdateTime" ItemsSource="{Binding AutoUpdateSettingPage.AutoUpdateTimes}" SelectedValuePath="Id"  DisplayMemberPath="Content" SelectedValue="{Binding UserConfig.AutoUpdateTime}">
-                        </ComboBox>
-                    <Button Grid.Row="4" Click="btnAutoUpdate_Click" Content="保存设置" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"> </Button>
+                    <ComboBox Header="是否允许自动更新默认城市" x:Name="cbbIsAutoUpdateForCity"  ItemsSource="{Binding AutoUpdateSettingPage.Switches}"  SelectedValuePath="Id"  DisplayMemberPath="Content" SelectedValue="{Binding UserConfig.IsAutoUpdateForCity}">
+                    </ComboBox>
+                    <ComboBox Header="是否允许自动更新所有常用城市" x:Name="cbbIsAutoUpdateForCities"  Grid.Row="1" ItemsSource="{Binding AutoUpdateSettingPage.Switches}"  SelectedValuePath="Id"  DisplayMemberPath="Content" SelectedValue="{Binding UserConfig.IsAutoUpdateForCities}">
+                    </ComboBox>
+                    <ComboBox  Grid.Row="2" Header="仅在WI-FI建立后自动更新" x:Name="cbbIsWifiAutoUpdate"  ItemsSource="{Binding AutoUpdateSettingPage.Switches}"  SelectedValuePath="Id"  DisplayMemberPath="Content" SelectedValue="{Binding UserConfig.IsWifiAutoUpdate}">
+                    </ComboBox>
+                    <ComboBox  Grid.Row="3" Header="自动更新频率" x:Name="cbbAutoUpdateTime" ItemsSource="{Binding AutoUpdateSettingPage.AutoUpdateTimes}" SelectedValuePath="Id"  DisplayMemberPath="Content" SelectedValue="{Binding UserConfig.AutoUpdateTime}">
+                    </ComboBox>
+                    <Button Grid.Row="4" Click="btnAutoUpdate_Click" Content="保存设置" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></Button>
+                </Grid>
+            </PivotItem>
+            <PivotItem
+				Margin="0,10,0,-9.778"
+				Header="磁贴设置"
+CommonNavigationTransitionInfo.IsStaggerElement="True">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <ComboBox  Header="磁贴使用天气背景" FontSize="22" x:Name="cbbIsTileSquarePic"  ItemsSource="{Binding AutoUpdateSettingPage.Switches}"  SelectedValuePath="Id"  DisplayMemberPath="Content" SelectedValue="{Binding UserConfig.IsTileSquarePic}">
+                    </ComboBox>
+                    <Button Grid.Row="2" Click="btnTile_Click" Content="保存设置" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
                 </Grid>
             </PivotItem>
         </Pivot>

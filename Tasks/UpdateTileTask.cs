@@ -28,66 +28,72 @@ namespace Weather.Tasks
     public sealed class UpdateTileTask : IBackgroundTask
     {
         private UserService userService = null;
+        private WeatherService weatherService = null;
         private GetUserRespose getUserRespose = null;
         private GetUserCityRespose getUserCityRespose = null;
         private GetWeatherRespose getWeatherRespose = null;
+        private GetWeatherTypeRespose getWeatherTypeRespose = null;
+
 
         public UpdateTileTask()
         {
             userService = new UserService();
+            weatherService = new WeatherService();
             getUserRespose = new GetUserRespose();
             getUserCityRespose = new GetUserCityRespose();
             getWeatherRespose = new GetWeatherRespose();
+            getWeatherTypeRespose = new GetWeatherTypeRespose();
         }
 
         public async void Run(IBackgroundTaskInstance taskInstance)
         {
             BackgroundTaskDeferral _deferral = taskInstance.GetDeferral();
 
+            getWeatherTypeRespose = await weatherService.GetWeatherTypeAsync();
+
             var defaultCity = await GetDefaultCity();
 
             getUserRespose = await GetUser();
-            //是否自动更新所有城市
-            if (getUserRespose.UserConfig.IsAutoUpdateForCities == 1)
-            {
-                if (getUserRespose.UserConfig.IsAutoUpdateForCity == 1)
-                {
-                    if (NetHelper.IsNetworkAvailable())
-                    {
-                        string realResposeString = null;
 
-                        //无论使用移动数据还是WIFI都允许自动更新
-                        if (getUserRespose.UserConfig.IsWifiAutoUpdate == 0)
-                        {
-                            realResposeString = await GetRealResposeString(defaultCity.CityName);
-                            getWeatherRespose = GetUrlRespose(defaultCity.CityName, realResposeString);
-                            UpdateTile(getWeatherRespose);
-                            await CreateFile(defaultCity.CityId.ToString(), realResposeString);
-                        }
-                        else
-                        {
-                            if (NetHelper.IsWifiConnection())
-                            {
-                                realResposeString = await GetRealResposeString(defaultCity.CityName);
-                                getWeatherRespose = GetUrlRespose(defaultCity.CityName, realResposeString);
-                                UpdateTile(getWeatherRespose);
-                                await CreateFile(defaultCity.CityId.ToString(), realResposeString);
-                            }
-                        }
+            if (!NetHelper.IsNetworkAvailable())
+            {
+                string realResposeString = null;
+
+                //无论使用移动数据还是WIFI都允许自动更新
+                if (getUserRespose.UserConfig.IsWifiAutoUpdate == 0)
+                {
+                    realResposeString = await GetRealResposeString(defaultCity.CityName);
+                    getWeatherRespose = GetUrlRespose(defaultCity.CityName, realResposeString);
+                    UpdateTile(getWeatherRespose);
+                    await CreateFile(defaultCity.CityId.ToString(), realResposeString);
+                }
+                else
+                {
+                    if (NetHelper.IsWifiConnection())
+                    {
+                        realResposeString = await GetRealResposeString(defaultCity.CityName);
+                        getWeatherRespose = GetUrlRespose(defaultCity.CityName, realResposeString);
+                        UpdateTile(getWeatherRespose);
+                        await CreateFile(defaultCity.CityId.ToString(), realResposeString);
+                    }
+                }
+            }
+            else
+            {
+                string fileName = await GetClientPath(defaultCity.CityId.ToString());
+                if (fileName != null)
+                {
+                    getWeatherRespose = await GetWeatherByFile(fileName);
+                    if (getWeatherRespose.result.today.date_y==DateTime.Now.ToString("yyyy年MM月dd日"))
+                    {
+                         UpdateTile(getWeatherRespose);
                     }
                     else
                     {
-                        string fileName = await GetUpdateTileForClientPath(defaultCity.CityId.ToString());
-                        if (fileName != null)
-                        {
-                            getWeatherRespose = await GetWeatherForFile(fileName);
-                            Model.Future future = getWeatherRespose.result.future.Find(x => x.date == DateTime.Now.ToString("yyyyMMdd"));
-                            UpdateTileForClient(future,defaultCity.CityName);
-                        }
-
+                        Model.Future future = getWeatherRespose.result.future.Find(x => x.date == StringHelper.GetTodayDateString());
+                        UpdateTileByClientForTomorrow(future, defaultCity.CityName);
                     }
                 }
-
             }
             //表示完成任务
             _deferral.Complete();
@@ -103,14 +109,25 @@ namespace Weather.Tasks
             return await userService.GetUserAsync();
         }
 
-        private static async Task<Model.UserCity> GetDefaultCity()
+
+        /// <summary>
+        /// 获取默认城市
+        /// </summary>
+        /// <returns></returns>
+        private async Task<Model.UserCity> GetDefaultCity()
         {
             UserService userService = new UserService();
             GetUserCityRespose userRespose = await userService.GetUserCityAsync();
             return userRespose.UserCities.Find(x => x.IsDefault == 1);
         }
 
-        private static async Task<String> GetRealResposeString(string cityName)
+        /// <summary>
+        /// 获取天气字符串
+        /// </summary>
+        /// <param name="cityName"></param>
+        /// <returns></returns>
+
+        private async Task<String> GetRealResposeString(string cityName)
         {
             IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, cityName);
             string requestUrl = request.GetRequestUrl();
@@ -119,20 +136,37 @@ namespace Weather.Tasks
             return realResposeString;
         }
 
-        private static GetWeatherRespose GetUrlRespose(string cityName, string realResposeString)
+        /// <summary>
+        /// 获取天气对象
+        /// </summary>
+        /// <param name="cityName"></param>
+        /// <param name="realResposeString"></param>
+        /// <returns></returns>
+        private GetWeatherRespose GetUrlRespose(string cityName, string realResposeString)
         {
             GetWeatherRespose respose = new GetWeatherRespose();
             respose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(realResposeString);
             return respose;
         }
 
-        private static async Task<bool> CreateFile(string cityId, string realResposeString)
+        /// <summary>
+        /// 序列化天气对象
+        /// </summary>
+        /// <param name="cityId"></param>
+        /// <param name="realResposeString"></param>
+        /// <returns></returns>
+        private async Task<bool> CreateFile(string cityId, string realResposeString)
         {
-            return await FileHelper.CreateFileForFolder("Temp", cityId + "_" + DateTime.Now.ToString("yyyyMMdd")+".txt", realResposeString);
+            return await FileHelper.CreateFileForFolder("Temp", cityId + "_" + StringHelper.GetTodayDateString() + ".txt", realResposeString);
         }
 
-
-        private static void UpdateTile(GetWeatherRespose respose)
+        /// <summary>
+        /// 更新磁贴
+        /// </summary>
+        /// <param name="respose"></param>
+        /// <param name="getWeatherTypeRespose"></param>
+        /// <param name="getUserRespose"></param>
+        private void UpdateTile(GetWeatherRespose respose)
         {
             string tileXmlString = @"<tile>"
                + "<visual version='2'>"
@@ -145,7 +179,7 @@ namespace Weather.Tasks
                + "<text id='6'>" + respose.result.today.week + "</text>"
                + "</binding>"
                + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-               + "<image id='1' src='ms-appx:///Assets/Logo.scale-100.png' alt='alt text'/>"
+               + "<image id='1' src='ms-appx:///" + (getUserRespose.UserConfig.IsTileSquarePic == 1 ? getWeatherTypeRespose.WeatherTypes.Find(x => x.Wid == respose.result.today.weather_id.fa).TileSquarePic : "Assets/Logo.png") + "'/>"
                + "<text id='1'>" + respose.result.today.city + "</text>"
                + "<text id='2'>天气：" + respose.result.today.weather + "</text>"
                + "<text id='3'>温度：" + respose.result.sk.temp + "°</text>"
@@ -159,7 +193,14 @@ namespace Weather.Tasks
 
         #region 本地
 
-        private void UpdateTileForClient(Model.Future future, string cityName)
+        /// <summary>
+        /// 通过本地更新磁贴，未来天气
+        /// </summary>
+        /// <param name="future"></param>
+        /// <param name="cityName"></param>
+        /// <param name="getWeatherTypeRespose"></param>
+        /// <param name="getUserRespose"></param>
+        private void UpdateTileByClientForTomorrow(Model.Future future, string cityName)
         {
             string tileXmlString = @"<tile>"
                + "<visual version='2'>"
@@ -172,7 +213,7 @@ namespace Weather.Tasks
                + "<text id='6'>" + future.week + "</text>"
                + "</binding>"
                + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-               + "<image id='1' src='ms-appx:///Assets/Logo.scale-100.png' alt='alt text'/>"
+               + "<image id='1' src='ms-appx:///" + (getUserRespose.UserConfig.IsTileSquarePic == 1 ? getWeatherTypeRespose.WeatherTypes.Find(x => x.Wid == future.weather_id.fa).TileSquarePic : "Assets/Logo.png") + "'/>"
                + "<text id='1'>" + cityName + "</text>"
                + "<text id='2'>天气：" + future.weather + "</text>"
                + "<text id='3'>温度：" + future.temperature + "°</text>"
@@ -182,13 +223,17 @@ namespace Weather.Tasks
                + "</tile>";
             TileHelper.UpdateTileNotificationsByXml(tileXmlString);
         }
-
-        private async Task<String> GetUpdateTileForClientPath(string cityId)
+        /// <summary>
+        /// 获取可用本地路径
+        /// </summary>
+        /// <param name="cityId"></param>
+        /// <returns></returns>
+        private async Task<String> GetClientPath(string cityId)
         {
             string str = null;
-            for (int i = 0; i < 7; i--)
+            for (int i = 0; i < 3; i++)
             {
-                string fileName = cityId + "_" + DateTime.Now.AddDays(i).ToString("yyyyMMdd")+".txt";
+                string fileName = cityId + "_" + DateTime.Now.AddDays(-i).ToString("yyyyMMdd") + ".txt";
                 string filePath = "Temp\\" + fileName;
                 var x = await FileHelper.IsExistFile(filePath);
                 if (x)
@@ -200,11 +245,16 @@ namespace Weather.Tasks
             return str;
         }
 
-        private async Task<GetWeatherRespose> GetWeatherForFile(string fileName)
+        /// <summary>
+        /// 反序列天气对象
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        private async Task<GetWeatherRespose> GetWeatherByFile(string fileName)
         {
-            GetWeatherRespose respose = await JsonSerializeHelper.JsonDeSerializeForFile<GetWeatherRespose>(fileName,"Temp");
+            GetWeatherRespose respose = await JsonSerializeHelper.JsonDeSerializeForFile<GetWeatherRespose>(fileName, "Temp");
             return respose;
-        } 
+        }
         #endregion
     }
 }

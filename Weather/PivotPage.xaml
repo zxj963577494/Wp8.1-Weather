@@ -8,223 +8,220 @@
 	xmlns:data="using:Weather.Data"
 	mc:Ignorable="d"
 	>
-    <Page.Transitions>
-        <TransitionCollection>
-            <NavigationThemeTransition>
-                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
-                    <CommonNavigationTransitionInfo IsStaggeringEnabled="True"/>
-                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
-            </NavigationThemeTransition>
-        </TransitionCollection>
-    </Page.Transitions>
+	<Page.Transitions>
+		<TransitionCollection>
+			<NavigationThemeTransition>
+				<NavigationThemeTransition.DefaultNavigationTransitionInfo>
+					<CommonNavigationTransitionInfo IsStaggeringEnabled="True"/>
+				</NavigationThemeTransition.DefaultNavigationTransitionInfo>
+			</NavigationThemeTransition>
+		</TransitionCollection>
+	</Page.Transitions>
 
-    <Grid>
+	<Grid>
 
-        <ProgressBar IsIndeterminate="True" x:Name="progressBar" Height="10" VerticalAlignment="Stretch" Visibility="Collapsed"/>
-        <Pivot  x:Name="pivot" CommonNavigationTransitionInfo.IsStaggerElement="True">
+		<ProgressBar IsIndeterminate="True" x:Name="progressBar" Height="10" VerticalAlignment="Stretch" Visibility="Collapsed"/>
+		<Pivot  x:Name="pivot" CommonNavigationTransitionInfo.IsStaggerElement="True">
 
-            <Pivot.Background>
+			<Pivot.Background>
                 <ImageBrush Stretch="None" ImageSource="{Binding WeatherType.BackgroundPic}"/>
-            </Pivot.Background>
-            <!--今日天气-->
-            <PivotItem Header="今日天气"
+			</Pivot.Background>
+			<!--今日天气-->
+			<PivotItem Header="今日天气"
 				Margin="0,10,0,-9.778"
 CommonNavigationTransitionInfo.IsStaggerElement="True">
-                <Grid VerticalAlignment="Bottom" HorizontalAlignment="Left">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="3*" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="20" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20"/>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="5"/>
-                        <ColumnDefinition Width="3*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="{Binding Today.city}" Grid.Column="1" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.ColumnSpan="6"/>
-                    <TextBlock Text="{Binding Sk.temp}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="96" Grid.ColumnSpan="6"/>
-                    <TextBlock Text="{Binding Today.temperature}"  Grid.Row="2" Grid.Column="1"  FontSize="24"  Grid.ColumnSpan="6"/>
-                    <TextBlock Text="{Binding Today.weather}"  Grid.Row="3" Grid.Column="1"  FontSize="24"/>
-                    <TextBlock Text="{Binding Sk.time}"  Grid.Row="3" Grid.Column="3"  FontSize="24"/>
-                </Grid>
+				<Grid VerticalAlignment="Bottom" HorizontalAlignment="Left">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="*" />
+						<RowDefinition Height="3*" />
+						<RowDefinition Height="*" />
+						<RowDefinition Height="*" />
+						<RowDefinition Height="20" />
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="20"/>
+						<ColumnDefinition Width="3*"/>
+						<ColumnDefinition Width="5"/>
+						<ColumnDefinition Width="3*"/>
+					</Grid.ColumnDefinitions>
+					<TextBlock Text="{Binding Today.city}" Grid.Column="1" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.ColumnSpan="6" />
+					<TextBlock Text="{Binding Sk.temp}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="96" Grid.ColumnSpan="6"/>
+					<TextBlock Text="{Binding Today.temperature}"  Grid.Row="2" Grid.Column="1"  FontSize="24"  Grid.ColumnSpan="6"/>
+					<TextBlock Text="{Binding Today.weather}"  Grid.Row="3" Grid.Column="1"  FontSize="24"/>
+					<TextBlock Text="{Binding Sk.time}"  Grid.Row="3" Grid.Column="3"  FontSize="24"/>
+				</Grid>
 
-            </PivotItem>
+			</PivotItem>
 
-            <PivotItem Header="天气详情" Margin="0,10,0,-9.778">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="6*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="6*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="20"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="20"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="20"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid  Grid.Row="0" Grid.Column="1" Background="{ThemeResource PhoneAccentBrush}" Opacity="0.7">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Image Source="Images/Index/shidu.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Sk.humidity}" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="相对湿度" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
-                    </Grid>
-                    <Grid  Grid.Row="0" Grid.Column="3" Background="{ThemeResource PhoneAccentBrush}" Opacity="0.7">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Image Source="Images/Index/fengli.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Today.wind}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="风力风向" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
-                    </Grid>
-                    <Grid  Grid.Row="2" Grid.Column="1" Background="{ThemeResource PhoneAccentBrush}" Opacity="0.7">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Image Source="Images/Index/shushidu.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Today.comfort_index}" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="舒适度" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
-                    </Grid>
-                    <Grid Grid.Row="2" Grid.Column="3" Background="{ThemeResource PhoneAccentBrush}" Opacity="0.7">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Image Source="Images/Index/chuanyi.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Today.dressing_index}" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="穿衣指数" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.ColumnSpan="2"/>
-                    </Grid>
+			<PivotItem Header="天气详情" Margin="0,10,0,-9.778">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="6*"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="6*"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="20"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="20"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="20"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<Grid  Grid.Row="0" Grid.Column="1" Background="{ThemeResource PhoneAccentBrush}" Opacity="0.7">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+						<Image Source="Images/Index/shidu.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Sk.humidity}" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<TextBlock Grid.Row="1" Grid.Column="0" Text="相对湿度" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+					</Grid>
+					<Grid  Grid.Row="0" Grid.Column="3" Background="{ThemeResource PhoneAccentBrush}" Opacity="0.7">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+						<Image Source="Images/Index/fengli.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Today.wind}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"/>
+						<TextBlock Grid.Row="1" Grid.Column="0" Text="风力风向" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+					</Grid>
+					<Grid  Grid.Row="2" Grid.Column="1" Background="{ThemeResource PhoneAccentBrush}" Opacity="0.7">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+						<Image Source="Images/Index/shushidu.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Today.comfort_index}" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<TextBlock Grid.Row="1" Grid.Column="0" Text="舒适度" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+					</Grid>
+					<Grid Grid.Row="2" Grid.Column="3" Background="{ThemeResource PhoneAccentBrush}" Opacity="0.7">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+						<Image Source="Images/Index/chuanyi.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Today.dressing_index}" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<TextBlock Grid.Row="1" Grid.Column="0" Text="穿衣指数" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.ColumnSpan="2"/>
+					</Grid>
 
-                    <Grid  Grid.Row="4" Grid.Column="1" Background="{ThemeResource PhoneAccentBrush}" Opacity="0.7">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Image Source="Images/Index/chenlian.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Today.exercise_index}" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="晨练指数" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.ColumnSpan="2"/>
-                    </Grid>
+					<Grid  Grid.Row="4" Grid.Column="1" Background="{ThemeResource PhoneAccentBrush}" Opacity="0.7">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+						<Image Source="Images/Index/chenlian.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Today.exercise_index}" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<TextBlock Grid.Row="1" Grid.Column="0" Text="晨练指数" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.ColumnSpan="2"/>
+					</Grid>
 
-                    <Grid  Grid.Row="4" Grid.Column="3" Background="{ThemeResource PhoneAccentBrush}" Opacity="0.7">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Image Source="Images/Index/ziwaixian.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Today.uv_index}" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="紫外线" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.ColumnSpan="2"/>
-                    </Grid>
+					<Grid  Grid.Row="4" Grid.Column="3" Background="{ThemeResource PhoneAccentBrush}" Opacity="0.7">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+						<Image Source="Images/Index/ziwaixian.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Today.uv_index}" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<TextBlock Grid.Row="1" Grid.Column="0" Text="紫外线" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.ColumnSpan="2"/>
+					</Grid>
 
-                    <Grid  Grid.Row="6" Grid.Column="1" Background="{ThemeResource PhoneAccentBrush}" Opacity="0.7">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Image Source="Images/Index/xiche.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Today.wash_index}" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="洗车指数" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.ColumnSpan="2"/>
-                    </Grid>
+					<Grid  Grid.Row="6" Grid.Column="1" Background="{ThemeResource PhoneAccentBrush}" Opacity="0.7">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+						<Image Source="Images/Index/xiche.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Today.wash_index}" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<TextBlock Grid.Row="1" Grid.Column="0" Text="洗车指数" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.ColumnSpan="2"/>
+					</Grid>
 
-                    <Grid  Grid.Row="6" Grid.Column="3" Background="{ThemeResource PhoneAccentBrush}" Opacity="0.7">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Image Source="Images/Index/lvyou.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Today.travel_index}" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="旅游指数" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.ColumnSpan="2"/>
-                    </Grid>
-                </Grid>
+					<Grid  Grid.Row="6" Grid.Column="3" Background="{ThemeResource PhoneAccentBrush}" Opacity="0.7">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+						<Image Source="Images/Index/lvyou.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Today.travel_index}" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						<TextBlock Grid.Row="1" Grid.Column="0" Text="旅游指数" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.ColumnSpan="2"/>
+					</Grid>
+				</Grid>
 
-            </PivotItem>
+			</PivotItem>
 
-            <!--未来天气-->
-            <PivotItem Header="未来天气"
+			<!--未来天气-->
+			<PivotItem Header="未来天气"
 				Margin="0,14.5,0,0"
 				>
-                <ListView
+				<ListView
 					ItemsSource="{Binding Futures}" ScrollViewer.VerticalScrollBarVisibility="Hidden" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.Background>
-                                    <ImageBrush Stretch="Fill" ImageSource="{Binding weather_id.fb}"/>
-                                </Grid.Background>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="90"/>
-                                    <ColumnDefinition Width="70"/>
-                                    <ColumnDefinition Width="110"/>
-                                    <ColumnDefinition Width="110"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="{Binding week}" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,10,40"/>
-                                <Image Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Source="{Binding weather_id.fa}" Stretch="None"  Margin="5,0,5,40"/>
-                                <TextBlock Grid.Column="2" Text="{Binding weather}" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="5,0,5,40"/>
-                                <TextBlock Grid.Column="3" Text="{Binding temperature}" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="5,0,5,40"/>
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<Grid>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto"/>
+								</Grid.RowDefinitions>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="90"/>
+									<ColumnDefinition Width="60"/>
+									<ColumnDefinition Width="120"/>
+									<ColumnDefinition Width="110"/>
+								</Grid.ColumnDefinitions>
+								<TextBlock Grid.Column="0" Text="{Binding week}" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,0,40"/>
+								<Image Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Source="{Binding weather_id.fa}" Stretch="None"  Margin="0,0,0,40"/>
+								<TextBlock Grid.Column="2" Text="{Binding weather}" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0,0,0,40"/>
+								<TextBlock Grid.Column="3" Text="{Binding temperature}" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0,0,0,40"/>
 
-                            </Grid>
+							</Grid>
 
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </PivotItem>
-        </Pivot>
-    </Grid>
-    <Page.BottomAppBar>
-        <CommandBar Opacity="0.5">
-            <AppBarButton x:Name="abbRefresh" Label="刷新" Icon="Refresh" Click="abbRefresh_Click" />
-            <AppBarButton x:Name="abbCity" Label="常用城市" Icon="Favorite" Click="abbCity_Click" />
-            <CommandBar.SecondaryCommands>
-                <AppBarButton x:Uid="SecondaryTileCommandBar" x:Name="SecondaryTileCommandBar" Label="固定到桌面屏幕"  Click="SecondaryTileCommandBar_Click"/>
-                <AppBarButton x:Uid="SettingCommandBar" x:Name="SettingCommandBar" Click="SettingCommandBar_Click" Label="设置" />
-            </CommandBar.SecondaryCommands>
-        </CommandBar>
-    </Page.BottomAppBar>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+				</ListView>
+			</PivotItem>
+		</Pivot>
+	</Grid>
+	<Page.BottomAppBar>
+		<CommandBar Opacity="0.5">
+			<AppBarButton x:Name="abbRefresh" Label="更新数据" Icon="Refresh" Click="abbRefresh_Click" />
+			<AppBarButton x:Name="abbCity" Label="常用城市" Icon="Favorite" Click="abbCity_Click" />
+			<CommandBar.SecondaryCommands>
+				<AppBarButton x:Uid="SecondaryTileCommandBar" x:Name="SecondaryTileCommandBar" Label="固定到桌面屏幕"  Click="SecondaryTileCommandBar_Click"/>
+				<AppBarButton x:Uid="SettingCommandBar" x:Name="SettingCommandBar" Click="SettingCommandBar_Click" Label="设置" />
+			</CommandBar.SecondaryCommands>
+		</CommandBar>
+	</Page.BottomAppBar>
 </Page>

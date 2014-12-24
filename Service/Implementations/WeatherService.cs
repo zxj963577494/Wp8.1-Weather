@@ -30,9 +30,9 @@ namespace Weather.Service.Implementations
             string fileName = null;
             string filePath = null;
             GetWeatherRespose respose = null;
-            for (int i = 0; i < 7; i--)
+            for (int i = 0; i < 3; i++)
             {
-                fileName = cityId + "_" + DateTime.Now.AddDays(i).ToString("yyyyMMdd") + ".txt";
+                fileName = cityId + "_" + DateTime.Now.AddDays(-i).ToString("yyyyMMdd") + ".txt";
                 filePath = "Temp\\" + fileName;
                 bool x = await FileHelper.IsExistFile(filePath);
                 if (x)
@@ -46,7 +46,7 @@ namespace Weather.Service.Implementations
 
         public void SaveWeather<T>(T target, string cityId)
         {
-            string fileName = cityId + "_" + DateTime.Now.ToString("yyyyMMdd") + ".txt";
+            string fileName = cityId + "_" + StringHelper.GetTodayDateString() + ".txt";
             Weather.Utils.JsonSerializeHelper.JsonSerializeForFile(target, fileName, "Temp");
         }
 

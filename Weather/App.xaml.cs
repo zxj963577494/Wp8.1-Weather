@@ -78,7 +78,7 @@ namespace Weather.App
                 SuspensionManager.RegisterFrame(rootFrame, "AppFrame");
 
                 // TODO: 将此值更改为适合您的应用程序的缓存大小。
-                rootFrame.CacheSize = 1;
+                rootFrame.CacheSize = 3;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {

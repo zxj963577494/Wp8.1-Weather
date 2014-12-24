@@ -7,5 +7,6 @@
     <AppxPackageIsForStore>False</AppxPackageIsForStore>
     <AppxShowAllApps>False</AppxShowAllApps>
     <AppxBuildConfigurationSelection>neutral</AppxBuildConfigurationSelection>
+    <ProjectView>ProjectFiles</ProjectView>
   </PropertyGroup>
 </Project>

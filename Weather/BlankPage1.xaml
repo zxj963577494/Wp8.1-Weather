@@ -1,0 +1,47 @@
+﻿<Page
+    x:Class="Weather.App.BlankPage1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Weather.App"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <TextBlock FontSize="24" x:Name="WindowSize"></TextBlock>
+        </StackPanel>
+        <StackPanel  Grid.Row="1" >
+            <TextBlock  FontSize="24" x:Name="LogicalDpi"></TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="2">
+            <TextBlock  FontSize="24"  x:Name="RawPixelsPerViewPixel"></TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="3" >
+            <TextBlock  FontSize="24" x:Name="ScaleFactor"></TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="4" >
+            <TextBlock  FontSize="24" x:Name="ScreenResolution"></TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="5" >
+            <TextBlock  FontSize="24" x:Name="LogicalResolution"></TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="6">
+            <TextBlock  FontSize="24"  x:Name="RawDpi"></TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="7" >
+            <TextBlock  FontSize="24" x:Name="ScreenInch"></TextBlock>
+        </StackPanel>
+    </Grid>
+</Page>

@@ -10,7 +10,7 @@ using Windows.Storage.Streams;
 
 namespace Weather.Utils
 {
-    public static class JsonSerializeHelper
+    public class JsonSerializeHelper
     {
         #region 通用序列化方法
         /// <summary>
@@ -71,9 +71,6 @@ namespace Weather.Utils
                 string jsonContent = JsonSerialize<T>(target);
                 await FileHelper.CreateFileForFolder(fileFolder, fileName, jsonContent);
 
-                // Uri uri = new Uri(@"ms-appx:///" + fileFolder + "/" + fileName + "");
-                //IStorageFile storageFile = await StorageFile.GetFileFromApplicationUriAsync(uri);
-                //await FileIO.WriteTextAsync(storageFile, jsonContent);
             }
             catch (Exception ex)
             {
@@ -93,11 +90,29 @@ namespace Weather.Utils
         {
             try
             {
-                Uri uri = new Uri(@"ms-appx:///" + fileFolder + "/" + fileName + "");
-
-                IStorageFile storageFile = await StorageFile.GetFileFromApplicationUriAsync(uri);
-                string text = await FileIO.ReadTextAsync(storageFile);
+                IStorageFolder local = Windows.ApplicationModel.Package.Current.InstalledLocation;
+                string filePath = fileFolder + "\\" + fileName;
+                IStorageFile storageFile = await local.GetFileAsync(filePath);
+                var buffer = await Windows.Storage.FileIO.ReadBufferAsync(storageFile);
+                DataReader dataReader = Windows.Storage.Streams.DataReader.FromBuffer(buffer);
+                string text = dataReader.ReadString(buffer.Length);
                 return JsonDeserialize<T>(text);
+
+                //Uri uri = new Uri(@"ms-appx:///" + fileFolder + "/" + fileName + "");
+
+                //IStorageFile storageFile = await StorageFile.GetFileFromApplicationUriAsync(uri);
+
+                ////StorageFile sf = await storageFolder.GetFileAsync(this.tbFileName.Text.Trim());
+
+                //IBuffer buffer = await FileIO.ReadBufferAsync(storageFile);
+                //using (DataReader dataReader = DataReader.FromBuffer(buffer))
+                //{
+                //    string filecontent = dataReader.ReadString(buffer.Length);
+                //    string text = dataReader.ReadString(buffer.Length);
+                //    return JsonDeserialize<T>(text);
+                //}
+
+
             }
             catch (Exception ex)
             {

@@ -96,7 +96,6 @@
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\ResposeFacede.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
-    <Compile Include="DataModel\SampleDataSource.cs" />
     <Compile Include="DTO\TileModel.cs" />
     <Compile Include="Facade\Weather\WeatherInvoker.cs" />
     <Compile Include="MyCityPage.xaml.cs">
@@ -112,6 +111,7 @@
     <Compile Include="ViewModel\AutoUpdateSettingPage.cs" />
     <Compile Include="ViewModel\GeneralSettingPage.cs" />
     <Compile Include="ViewModel\HomePageModel.cs" />
+    <Compile Include="ViewModel\MyCityPage.cs" />
     <Compile Include="ViewModel\SelectCityPage.cs" />
     <Compile Include="ViewModel\SettingPage.cs" />
   </ItemGroup>
@@ -152,7 +152,6 @@
     <Content Include="Data\Cities.txt" />
     <Content Include="Data\HotCities.txt" />
     <Content Include="Data\Switches.txt" />
-    <Content Include="Images\001.jpg" />
     <Content Include="Images\Background\08.jpg" />
     <Content Include="Images\Background\10.jpg" />
     <Content Include="Images\Background\07.jpg" />
@@ -173,8 +172,20 @@
     <Content Include="Images\Index\ziwaixian.png" />
     <Content Include="Images\Index\fengli.png" />
     <Content Include="Images\Index\shidu.png" />
-    <Content Include="Images\OtherIcon\wdj.jpg" />
-    <Content Include="Images\OtherIcon\xdsd.jpg" />
+    <Content Include="Images\Other\gaosi.jpg" />
+    <Content Include="Images\TileSquare\00.jpg" />
+    <Content Include="Images\TileSquare\01.jpg" />
+    <Content Include="Images\TileSquare\02.jpg" />
+    <Content Include="Images\TileSquare\05.jpg" />
+    <Content Include="Images\TileSquare\04.jpg" />
+    <Content Include="Images\TileSquare\06.jpg" />
+    <Content Include="Images\TileSquare\07.jpg" />
+    <Content Include="Images\TileSquare\08.jpg" />
+    <Content Include="Images\TileSquare\09.jpg" />
+    <Content Include="Images\TileSquare\10.jpg" />
+    <Content Include="Images\TileSquare\11.jpg" />
+    <Content Include="Images\TileSquare\12.jpg" />
+    <Content Include="Images\TileSquare\13.jpg" />
     <Content Include="Images\Today\03.png" />
     <Content Include="Images\Today\04.png" />
     <Content Include="Images\Today\18.png" />
@@ -226,23 +237,6 @@
     <Content Include="Images\Tomorrow\07.png" />
     <Content Include="Images\Tomorrow\08.png" />
     <Content Include="Images\Tomorrow\901.png" />
-    <Content Include="Images\Toolkit\ApplicationBar.settings.png" />
-    <Content Include="Images\Toolkit\Beignets.jpg" />
-    <Content Include="Images\Toolkit\Copenhagen.jpg" />
-    <Content Include="Images\Toolkit\Dessert.jpg" />
-    <Content Include="Images\Toolkit\Fruits.jpg" />
-    <Content Include="Images\Toolkit\Movie.jpg" />
-    <Content Include="Images\Toolkit\Mürren.jpg" />
-    <Content Include="Images\Toolkit\Neuschwanstein.jpg" />
-    <Content Include="Images\Toolkit\Paris.jpg" />
-    <Content Include="Images\Toolkit\Person.jpg" />
-    <Content Include="Images\Toolkit\Pretzel.jpg" />
-    <Content Include="Images\Toolkit\Search.png" />
-    <Content Include="Images\Toolkit\Seattle.jpg" />
-    <Content Include="Images\Toolkit\Shrimp.jpg" />
-    <Content Include="Images\Toolkit\SteakSandwich.jpg" />
-    <Content Include="Images\Toolkit\Venice.jpg" />
-    <Content Include="Images\Weather-Clouds-icon.png" />
     <Content Include="StoreManifest.xml" />
     <Content Include="Temp\杭州_20141209.txt" />
     <Content Include="Temp\杭州_20141210050000.txt" />
@@ -256,7 +250,6 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DataModel\SampleData.json" />
     <PRIResource Include="Strings\zh-CN\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
@@ -306,7 +299,14 @@
       <Name>Weather.Service</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Images\TileWide\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Fonts\Segoe WP.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

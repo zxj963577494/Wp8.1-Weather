@@ -239,5 +239,20 @@ namespace Weather.App
                 popup.IsOpen = false;
             }
         }
+
+        private void btnTile_Click(object sender, RoutedEventArgs e)
+        {
+            userRespose.UserConfig.IsTileSquarePic
+                = int.Parse(cbbIsTileSquarePic.SelectedValue.ToString());
+            try
+            {
+                userService.SaveUser(userRespose);
+                NotifyUser("保存设置成功");
+            }
+            catch (Exception)
+            {
+                NotifyUser("保存设置失败");
+            }
+        }
     }
 }

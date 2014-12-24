@@ -1,5 +1,4 @@
 ﻿using Weather.App.Common;
-using Weather.Data;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -173,40 +172,66 @@ namespace Weather.App
         /// 获取天气数据
         /// </summary>
         /// <param name="cityId"></param>
-        private async void GetWeather(string cityId, int flatRefresh)
+        private async void GetWeather(string cityId, int isRefresh)
         {
             Model.UserCity userCity = null;
             progressBar.Visibility = Visibility.Visible;
             userCityRespose = await userService.GetUserCityAsync();
+            userRespose = await userService.GetUserAsync();
             userCity = string.IsNullOrEmpty(cityId) ? userCityRespose.UserCities.FirstOrDefault(x => x.IsDefault == 1) : userCityRespose.UserCities.FirstOrDefault(x => x.CityId == int.Parse(cityId));
             IGetWeatherRequest weatherRequest = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, userCity.CityName);
             weatherTypeRespose = await weatherService.GetWeatherTypeAsync();
-            if (!NetHelper.IsNetworkAvailable())
+            if (NetHelper.IsNetworkAvailable())
             {
-                if (flatRefresh == 1)
+                if (userRespose.UserConfig.IsWifiUpdate == 0)
                 {
-                    weatherRespose = await weatherService.GetWeatherAsync(weatherRequest);
-                }
-                else
-                {
-                    string filePath = "Temp\\" + cityId + "_" + DateTime.Now.ToString("yyyyMMdd") + ".txt";
-                    if (!await FileHelper.IsExistFile(filePath))
+                    if (isRefresh == 1)
                     {
-                        //不存在当天的天气数据，就从网络获取数据
                         weatherRespose = await weatherService.GetWeatherAsync(weatherRequest);
                     }
                     else
                     {
-                        weatherRespose = await weatherService.GetWeatherByClientAsync(userCity.CityId.ToString());
+                        string filePath = StringHelper.GetTodayFilePath(userCity.CityId);
+                        if (!await FileHelper.IsExistFile(filePath))
+                        {
+                            //不存在当天的天气数据，就从网络获取数据
+                            weatherRespose = await weatherService.GetWeatherAsync(weatherRequest);
+                        }
+                        else
+                        {
+                            weatherRespose = await weatherService.GetWeatherByClientAsync(userCity.CityId.ToString());
+                        }
                     }
                 }
-
+                else
+                {
+                    if (NetHelper.IsWifiConnection())
+                    {
+                        if (isRefresh == 1)
+                        {
+                            weatherRespose = await weatherService.GetWeatherAsync(weatherRequest);
+                        }
+                        else
+                        {
+                            string filePath = StringHelper.GetTodayFilePath(userCity.CityId);
+                            if (!await FileHelper.IsExistFile(filePath))
+                            {
+                                //不存在当天的天气数据，就从网络获取数据
+                                weatherRespose = await weatherService.GetWeatherAsync(weatherRequest);
+                            }
+                            else
+                            {
+                                weatherRespose = await weatherService.GetWeatherByClientAsync(userCity.CityId.ToString());
+                            }
+                        }
+                    }
+                }
             }
             else
             {
                 weatherRespose = await weatherService.GetWeatherByClientAsync(userCity.CityId.ToString());
             }
-            if (weatherRespose!=null)
+            if (weatherRespose.result != null)
             {
                 weatherService.SaveWeather(weatherRespose, userCity.CityId.ToString());
                 ViewModel.HomePageModel homePageModel = new ViewModel.HomePageModel();
@@ -215,9 +240,6 @@ namespace Weather.App
                 weatherRespose.result.sk.time = weatherRespose.result.sk.time + "发布";
                 homePageModel.Sk = weatherRespose.result.sk;
                 homePageModel.Today = weatherRespose.result.today;
-
-                //var futures1 = weatherRespose.result.future.ForEach(x => x.weather_id.fa = weatherTypeRespose.WeatherTypes.Find(w => w.Wid == x.weather_id.fa).TomorrowPic);
-                //var futures2 = weatherRespose.result.future.ForEach(x => x.weather_id.fb = weatherTypeRespose.WeatherTypes.Find(w => w.Wid == x.weather_id.fa).BackgroundPic);
                 homePageModel.Futures = weatherRespose.result.future.AsParallel().ForEach(x => x.weather_id.fa = weatherTypeRespose.WeatherTypes.Find(w => w.Wid == x.weather_id.fa).TomorrowPic).ToList();
                 pivot.DataContext = homePageModel;
             }

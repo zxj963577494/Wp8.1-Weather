@@ -40,5 +40,17 @@ namespace Weather.Utils
 
             return "%" + BitConverter.ToString(_Value).Replace('-', '%');
         }
+
+
+        /// <summary>
+        /// 获取今日天气文件路径
+        /// </summary>
+        /// <param name="cityId"></param>
+        /// <returns></returns>
+        public static string GetTodayFilePath(int cityId)
+        {
+            string filePath = "Temp\\" + cityId + "_" + StringHelper.GetTodayDateString() + ".txt";
+            return filePath;
+        }
     }
 }

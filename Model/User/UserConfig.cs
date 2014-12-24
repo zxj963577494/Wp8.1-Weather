@@ -40,5 +40,10 @@ namespace Weather.Model
         /// 使用Wifi自动更新
         /// </summary>
         public int IsWifiAutoUpdate { get; set; }
+
+        /// <summary>
+        /// 磁贴是否使用天气图片
+        /// </summary>
+        public int IsTileSquarePic { get; set; }
     }
 }

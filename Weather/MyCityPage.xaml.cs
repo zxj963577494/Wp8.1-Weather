@@ -21,6 +21,8 @@ using System.Threading.Tasks;
 
 using Weather.App;
 using Windows.Phone.UI.Input;
+using Weather.Utils;
+using Weather.App.ViewModel;
 
 // “基本页”项模板在 http://go.microsoft.com/fwlink/?LinkID=390556 上有介绍
 
@@ -33,8 +35,14 @@ namespace Weather.App
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private readonly UserService userService = null;
-        private GetUserCityRespose respose = null;
+        private UserService userService = null;
+        private WeatherService weatherService;
+        private GetUserRespose userRespose;
+        private GetUserCityRespose userCityRespose = null;
+        private GetWeatherTypeRespose weatherTypeRespose;
+        private GetWeatherRespose weatherRespose = null;
+        private ViewModel.MyCityPage myCityPage = null;
+
 
         public MyCityPage()
         {
@@ -46,6 +54,12 @@ namespace Weather.App
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;//注册重写后退按钮事件
 
             userService = new UserService();
+            weatherService = new WeatherService();
+            userRespose = new GetUserRespose();
+            userCityRespose = new GetUserCityRespose();
+            weatherTypeRespose = new GetWeatherTypeRespose();
+            weatherRespose = new GetWeatherRespose();
+            myCityPage = new ViewModel.MyCityPage();
         }
 
         /// <summary>
@@ -109,12 +123,169 @@ namespace Weather.App
         /// </summary>
         /// <param name="e">提供导航方法数据和
         /// 无法取消导航请求的事件处理程序。</param>
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
-            respose = await GetUserCity();
-            LayoutRoot.DataContext = respose;
+            GetWeather(0);
         }
+
+
+
+        private async void GetWeather(int isRefresh)
+        {
+            progressBar.Visibility = Visibility.Visible;
+            userCityRespose = await GetUserCity();
+            userRespose = await userService.GetUserAsync();
+            weatherTypeRespose = await weatherService.GetWeatherTypeAsync();
+            if (NetHelper.IsNetworkAvailable())
+            {
+                List<ViewModel.MyCityPageModel> myCityPageModelList = new List<ViewModel.MyCityPageModel>();
+
+                foreach (var item in userCityRespose.UserCities)
+                {
+                    if (userRespose.UserConfig.IsUpdateForCity == 0)
+                    {
+                        if (isRefresh == 1)
+                        {
+                            //不存在当天的天气数据，就从网络获取数据
+                            IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, item.CityName);
+                            weatherRespose = await weatherService.GetWeatherAsync(request);
+                            weatherService.SaveWeather<GetWeatherRespose>(weatherRespose, item.CityId.ToString());
+
+                            MyCityPageModel model = new MyCityPageModel()
+                            {
+                                CityId = item.CityId,
+                                CityName = item.CityName,
+                                Temp = weatherRespose == null ? "" : weatherRespose.result.today.temperature,
+                                TodayPic = weatherRespose == null ? "" : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TodayPic
+                            };
+                            myCityPageModelList.Add(model);
+                        }
+                        else
+                        {
+                            string filePath = StringHelper.GetTodayFilePath(item.CityId);
+                            if (!await FileHelper.IsExistFile(filePath))
+                            {
+                                //不存在当天的天气数据，就从网络获取数据
+                                IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, item.CityName);
+                                weatherRespose = await weatherService.GetWeatherAsync(request);
+                                weatherService.SaveWeather<GetWeatherRespose>(weatherRespose, item.CityId.ToString());
+
+                                MyCityPageModel model = new MyCityPageModel()
+                                {
+                                    CityId = item.CityId,
+                                    CityName = item.CityName,
+                                    Temp = weatherRespose == null ? "" : weatherRespose.result.today.temperature,
+                                    TodayPic = weatherRespose == null ? "" : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TodayPic
+                                };
+                                myCityPageModelList.Add(model);
+                            }
+                            else
+                            {
+                                weatherRespose = await weatherService.GetWeatherByClientAsync(item.CityId.ToString());
+                                MyCityPageModel model = new MyCityPageModel();
+                                model.CityId = item.CityId;
+                                model.CityName = item.CityName;
+                                model.Temp = weatherRespose == null ? "" : weatherRespose.result.today.temperature;
+                                model.TodayPic = weatherRespose == null ? "" : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TodayPic;
+                                myCityPageModelList.Add(model);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (isRefresh == 1)
+                        {
+                            if (item.IsDefault == 1)
+                            {
+                                //不存在当天的天气数据，就从网络获取数据
+                                IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, item.CityName);
+                                weatherRespose = await weatherService.GetWeatherAsync(request);
+                                weatherService.SaveWeather<GetWeatherRespose>(weatherRespose, item.CityId.ToString());
+
+                                MyCityPageModel model = new MyCityPageModel()
+                                {
+                                    CityId = item.CityId,
+                                    CityName = item.CityName,
+                                    Temp = weatherRespose == null ? "" : weatherRespose.result.today.temperature,
+                                    TodayPic = weatherRespose == null ? "" : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TodayPic
+                                };
+                                myCityPageModelList.Add(model);
+                            }
+                            else
+                            {
+                                MyCityPageModel model = new MyCityPageModel()
+                                {
+                                    CityId = item.CityId,
+                                    CityName = item.CityName,
+                                    Temp = "",
+                                    TodayPic = "",
+                                };
+                                myCityPageModelList.Add(model);
+                            }
+
+                        }
+                        else
+                        {
+                            if (item.IsDefault == 1)
+                            {
+
+
+                                string filePath = StringHelper.GetTodayFilePath(item.CityId);
+                                if (!await FileHelper.IsExistFile(filePath))
+                                {
+                                    //不存在当天的天气数据，就从网络获取数据
+                                    IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, item.CityName);
+                                    weatherRespose = await weatherService.GetWeatherAsync(request);
+                                    weatherService.SaveWeather<GetWeatherRespose>(weatherRespose, item.CityId.ToString());
+
+                                    MyCityPageModel model = new MyCityPageModel()
+                                    {
+                                        CityId = item.CityId,
+                                        CityName = item.CityName,
+                                        Temp = weatherRespose == null ? "" : weatherRespose.result.today.temperature,
+                                        TodayPic = weatherRespose == null ? "" : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TodayPic
+                                    };
+                                    myCityPageModelList.Add(model);
+                                }
+                                else
+                                {
+                                    weatherRespose = await weatherService.GetWeatherByClientAsync(item.CityId.ToString());
+                                    MyCityPageModel model = new MyCityPageModel();
+                                    model.CityId = item.CityId;
+                                    model.CityName = item.CityName;
+                                    model.Temp = weatherRespose == null ? "" : weatherRespose.result.today.temperature;
+                                    model.TodayPic = weatherRespose == null ? "" : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TodayPic;
+                                    myCityPageModelList.Add(model);
+                                }
+                            }
+                            else
+                            {
+                                MyCityPageModel model = new MyCityPageModel()
+                                {
+                                    CityId = item.CityId,
+                                    CityName = item.CityName,
+                                    Temp = "",
+                                    TodayPic = "",
+                                };
+                                myCityPageModelList.Add(model);
+                            }
+                        }
+                    }
+                }
+                myCityPage.MyCityPageModels = myCityPageModelList;
+            }
+            else
+            {
+
+            }
+            LayoutRoot.DataContext = myCityPage;
+            progressBar.Visibility = Visibility.Collapsed;
+        }
+
+
+
+
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
@@ -133,12 +304,6 @@ namespace Weather.App
         #endregion
 
 
-
-
-        private void abbAdd_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(AddCityPage));
-        }
 
         private void Grid_Holding(object sender, Windows.UI.Xaml.Input.HoldingRoutedEventArgs e)
         {
@@ -159,15 +324,15 @@ namespace Weather.App
                 if (selectedItem != null)
                 {
                     int cityId = int.Parse(selectedItem.CommandParameter.ToString());
-                    respose = await GetUserCity();
-                    var DefaultCityed = respose.UserCities.FirstOrDefault(x => x.IsDefault == 1);
+                    userCityRespose = await GetUserCity();
+                    var DefaultCityed = userCityRespose.UserCities.FirstOrDefault(x => x.IsDefault == 1);
                     if (DefaultCityed.CityId != cityId)
                     {
-                        respose.UserCities.FirstOrDefault(x => x.CityId == DefaultCityed.CityId).IsDefault = 0;
-                        respose.UserCities.FirstOrDefault(x => x.CityId == cityId).IsDefault = 1;
-                        userService.SaveUserCity(respose);
+                        userCityRespose.UserCities.FirstOrDefault(x => x.CityId == DefaultCityed.CityId).IsDefault = 0;
+                        userCityRespose.UserCities.FirstOrDefault(x => x.CityId == cityId).IsDefault = 1;
+                        userService.SaveUserCity(userCityRespose);
                         NotifyUser("设置成功");
-                        LayoutRoot.DataContext = SortUserCity(respose);
+                        LayoutRoot.DataContext = SortUserCity(userCityRespose);
                     }
                     else
                     {
@@ -190,7 +355,7 @@ namespace Weather.App
             {
                 int cityId = int.Parse(selectedItem.CommandParameter.ToString());
                 string titleId = selectedItem.CommandParameter.ToString() + "_Weather";
-                Model.UserCity userCity = (from u in respose.UserCities
+                Model.UserCity userCity = (from u in userCityRespose.UserCities
                                            where u.CityId == cityId
                                            select u).FirstOrDefault();
                 string displayName = userCity.CityName;
@@ -260,7 +425,7 @@ namespace Weather.App
             if (selectedItem != null)
             {
                 int cityId = int.Parse(selectedItem.CommandParameter.ToString());
-                GetUserCityRespose list = SortUserCity(respose);
+                GetUserCityRespose list = SortUserCity(userCityRespose);
                 Model.UserCity city = list.UserCities.FirstOrDefault(x => x.CityId == cityId);
                 if (list.UserCities.FirstOrDefault().IsDefault == 1)
                 {
@@ -275,6 +440,22 @@ namespace Weather.App
                 LayoutRoot.DataContext = list;
                 userService.SaveUserCity(list);
             }
+        }
+
+        private void abbAdd_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(AddCityPage));
+        }
+
+        private void abbRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            GetWeather(1);
+        }
+
+        private void gvCity_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            ViewModel.MyCityPageModel city = (ViewModel.MyCityPageModel)e.ClickedItem;
+            Frame.Navigate(typeof(PivotPage), city.CityId);
         }
     }
 }
