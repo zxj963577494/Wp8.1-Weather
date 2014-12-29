@@ -26,7 +26,7 @@ namespace Weather.Utils
         /// <param name="tileId">磁贴的唯一 ID</param>
         /// <param name="displayName">显示名称</param>
         /// <param name="tileActivationArguments">激活辅助磁贴时传递到父应用程序的参数字符串</param>
-        public async static void CreateSecondaryTileAsync(string tileId, string displayName, string tileActivationArguments)
+        public async static Task CreateSecondaryTileAsync(string tileId, string displayName, string tileActivationArguments)
         {
             SecondaryTile secondaryTile = new SecondaryTile(tileId,
                                                 displayName,
@@ -43,7 +43,7 @@ namespace Weather.Utils
         /// 移除辅助磁贴
         /// </summary>
         /// <param name="tileId">磁贴的唯一 ID</param>
-        public async static void DeleteSecondaryTileAsync(string tileId)
+        public async static Task DeleteSecondaryTileAsync(string tileId)
         {
             if (Windows.UI.StartScreen.SecondaryTile.Exists(tileId))
             {

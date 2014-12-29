@@ -356,15 +356,6 @@ namespace Weather.App
 
         #region Holding
 
-        private void GridWeather_Holding(object sender, HoldingRoutedEventArgs e)
-        {
-            if (e.HoldingState == Windows.UI.Input.HoldingState.Started)
-            {
-                FrameworkElement senderElement = sender as FrameworkElement;
-                FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
-                flyoutBase.ShowAt(senderElement);
-            }
-        }
         private void gvCity_Holding(object sender, HoldingRoutedEventArgs e)
         {
             var flyout = (MenuFlyout)Resources["MenuFlyoutSource"];
@@ -472,6 +463,7 @@ namespace Weather.App
                     LayoutRoot.DataContext = null;
                     LayoutRoot.DataContext = myCityPage;
                     await userService.SaveUserCity(list);
+                    await SecondaryTileHelper.DeleteSecondaryTileAsync(cityId + "_Weather");
                 }
                 else
                 {
@@ -481,7 +473,7 @@ namespace Weather.App
             }
         }
 
-        private void DesTopTile_Click(object sender, RoutedEventArgs e)
+        private async void DesTopTile_Click(object sender, RoutedEventArgs e)
         {
             MenuFlyoutItem selectedItem = sender as MenuFlyoutItem;
             if (selectedItem != null)
@@ -494,7 +486,8 @@ namespace Weather.App
                 string displayName = userCity.CityName;
                 if (!Utils.SecondaryTileHelper.IsExists(titleId))
                 {
-                    Utils.SecondaryTileHelper.CreateSecondaryTileAsync(titleId, displayName, cityId.ToString());
+                    await Utils.SecondaryTileHelper.CreateSecondaryTileAsync(titleId, displayName, cityId.ToString());
+                    UpdateSecondaryTile(titleId);
                 }
                 else
                 {

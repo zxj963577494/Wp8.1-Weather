@@ -300,7 +300,7 @@ namespace Weather.App
 
         #region CommandBar
 
-        private void SecondaryTileCommandBar_Click(object sender, RoutedEventArgs e)
+        private async void SecondaryTileCommandBar_Click(object sender, RoutedEventArgs e)
         {
             Model.UserCity userCity = userCityRespose.UserCities.FirstOrDefault(x => x.IsDefault == 1);
 
@@ -309,7 +309,11 @@ namespace Weather.App
             {
                 string displayName = userCity.CityName;
                 string tileActivationArguments = userCity.CityId.ToString();
-                SecondaryTileHelper.CreateSecondaryTileAsync(tileId, displayName, tileActivationArguments);
+              await SecondaryTileHelper.CreateSecondaryTileAsync(tileId, displayName, tileActivationArguments);
+            }
+            else
+            {
+                NotifyUser("该城市磁贴已固定在桌面");
             }
         }
 
