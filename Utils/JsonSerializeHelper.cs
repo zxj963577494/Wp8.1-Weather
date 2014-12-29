@@ -36,8 +36,6 @@ namespace Weather.Utils
             }
         }
 
-
-
         /// <summary>
         /// 反序列化Json
         /// </summary>
@@ -63,13 +61,14 @@ namespace Weather.Utils
         /// <param name="target"></param>
         /// <param name="fileName"></param>
         /// <param name="fileFolder"></param>
-        public static async void JsonSerializeForFile<T>(T target, string fileName, string fileFolder)
+        public static async Task JsonSerializeForFileAsync<T>(T target, string fileName, string fileFolder)
         {
             try
             {
+                Task.WaitAll();
                 //序列化
                 string jsonContent = JsonSerialize<T>(target);
-                await FileHelper.CreateFileForFolder(fileFolder, fileName, jsonContent);
+                await FileHelper.CreateFileForFolderAsync(fileFolder, fileName, jsonContent).ConfigureAwait(false);
 
             }
             catch (Exception ex)
@@ -86,33 +85,12 @@ namespace Weather.Utils
         /// <param name="type"></param>
         /// <param name="filename"></param>
         /// <returns></returns>
-        public static async Task<T> JsonDeSerializeForFile<T>(string fileName, string fileFolder) where T : class
+        public static async Task<T> JsonDeSerializeForFileAsync<T>(string fileName, string fileFolder) where T : class
         {
             try
             {
-                IStorageFolder local = Windows.ApplicationModel.Package.Current.InstalledLocation;
-                string filePath = fileFolder + "\\" + fileName;
-                IStorageFile storageFile = await local.GetFileAsync(filePath);
-                var buffer = await Windows.Storage.FileIO.ReadBufferAsync(storageFile);
-                DataReader dataReader = Windows.Storage.Streams.DataReader.FromBuffer(buffer);
-                string text = dataReader.ReadString(buffer.Length);
+                string text = await FileHelper.ReadTxtFile(fileName, fileFolder);
                 return JsonDeserialize<T>(text);
-
-                //Uri uri = new Uri(@"ms-appx:///" + fileFolder + "/" + fileName + "");
-
-                //IStorageFile storageFile = await StorageFile.GetFileFromApplicationUriAsync(uri);
-
-                ////StorageFile sf = await storageFolder.GetFileAsync(this.tbFileName.Text.Trim());
-
-                //IBuffer buffer = await FileIO.ReadBufferAsync(storageFile);
-                //using (DataReader dataReader = DataReader.FromBuffer(buffer))
-                //{
-                //    string filecontent = dataReader.ReadString(buffer.Length);
-                //    string text = dataReader.ReadString(buffer.Length);
-                //    return JsonDeserialize<T>(text);
-                //}
-
-
             }
             catch (Exception ex)
             {
@@ -122,50 +100,5 @@ namespace Weather.Utils
 
         }
         #endregion
-
-        #region Cities.json和WeatherTypes.json反序列化
-
-        /// <summary>
-        /// Cities.json反序列化
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="filename"></param>
-        /// <returns></returns>
-        public static async Task<T> JsonDeSerializeForCities<T>() where T : class
-        {
-            try
-            {
-                IStorageFile storageFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Data/Cities.txt"));
-                string text = await FileIO.ReadTextAsync(storageFile);
-                return JsonDeserialize<T>(text);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        /// <summary>
-        /// WeatherTypes.json反序列化
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="filename"></param>
-        /// <returns></returns>
-        public static async Task<T> JsonDeSerializeForWeatherTypes<T>() where T : class
-        {
-            try
-            {
-                IStorageFile storageFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Data/WeatherTypes.txt"));
-                string text = await FileIO.ReadTextAsync(storageFile);
-                return JsonDeserialize<T>(text);
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-        }
-        #endregion
-
     }
 }

@@ -42,6 +42,8 @@ namespace Weather.App
         private GetWeatherTypeRespose weatherTypeRespose;
         private GetWeatherRespose weatherRespose = null;
         private ViewModel.MyCityPage myCityPage = null;
+        IList<ViewModel.MyCityPageModel> myCityPageModelList = null;
+
 
 
         public MyCityPage()
@@ -53,13 +55,15 @@ namespace Weather.App
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;//注册重写后退按钮事件
 
-            userService = new UserService();
-            weatherService = new WeatherService();
+            userService = UserService.GetInstance();
+            weatherService = WeatherService.GetInstance();
             userRespose = new GetUserRespose();
             userCityRespose = new GetUserCityRespose();
             weatherTypeRespose = new GetWeatherTypeRespose();
             weatherRespose = new GetWeatherRespose();
             myCityPage = new ViewModel.MyCityPage();
+            myCityPageModelList = new List<ViewModel.MyCityPageModel>();
+
         }
 
         /// <summary>
@@ -123,174 +127,221 @@ namespace Weather.App
         /// </summary>
         /// <param name="e">提供导航方法数据和
         /// 无法取消导航请求的事件处理程序。</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
-            GetWeather(0);
-        }
-
-
-
-        private async void GetWeather(int isRefresh)
-        {
-            progressBar.Visibility = Visibility.Visible;
-            userCityRespose = await GetUserCity();
-            userRespose = await userService.GetUserAsync();
-            weatherTypeRespose = await weatherService.GetWeatherTypeAsync();
-            if (NetHelper.IsNetworkAvailable())
+            try
             {
-                List<ViewModel.MyCityPageModel> myCityPageModelList = new List<ViewModel.MyCityPageModel>();
+                userCityRespose = await userService.GetUserCityAsync();
 
-                foreach (var item in userCityRespose.UserCities)
+                userRespose = await userService.GetUserAsync();
+
+                weatherTypeRespose = await weatherService.GetWeatherTypeAsync();
+
+                if (userCityRespose != null && userRespose != null && weatherTypeRespose != null)
                 {
-                    if (userRespose.UserConfig.IsUpdateForCity == 0)
-                    {
-                        if (isRefresh == 1)
-                        {
-                            //不存在当天的天气数据，就从网络获取数据
-                            IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, item.CityName);
-                            weatherRespose = await weatherService.GetWeatherAsync(request);
-                            weatherService.SaveWeather<GetWeatherRespose>(weatherRespose, item.CityId.ToString());
-
-                            MyCityPageModel model = new MyCityPageModel()
-                            {
-                                CityId = item.CityId,
-                                CityName = item.CityName,
-                                Temp = weatherRespose == null ? "" : weatherRespose.result.today.temperature,
-                                TodayPic = weatherRespose == null ? "" : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TodayPic
-                            };
-                            myCityPageModelList.Add(model);
-                        }
-                        else
-                        {
-                            string filePath = StringHelper.GetTodayFilePath(item.CityId);
-                            if (!await FileHelper.IsExistFile(filePath))
-                            {
-                                //不存在当天的天气数据，就从网络获取数据
-                                IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, item.CityName);
-                                weatherRespose = await weatherService.GetWeatherAsync(request);
-                                weatherService.SaveWeather<GetWeatherRespose>(weatherRespose, item.CityId.ToString());
-
-                                MyCityPageModel model = new MyCityPageModel()
-                                {
-                                    CityId = item.CityId,
-                                    CityName = item.CityName,
-                                    Temp = weatherRespose == null ? "" : weatherRespose.result.today.temperature,
-                                    TodayPic = weatherRespose == null ? "" : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TodayPic
-                                };
-                                myCityPageModelList.Add(model);
-                            }
-                            else
-                            {
-                                weatherRespose = await weatherService.GetWeatherByClientAsync(item.CityId.ToString());
-                                MyCityPageModel model = new MyCityPageModel();
-                                model.CityId = item.CityId;
-                                model.CityName = item.CityName;
-                                model.Temp = weatherRespose == null ? "" : weatherRespose.result.today.temperature;
-                                model.TodayPic = weatherRespose == null ? "" : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TodayPic;
-                                myCityPageModelList.Add(model);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (isRefresh == 1)
-                        {
-                            if (item.IsDefault == 1)
-                            {
-                                //不存在当天的天气数据，就从网络获取数据
-                                IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, item.CityName);
-                                weatherRespose = await weatherService.GetWeatherAsync(request);
-                                weatherService.SaveWeather<GetWeatherRespose>(weatherRespose, item.CityId.ToString());
-
-                                MyCityPageModel model = new MyCityPageModel()
-                                {
-                                    CityId = item.CityId,
-                                    CityName = item.CityName,
-                                    Temp = weatherRespose == null ? "" : weatherRespose.result.today.temperature,
-                                    TodayPic = weatherRespose == null ? "" : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TodayPic
-                                };
-                                myCityPageModelList.Add(model);
-                            }
-                            else
-                            {
-                                MyCityPageModel model = new MyCityPageModel()
-                                {
-                                    CityId = item.CityId,
-                                    CityName = item.CityName,
-                                    Temp = "",
-                                    TodayPic = "",
-                                };
-                                myCityPageModelList.Add(model);
-                            }
-
-                        }
-                        else
-                        {
-                            if (item.IsDefault == 1)
-                            {
-
-
-                                string filePath = StringHelper.GetTodayFilePath(item.CityId);
-                                if (!await FileHelper.IsExistFile(filePath))
-                                {
-                                    //不存在当天的天气数据，就从网络获取数据
-                                    IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, item.CityName);
-                                    weatherRespose = await weatherService.GetWeatherAsync(request);
-                                    weatherService.SaveWeather<GetWeatherRespose>(weatherRespose, item.CityId.ToString());
-
-                                    MyCityPageModel model = new MyCityPageModel()
-                                    {
-                                        CityId = item.CityId,
-                                        CityName = item.CityName,
-                                        Temp = weatherRespose == null ? "" : weatherRespose.result.today.temperature,
-                                        TodayPic = weatherRespose == null ? "" : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TodayPic
-                                    };
-                                    myCityPageModelList.Add(model);
-                                }
-                                else
-                                {
-                                    weatherRespose = await weatherService.GetWeatherByClientAsync(item.CityId.ToString());
-                                    MyCityPageModel model = new MyCityPageModel();
-                                    model.CityId = item.CityId;
-                                    model.CityName = item.CityName;
-                                    model.Temp = weatherRespose == null ? "" : weatherRespose.result.today.temperature;
-                                    model.TodayPic = weatherRespose == null ? "" : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TodayPic;
-                                    myCityPageModelList.Add(model);
-                                }
-                            }
-                            else
-                            {
-                                MyCityPageModel model = new MyCityPageModel()
-                                {
-                                    CityId = item.CityId,
-                                    CityName = item.CityName,
-                                    Temp = "",
-                                    TodayPic = "",
-                                };
-                                myCityPageModelList.Add(model);
-                            }
-                        }
-                    }
+                    await GetWeather(0);
                 }
-                myCityPage.MyCityPageModels = myCityPageModelList;
+
             }
-            else
+            catch (Exception)
             {
 
+                throw;
             }
-            LayoutRoot.DataContext = myCityPage;
-            progressBar.Visibility = Visibility.Collapsed;
+
         }
-
-
-
 
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedFrom(e);
         }
+
+        #region 获取天气数据
+
+
+        private async Task GetWeather(int isRefresh)
+        {
+            progressBar.Visibility = Visibility.Visible;
+            myCityPage.MyCityPageModels = null;
+            myCityPageModelList = null;
+            myCityPageModelList = new List<ViewModel.MyCityPageModel>();
+            //如果有网络
+            if (NetHelper.IsNetworkAvailable())
+            {
+                //遍历常用城市
+                foreach (var item in userCityRespose.UserCities)
+                {
+                    //不使用wifi更新
+                    if (userRespose.UserConfig.IsWifiUpdate == 0)
+                    {
+                        await GetWeather2(isRefresh, item);
+                    }
+                    else
+                    {
+                        if (NetHelper.IsWifiConnection())
+                        {
+                            await GetWeather2(isRefresh, item);
+                        }
+                        else
+                        {
+                            MyCityPageModel model = GetWeatherByNo(item);
+                            myCityPageModelList.Add(model);
+                            NotifyUser("Wifi未启动");
+                        }
+                    }
+                    UpdateSecondaryTile(item.CityId + "_Weather");
+                }
+
+                myCityPage.MyCityPageModels = myCityPageModelList.ToList();
+            }
+            else
+            {
+                NotifyUser("请开启网络，以更新最新天气数据");
+            }
+            LayoutRoot.DataContext = null;
+            LayoutRoot.DataContext = myCityPage;
+            progressBar.Visibility = Visibility.Collapsed;
+        }
+
+        /// <summary>
+        /// 通过网络获取
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public async Task<MyCityPageModel> GetWeatherByNet(Model.UserCity item)
+        {
+            //不存在当天的天气数据，就从网络获取数据
+            IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, item.CityName);
+            weatherRespose = await weatherService.GetWeatherAsync(request);
+            await DeleteFile(item.CityId);
+            await weatherService.SaveWeather<GetWeatherRespose>(weatherRespose, item.CityId.ToString());
+            MyCityPageModel model = new MyCityPageModel()
+            {
+                CityId = item.CityId,
+                CityName = item.CityName,
+                Temp = weatherRespose == null ? null : weatherRespose.result.today.temperature,
+                TodayPic = weatherRespose == null ? null : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TodayPic
+            };
+            return model;
+        }
+
+        /// <summary>
+        /// 通过本地获取
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public async Task<MyCityPageModel> GetWeatherByClient(Model.UserCity item)
+        {
+            weatherRespose = await weatherService.GetWeatherByClientAsync(item.CityId.ToString());
+            MyCityPageModel model = new MyCityPageModel()
+            {
+                CityId = item.CityId,
+                CityName = item.CityName,
+                Temp = weatherRespose == null ? null : weatherRespose.result.today.temperature,
+                TodayPic = weatherRespose == null ? null : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TodayPic
+            };
+            return model;
+        }
+
+
+        /// <summary>
+        /// 非强制刷新下，根据是否存在今日天气数据文件，进行获取天气数据
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        private async Task<MyCityPageModel> GetWeatherByNetOrClient(Model.UserCity item)
+        {
+            MyCityPageModel model = null;
+            string filePath = StringHelper.GetTodayFilePath(item.CityId);
+            bool isExistFile = await FileHelper.IsExistFile(filePath);
+            //存在今日天气数据
+            if (isExistFile)
+            {
+                model = await GetWeatherByClient(item);
+            }
+            else
+            {
+                model = await GetWeatherByNet(item);
+            }
+            return model;
+        }
+
+        /// <summary>
+        /// 只获取城市ID和名称
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public MyCityPageModel GetWeatherByNo(Model.UserCity item)
+        {
+            MyCityPageModel model = new MyCityPageModel()
+            {
+                CityId = item.CityId,
+                CityName = item.CityName,
+                Temp = null,
+                TodayPic = null,
+            };
+            return model;
+        }
+
+        private async Task GetWeather2(int isRefresh, Model.UserCity item)
+        {
+            //更新所有常用城市
+            if (userRespose.UserConfig.IsUpdateForCity == 0)
+            {
+                //强制刷新
+                if (isRefresh == 1)
+                {
+                    //通过网络获取天气数据
+                    MyCityPageModel model = await GetWeatherByNet(item);
+                    myCityPageModelList.Add(model);
+                }
+                else
+                {
+                    //非强制刷新下，根据是否存在今日天气数据文件，进行获取天气数据
+                    MyCityPageModel model = await GetWeatherByNetOrClient(item);
+                    myCityPageModelList.Add(model);
+                }
+            }
+            else //只更新默认城市
+            {
+                //强制刷新
+                if (isRefresh == 1)
+                {
+                    //是默认城市
+                    if (item.IsDefault == 1)
+                    {
+                        //通过网络获取
+                        MyCityPageModel model = await GetWeatherByNet(item);
+                        myCityPageModelList.Add(model);
+                    }
+                    else
+                    {
+                        //天气数据置为空
+                        MyCityPageModel model = GetWeatherByNo(item);
+                        myCityPageModelList.Add(model);
+                    }
+
+                }
+                else
+                {
+                    //是默认城市
+                    if (item.IsDefault == 1)
+                    {
+                        //非强制刷新下，根据是否存在今日天气数据文件，进行获取天气数据
+                        MyCityPageModel model = await GetWeatherByNetOrClient(item);
+                        myCityPageModelList.Add(model);
+                    }
+                    else
+                    {
+                        MyCityPageModel model = GetWeatherByNo(item);
+                        myCityPageModelList.Add(model);
+                    }
+                }
+            }
+        }
+        #endregion
 
         private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
         {
@@ -303,18 +354,52 @@ namespace Weather.App
         }
         #endregion
 
+        #region Holding
 
-
-        private void Grid_Holding(object sender, Windows.UI.Xaml.Input.HoldingRoutedEventArgs e)
+        private void GridWeather_Holding(object sender, HoldingRoutedEventArgs e)
         {
             if (e.HoldingState == Windows.UI.Input.HoldingState.Started)
             {
                 FrameworkElement senderElement = sender as FrameworkElement;
                 FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
-
                 flyoutBase.ShowAt(senderElement);
             }
         }
+        private void gvCity_Holding(object sender, HoldingRoutedEventArgs e)
+        {
+            var flyout = (MenuFlyout)Resources["MenuFlyoutSource"];
+            switch (e.HoldingState)
+            {
+                case Windows.UI.Input.HoldingState.Started:
+                    if (e.OriginalSource is TextBlock)
+                    {
+                        var tb = e.OriginalSource as TextBlock;
+                        flyout.ShowAt(tb);
+                    }
+                    else if (e.OriginalSource is Image)
+                    {
+                        var tb = e.OriginalSource as Image;
+                        flyout.ShowAt(tb);
+                    }
+                    else
+                    {
+                        foreach (var item in ((e.OriginalSource as Border).Child as Grid).Children)
+                        {
+                            if (item is ContentPresenter)
+                            {
+                                var cp = (item as ContentPresenter);
+                                flyout.ShowAt(cp);
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                case Windows.UI.Input.HoldingState.Completed:
+                case Windows.UI.Input.HoldingState.Canceled:
+                    break;
+            }
+        }
+
 
         private async void DefaultCity_Click(object sender, RoutedEventArgs e)
         {
@@ -324,15 +409,26 @@ namespace Weather.App
                 if (selectedItem != null)
                 {
                     int cityId = int.Parse(selectedItem.CommandParameter.ToString());
-                    userCityRespose = await GetUserCity();
                     var DefaultCityed = userCityRespose.UserCities.FirstOrDefault(x => x.IsDefault == 1);
                     if (DefaultCityed.CityId != cityId)
                     {
                         userCityRespose.UserCities.FirstOrDefault(x => x.CityId == DefaultCityed.CityId).IsDefault = 0;
                         userCityRespose.UserCities.FirstOrDefault(x => x.CityId == cityId).IsDefault = 1;
-                        userService.SaveUserCity(userCityRespose);
+
+                        GetUserCityRespose list = SortUserCity(userCityRespose);
+
+                        myCityPage.MyCityPageModels = SortCityPageModelList(userCityRespose);
+
+                        LayoutRoot.DataContext = null;
+
+                        LayoutRoot.DataContext = myCityPage;
+
+                        await userService.SaveUserCity(list);
+
                         NotifyUser("设置成功");
-                        LayoutRoot.DataContext = SortUserCity(userCityRespose);
+
+                        await GetWeather(1);
+
                     }
                     else
                     {
@@ -346,6 +442,43 @@ namespace Weather.App
                 throw;
             }
 
+        }
+
+        private async void RemoveCity_Click(object sender, RoutedEventArgs e)
+        {
+            MenuFlyoutItem selectedItem = sender as MenuFlyoutItem;
+            if (selectedItem != null)
+            {
+                if (userCityRespose.UserCities.Count > 1)
+                {
+                    int cityId = int.Parse(selectedItem.CommandParameter.ToString());
+
+                    ViewModel.MyCityPageModel city = myCityPageModelList.FirstOrDefault(x => x.CityId == cityId);
+
+                    if (userCityRespose.UserCities.FirstOrDefault(x => x.CityId == city.CityId).IsDefault == 1)
+                    {
+                        myCityPageModelList.Remove(city);
+                        userCityRespose.UserCities.RemoveAll(x => x.CityId == cityId);
+                        userCityRespose.UserCities.FirstOrDefault().IsDefault = 1;
+                        await GetWeather(1);
+                    }
+                    else
+                    {
+                        userCityRespose.UserCities.RemoveAll(x => x.CityId == cityId);
+                        myCityPageModelList.Remove(city);
+                    }
+                    GetUserCityRespose list = SortUserCity(userCityRespose);
+                    myCityPage.MyCityPageModels = myCityPageModelList.ToList();
+                    LayoutRoot.DataContext = null;
+                    LayoutRoot.DataContext = myCityPage;
+                    await userService.SaveUserCity(list);
+                }
+                else
+                {
+                    NotifyUser("必须保留一个城市");
+                    return;
+                }
+            }
         }
 
         private void DesTopTile_Click(object sender, RoutedEventArgs e)
@@ -370,13 +503,28 @@ namespace Weather.App
             }
         }
 
-        private async Task<GetUserCityRespose> GetUserCity()
-        {
-            GetUserCityRespose respose = new GetUserCityRespose();
-            respose = await userService.GetUserCityAsync();
-            return SortUserCity(respose);
-        }
 
+        #endregion
+
+        #region 删除过期文件
+
+        /// <summary>
+        /// 删除过期文件
+        /// </summary>
+        /// <param name="cityId"></param>
+        /// <returns></returns>
+        private async Task DeleteFile(int cityId)
+        {
+            string fileName = cityId + "_" + DateTime.Now.AddDays(-1).ToString("yyyyMMdd") + ".txt";
+            string filePath = "Temp\\" + fileName;
+            bool x = await FileHelper.IsExistFile(filePath);
+            if (x)
+            {
+                await FileHelper.DeleteFile(filePath);
+
+            }
+        }
+        #endregion
 
         private GetUserCityRespose SortUserCity(GetUserCityRespose respose)
         {
@@ -386,6 +534,20 @@ namespace Weather.App
             respose.UserCities = data.ToList();
             return respose;
         }
+
+        private List<MyCityPageModel> SortCityPageModelList(GetUserCityRespose respose)
+        {
+            respose = SortUserCity(respose);
+            List<MyCityPageModel> newList = new List<MyCityPageModel>();
+            foreach (var item in respose.UserCities)
+            {
+                MyCityPageModel model = myCityPageModelList.FirstOrDefault(x => x.CityId == item.CityId);
+                newList.Add(model);
+            }
+            return newList;
+        }
+
+
 
         /// <summary>
         /// Used to display messages to the user
@@ -403,8 +565,8 @@ namespace Weather.App
                 popup.IsOpen = true;
                 // 创建一个DispatcherTimer实例。
                 DispatcherTimer newTimer = new DispatcherTimer();
-                // 将DispatcherTimer的Interval设为5秒。
-                newTimer.Interval = TimeSpan.FromSeconds(5);
+                // 将DispatcherTimer的Interval设为3秒。
+                newTimer.Interval = TimeSpan.FromSeconds(3);
                 // 这样一来OnTimerTick方法每秒都会被调用一次。
                 newTimer.Tick += (o, e) =>
                 {
@@ -419,28 +581,7 @@ namespace Weather.App
             }
         }
 
-        private void RemoveCity_Click(object sender, RoutedEventArgs e)
-        {
-            MenuFlyoutItem selectedItem = sender as MenuFlyoutItem;
-            if (selectedItem != null)
-            {
-                int cityId = int.Parse(selectedItem.CommandParameter.ToString());
-                GetUserCityRespose list = SortUserCity(userCityRespose);
-                Model.UserCity city = list.UserCities.FirstOrDefault(x => x.CityId == cityId);
-                if (list.UserCities.FirstOrDefault().IsDefault == 1)
-                {
-                    list.UserCities.Remove(city);
-                    list.UserCities.FirstOrDefault().IsDefault = 1;
-                }
-                else
-                {
-                    list.UserCities.Remove(city);
-                }
-                LayoutRoot.DataContext = null;
-                LayoutRoot.DataContext = list;
-                userService.SaveUserCity(list);
-            }
-        }
+        #region Command
 
         private void abbAdd_Click(object sender, RoutedEventArgs e)
         {
@@ -451,11 +592,66 @@ namespace Weather.App
         {
             GetWeather(1);
         }
+        #endregion
+
+        #region ItemClick
 
         private void gvCity_ItemClick(object sender, ItemClickEventArgs e)
         {
             ViewModel.MyCityPageModel city = (ViewModel.MyCityPageModel)e.ClickedItem;
             Frame.Navigate(typeof(PivotPage), city.CityId);
         }
+        #endregion
+
+        #region 磁贴更新
+
+        private void UpdateSecondaryTile(string tileId)
+        {
+            if (weatherRespose.result != null)
+            {
+                if (SecondaryTileHelper.IsExists(tileId))
+                {
+                    //                  string tileXmlString = "<tile>"
+                    //   + "<visual version='2'>"
+                    //   + "<binding template='TileWide310x150PeekImage03' fallback='TileWidePeekImage03'>"
+                    //   + "<image id='1' src='ms-appx:///" + (userRespose.UserConfig.IsTileSquarePic == 1 ? weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TileWidePic : "Assets/Logo.png") + "'/>"
+                    //   + "<text id='1'>" + weatherRespose.result.sk.temp + "°\r\n" + weatherRespose.result.today.weather + "\r\n" + weatherRespose.result.today.weather + "\r\n" + weatherRespose.result.sk.wind_direction + " " + weatherRespose.result.sk.wind_strength + "\r\n" + weatherRespose.result.today.week + "</text>"
+                    //   + "</binding>"
+                    //+ "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
+                    //+ "<image id='1' src='ms-appx:///" + (userRespose.UserConfig.IsTileSquarePic == 1 ? weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TileSquarePic : "Assets/Logo.png") + "'/>"
+                    //+ "<text id='1'>" + weatherRespose.result.sk.temp + "°</text>"
+                    //+ "<text id='2'>" + weatherRespose.result.today.weather + "</text>"
+                    //+ "<text id='3'>" + weatherRespose.result.today.temperature + "</text>"
+                    //+ "<text id='4'>" + weatherRespose.result.sk.wind_direction + " " + weatherRespose.result.sk.wind_strength + "</text>"
+                    //+ "</binding>"
+                    //+ "</visual>"
+                    //+ "</tile>";
+                    string tileXmlString = @"<tile>"
+  + "<visual version='2'>"
+  + "<binding template='TileWide310x150BlockAndText01' fallback='TileWideBlockAndText01'>"
+  + "<text id='1'>" + weatherRespose.result.sk.temp + "°</text>"
+  + "<text id='2'>" + weatherRespose.result.today.city + "</text>"
+  + "<text id='3'>" + weatherRespose.result.today.weather + "</text>"
+  + "<text id='4'>" + weatherRespose.result.today.temperature + "</text>"
+  + "<text id='5'>" + weatherRespose.result.sk.wind_direction + " " + weatherRespose.result.sk.wind_strength + "</text>"
+  + "<text id='6'>" + weatherRespose.result.today.week + "</text>"
+  + "</binding>"
+  + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
+  + "<image id='1' src='ms-appx:///" + (userRespose.UserConfig.IsTileSquarePic == 1 ? weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TileSquarePic : "Assets/Logo.png") + "'/>"
+  + "<text id='1'>" + weatherRespose.result.sk.temp + "°</text>"
+  + "<text id='2'>" + weatherRespose.result.today.weather + "</text>"
+  + "<text id='3'>" + weatherRespose.result.today.temperature + "</text>"
+  + "<text id='4'>" + weatherRespose.result.sk.wind_direction + " " + weatherRespose.result.sk.wind_strength + "</text>"
+  + "</binding>"
+  + "</visual>"
+  + "</tile>";
+                    SecondaryTileHelper.UpdateSecondaryTileNotificationsByXml(tileId, tileXmlString);
+                }
+            }
+        }
+
+        #endregion
+
+
     }
 }

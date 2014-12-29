@@ -50,8 +50,8 @@ namespace Weather.App
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;//注册重写后退按钮事件
 
 
-            settingService = new SettingService();
-            userService = new UserService();
+            settingService = SettingService.GetInstance();
+            userService = UserService.GetInstance();
             switchesRespose = new GetSettingSwitchesRespose();
             autoUpdateTimeRepose = new GetSettingAutoUpdateTimeRepose();
             userRespose = new GetUserRespose();
@@ -168,8 +168,8 @@ namespace Weather.App
             {
                 NotifyUser("保存设置失败");
             }
-            
-            
+
+
         }
 
 
@@ -224,8 +224,8 @@ namespace Weather.App
                 popup.IsOpen = true;
                 // 创建一个DispatcherTimer实例。
                 DispatcherTimer newTimer = new DispatcherTimer();
-                // 将DispatcherTimer的Interval设为5秒。
-                newTimer.Interval = TimeSpan.FromSeconds(5);
+                // 将DispatcherTimer的Interval设为3秒。
+                newTimer.Interval = TimeSpan.FromSeconds(3);
                 // 这样一来OnTimerTick方法每秒都会被调用一次。
                 newTimer.Tick += (o, e) =>
                 {
@@ -240,19 +240,24 @@ namespace Weather.App
             }
         }
 
-        private void btnTile_Click(object sender, RoutedEventArgs e)
+        private async void btnTile_Click(object sender, RoutedEventArgs e)
         {
             userRespose.UserConfig.IsTileSquarePic
                 = int.Parse(cbbIsTileSquarePic.SelectedValue.ToString());
             try
             {
-                userService.SaveUser(userRespose);
+                await userService.SaveUser(userRespose);
                 NotifyUser("保存设置成功");
             }
             catch (Exception)
             {
                 NotifyUser("保存设置失败");
             }
+        }
+
+        private void LockScreen_Click(object sender, RoutedEventArgs e)
+        {
+            SettingPageHelper.LaunchUriAsync(SettingPageHelper.LaunchUriType.Locks);
         }
     }
 }

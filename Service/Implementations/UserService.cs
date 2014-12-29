@@ -9,28 +9,40 @@ namespace Weather.Service.Implementations
 {
     public class UserService
     {
+
+        private static readonly UserService instance = new UserService();
+
+        private UserService()
+        {
+        }
+
+        public static UserService GetInstance()
+        {
+            return instance;
+        }
+
         public async Task<GetUserRespose> GetUserAsync()
         {
             GetUserRespose respose = new GetUserRespose();
-            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFile<GetUserRespose>("UserConfig.txt", "User");
+            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileAsync<GetUserRespose>("UserConfig.txt", "User").ConfigureAwait(false);
             return respose;
         }
 
-        public void SaveUser(GetUserRespose getUserRespose)
+        public async Task SaveUser(GetUserRespose getUserRespose)
         {
-            Weather.Utils.JsonSerializeHelper.JsonSerializeForFile<GetUserRespose>(getUserRespose, "UserConfig.txt", "User");
+            await Weather.Utils.JsonSerializeHelper.JsonSerializeForFileAsync<GetUserRespose>(getUserRespose, "UserConfig.txt", "User").ConfigureAwait(false);
         }
 
         public async Task<GetUserCityRespose> GetUserCityAsync()
         {
             GetUserCityRespose respose = new GetUserCityRespose();
-            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFile<GetUserCityRespose>("UserCities.txt", "User");
+            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileAsync<GetUserCityRespose>("UserCities.txt", "User").ConfigureAwait(false);
             return respose;
         }
 
-        public void SaveUserCity(GetUserCityRespose getUserCityRespose)
+        public async Task SaveUserCity(GetUserCityRespose getUserCityRespose)
         {
-            Weather.Utils.JsonSerializeHelper.JsonSerializeForFile<GetUserCityRespose>(getUserCityRespose, "UserCities.txt", "User");
+            await Weather.Utils.JsonSerializeHelper.JsonSerializeForFileAsync<GetUserCityRespose>(getUserCityRespose, "UserCities.txt", "User").ConfigureAwait(false);
 
         }
     }

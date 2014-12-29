@@ -20,6 +20,7 @@ using Weather.Service.Message;
 using Windows.UI.Popups;
 using System.Threading.Tasks;
 using Windows.Phone.UI.Input;
+using Weather.Service.Implementations;
 
 // “基本页”项模板在 http://go.microsoft.com/fwlink/?LinkID=390556 上有介绍
 
@@ -32,9 +33,16 @@ namespace Weather.App
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private readonly Service.Implementations.CityService service = null;
-        private readonly Service.Implementations.UserService userService = null;
         private ViewModel.SelectCityPage page = null;
+        private CityService cityService = null;
+        private UserService userService = null;
+        private GetCityRespose resposeCities = null;
+        private GetHotCityRespose resposeHotCities = null;
+        private GetUserCityRespose resposeUserCity = null;
+
+        private string s;
+
+
 
 
         public AddCityPage()
@@ -46,11 +54,11 @@ namespace Weather.App
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;//注册重写后退按钮事件
 
-            service = new Service.Implementations.CityService();
-            userService = new Service.Implementations.UserService();
-
-
-
+            cityService = CityService.GetInstance();
+            userService = UserService.GetInstance();
+            resposeCities = new GetCityRespose();
+            resposeHotCities = new GetHotCityRespose();
+            resposeUserCity = new GetUserCityRespose();
         }
 
         /// <summary>
@@ -83,13 +91,6 @@ namespace Weather.App
         /// 字典。 首次访问页面时，该状态将为 null。</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            if (e.PageState != null)
-            {
-                if (e.PageState.ContainsKey("txt_CityName"))
-                {
-                    asbCity.Text = e.PageState["txt_CityName"].ToString();
-                }
-            }
         }
 
         /// <summary>
@@ -102,7 +103,6 @@ namespace Weather.App
         ///的事件数据。</param>
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
-            e.PageState["txt_CityName"] = asbCity.Text;
         }
 
         #region NavigationHelper 注册
@@ -124,24 +124,28 @@ namespace Weather.App
         {
             this.navigationHelper.OnNavigatedTo(e);
             Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+            if (e.Parameter != null)
+            {
+                s = e.Parameter.ToString();
+            }
 
-            GetCityRespose resposeCities = new GetCityRespose();
-            resposeCities = await service.GetCityAsync();
+            resposeCities = await cityService.GetCityAsync();
 
-            GetCityRespose resposeHotCities = new GetCityRespose();
-            resposeHotCities = await service.GetHotCityAsync();
+            resposeHotCities = await cityService.GetHotCityAsync(); ;
 
+            if (s != "1")
+            {
+                resposeUserCity = await userService.GetUserCityAsync(); ;
+            }
             page = new ViewModel.SelectCityPage();
             page.Cities = resposeCities.Cities;
             page.HotCities = resposeHotCities.Cities;
-
             LayoutRoot.DataContext = page;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedFrom(e);
-            Windows.Phone.UI.Input.HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
         }
 
         private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
@@ -179,6 +183,7 @@ namespace Weather.App
 
         private async void asbCity_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
+
             string cityname = args.SelectedItem.ToString();
             if (!string.IsNullOrEmpty(cityname))
             {
@@ -186,21 +191,35 @@ namespace Weather.App
                 if (isSuccess)
                 {
                     Frame.Navigate(typeof(MyCityPage));
+                    return;
                 }
             }
+
         }
 
         private async void gvCity_ItemClick(object sender, ItemClickEventArgs e)
         {
-            Model.WeatherCity city = (Model.WeatherCity)e.ClickedItem;
-            if (!string.IsNullOrEmpty(city.District))
+            try
             {
-                bool isSuccess = await UpdateUserCity(city.District);
-                if (isSuccess)
+
+                Model.WeatherCity city = (Model.WeatherCity)e.ClickedItem;
+                if (!string.IsNullOrEmpty(city.District))
                 {
-                    Frame.Navigate(typeof(MyCityPage));
+                    bool isSuccess = await UpdateUserCity(city.District);
+                    if (isSuccess)
+                    {
+                        Frame.Navigate(typeof(MyCityPage));
+                        return;
+                    }
                 }
+
             }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public async Task<bool> UpdateUserCity(string cityName)
@@ -214,24 +233,49 @@ namespace Weather.App
                           select c.Id).FirstOrDefault(),
                 AddTime = DateTime.Now,
                 CityName = cityName.Trim(),
-                IsDefault = 0
+                IsDefault = s == "1" ? 1 : 0
             };
-            GetUserCityRespose respose = new GetUserCityRespose();
-            respose = await userService.GetUserCityAsync();
-
-            var count = respose.UserCities.Count(x => x.CityName.Contains(cityName.Trim()));
-
-            if (count == 0)
+            if (s == "1")
             {
-                respose.UserCities.Add(userCity);
-                userService.SaveUserCity(respose);
+                List<Model.UserCity> userCityList = new List<Model.UserCity>();
+                userCityList.Add(userCity);
+                resposeUserCity.UserCities = userCityList;
+                await userService.SaveUserCity(SortUserCity(resposeUserCity));
                 isAdd = true;
             }
             else
             {
-                NotifyUser("该城市已加入常用城市列表");
+                if (resposeUserCity.UserCities.Count < 5)
+                {
+                    var count = resposeUserCity.UserCities.Count(x => x.CityName.Contains(cityName.Trim()));
+
+                    if (count == 0)
+                    {
+                        resposeUserCity.UserCities.Add(userCity);
+
+                        await userService.SaveUserCity(SortUserCity(resposeUserCity));
+                        isAdd = true;
+                    }
+                    else
+                    {
+                        NotifyUser("该城市已加入常用城市列表");
+                    }
+                }
+                else
+                {
+                    NotifyUser("因资源有限，每人最多拥有5座常用城市");
+                }
             }
+
             return isAdd;
+        }
+        private GetUserCityRespose SortUserCity(GetUserCityRespose respose)
+        {
+            var data = from c in respose.UserCities
+                       orderby c.IsDefault descending, c.AddTime descending
+                       select c;
+            respose.UserCities = data.ToList();
+            return respose;
         }
 
         private void NotifyUser(string strMessage)
@@ -245,8 +289,8 @@ namespace Weather.App
                 popup.IsOpen = true;
                 // 创建一个DispatcherTimer实例。
                 DispatcherTimer newTimer = new DispatcherTimer();
-                // 将DispatcherTimer的Interval设为5秒。
-                newTimer.Interval = TimeSpan.FromSeconds(5);
+                // 将DispatcherTimer的Interval设为3秒。
+                newTimer.Interval = TimeSpan.FromSeconds(3);
                 // 这样一来OnTimerTick方法每秒都会被调用一次。
                 newTimer.Tick += (o, e) =>
                 {

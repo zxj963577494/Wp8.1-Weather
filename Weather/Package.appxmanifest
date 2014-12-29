@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
-  <Identity Name="35597e35-d4c4-4750-b97d-3fc3bb664708" Publisher="CN=001" Version="1.0.0.0" />
-  <mp:PhoneIdentity PhoneProductId="35597e35-d4c4-4750-b97d-3fc3bb664708" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Identity Name="25813zhengxvjiang.62418A6C2EC1A" Publisher="CN=F06D22C2-F6A1-49AC-8473-D9A63CB52109" Version="1.0.0.0" />
+  <mp:PhoneIdentity PhoneProductId="592bb18e-2e0d-4631-b030-11e3f552c907" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>Weather</DisplayName>
-    <PublisherDisplayName>001</PublisherDisplayName>
+    <DisplayName>天气在线</DisplayName>
+    <PublisherDisplayName>zhengxvjiang</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Prerequisites>
@@ -16,7 +16,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Weather.App">
-      <m3:VisualElements DisplayName="天气在线" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\SmallLogo.png" Description="Weather" ForegroundText="light" BackgroundColor="transparent" ToastCapable="true">
+      <m3:VisualElements DisplayName="天气在线" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\SmallLogo.png" Description="天气在线是基于Window Phone 8.1开发的原生应用， 为网友提供最新的天气信息，方便出行，做一个好用的天气应用。" ForegroundText="light" BackgroundColor="transparent" ToastCapable="false">
         <m3:LockScreen Notification="badgeAndTileText" BadgeLogo="Assets\BadgeLogo.png" />
         <m3:DefaultTile Square71x71Logo="Assets\Square71x71Logo.png" Wide310x150Logo="Assets\WideLogo.png">
           <m3:ShowNameOnTiles>
@@ -45,6 +45,5 @@
   </Applications>
   <Capabilities>
     <Capability Name="internetClientServer" />
-    <DeviceCapability Name="location" />
   </Capabilities>
 </Package>

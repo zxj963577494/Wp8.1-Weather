@@ -52,6 +52,7 @@
     <Compile Include="FileHelper.cs" />
     <Compile Include="GeolocationHelper.cs" />
     <Compile Include="HttpHelper.cs" />
+    <Compile Include="ImageHelper.cs" />
     <Compile Include="JsonSerializeHelper.cs" />
     <Compile Include="LockScreenHelper.cs" />
     <Compile Include="MessageHelper.cs" />

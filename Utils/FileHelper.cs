@@ -26,7 +26,7 @@ namespace Weather.Utils
                 //当前应用程序包位置
                 IStorageFolder local = Windows.ApplicationModel.Package.Current.InstalledLocation;
 
-                StorageFolder storageFolder = await local.GetFolderAsync(dirName);
+                StorageFolder storageFolder = await local.GetFolderAsync(dirName).AsTask().ConfigureAwait(false);
                 if (storageFolder != null)
                 {
                     isExistFolder = true;
@@ -53,7 +53,7 @@ namespace Weather.Utils
             {
                 //当前应用程序包位置
                 IStorageFolder local = Windows.ApplicationModel.Package.Current.InstalledLocation;
-                IStorageFile storageFile = await local.GetFileAsync(filePath);
+                IStorageFile storageFile = await local.GetFileAsync(filePath).AsTask().ConfigureAwait(false);
                 if (storageFile != null)
                 {
                     isExistFile = true;
@@ -93,7 +93,6 @@ namespace Weather.Utils
             return isCreateDir;
         }
 
-
         /// <summary>
         /// 创建文件
         /// </summary>
@@ -101,7 +100,7 @@ namespace Weather.Utils
         /// <param name="filename">文件名称</param>
         /// <param name="getDataStream">文件内容</param>
         /// <returns>是否创建</returns>
-        public async static Task<bool> CreateFileForFolder(string dirname, string filename, string content)
+        public async static Task<bool> CreateFileForFolderAsync(string dirname, string filename, string content)
         {
             bool isCreateFile = false;
             try
@@ -123,11 +122,38 @@ namespace Weather.Utils
             return isCreateFile;
         }
 
+        /// <summary>
+        /// 删除文件
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public static async Task DeleteFile(string fileName)
         {
-            var file = await GetFileAccess(fileName);
+            var file = await GetFileAccess(fileName).ConfigureAwait(false);
+            if (file != null)
+            {
+                await file.DeleteAsync();
+            }
+        }
 
-            await file.DeleteAsync();
+        /// <summary>
+        /// 读取Txt文件
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="fileFolder"></param>
+        /// <returns></returns>
+        public static async Task<string> ReadTxtFile(string fileName, string fileFolder)
+        {
+            string text = null;
+            IStorageFolder local = Windows.ApplicationModel.Package.Current.InstalledLocation;
+            string filePath = fileFolder + "\\" + fileName;
+            IStorageFile storageFile = await local.GetFileAsync(filePath).AsTask().ConfigureAwait(false);
+            var buffer = await Windows.Storage.FileIO.ReadBufferAsync(storageFile).AsTask().ConfigureAwait(false);
+            using (DataReader dataReader = Windows.Storage.Streams.DataReader.FromBuffer(buffer))
+            {
+              text= dataReader.ReadString(buffer.Length);
+            }
+            return text;
         }
 
         public async static Task<IInputStream> GetOpenFileSequentialStream(string fileName)

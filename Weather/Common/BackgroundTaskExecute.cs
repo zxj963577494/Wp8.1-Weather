@@ -21,7 +21,6 @@ namespace Weather.App.Common
                 if (task.Value.Name == backgroundTaskName)
                 {
                     AttachProgressAndCompletedHandlers(task.Value);
-
                 }
             }
         }

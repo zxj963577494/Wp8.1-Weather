@@ -7,6 +7,28 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        
+        <DataTemplate x:Key="GridViewTemplate">
+            <Grid x:Name="GridWeather">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="{Binding Temp}" FontSize="20" HorizontalAlignment="Right" Margin="0,5,5,0" VerticalAlignment="Top"/>
+                <Image Grid.Row="1" Source="{Binding TodayPic}" Stretch="None"  />
+                <TextBlock Grid.Row="2" Text="{Binding CityName}" FontSize="20" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom"/>
+            </Grid>
+        </DataTemplate>
+        
+        <MenuFlyout x:Key="MenuFlyoutSource">
+            <MenuFlyoutItem Text="设为默认城市" Click="DefaultCity_Click" CommandParameter="{Binding CityId}" />
+            <MenuFlyoutItem Text="固定到桌面" Click="DesTopTile_Click" CommandParameter="{Binding CityId}" />
+            <MenuFlyoutItem Text="移除" Click="RemoveCity_Click" CommandParameter="{Binding CityId}" />
+        </MenuFlyout>
+    </Page.Resources>
+
     <Grid x:Name="LayoutRoot">
 
         <Grid.Background>
@@ -25,46 +47,32 @@
         <ProgressBar IsIndeterminate="True" x:Name="progressBar" Height="10" VerticalAlignment="Stretch" Visibility="Collapsed"/>
         <Popup x:Name="popup"  Grid.Row="0" >
             <Border x:Name="StatusBorder" >
-                <TextBlock x:Name="StatusBlock" Foreground="White" FontSize="20" FontWeight="Bold" Margin="15, 10, 15, 10" TextWrapping="Wrap"/>
+                <TextBlock x:Name="StatusBlock" Foreground="White" FontSize="20"  Margin="15, 10, 15, 10" TextWrapping="Wrap"/>
             </Border>
         </Popup>
         <StackPanel Grid.Row="1" Margin="15,0,0,0">
             <TextBlock Text="天气在线" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
             <TextBlock Text="常用城市" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
         </StackPanel>
-        <GridView x:Name="gvCity" Margin="20,0" Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Hidden"  ItemClick="gvCity_ItemClick" IsItemClickEnabled="True"  ItemsSource="{Binding MyCityPageModels}">
-            <GridView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Holding="Grid_Holding">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="2*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <FlyoutBase.AttachedFlyout>
-                            <MenuFlyout>
-                                <MenuFlyoutItem Text="设为默认城市" Click="DefaultCity_Click" CommandParameter="{Binding CityId}" />
-                                <MenuFlyoutItem Text="固定到桌面" Click="DesTopTile_Click" CommandParameter="{Binding CityId}" />
-                                <MenuFlyoutItem Text="移除" Click="RemoveCity_Click" CommandParameter="{Binding CityId}" />
-                            </MenuFlyout>
-                        </FlyoutBase.AttachedFlyout>
-                        <TextBlock Grid.Row="0" Text="{Binding Temp}" FontSize="20" HorizontalAlignment="Right" Margin="0,5,5,0" VerticalAlignment="Top"/>
-                        <Image Grid.Row="1" Source="{Binding TodayPic}" Stretch="None"  />
-                        <TextBlock Grid.Row="2" Text="{Binding CityName}" FontSize="20" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom"/>
-                    </Grid>
-                </DataTemplate>
-            </GridView.ItemTemplate>
+        <GridView x:Name="gvCity" Margin="20,0" Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Hidden" ItemClick="gvCity_ItemClick" IsItemClickEnabled="True" ItemsSource="{Binding MyCityPageModels}" Holding="gvCity_Holding" ItemTemplate="{StaticResource GridViewTemplate}" >
+            <ItemsControl.ItemContainerTransitions>
+                <TransitionCollection>
+                    <EntranceThemeTransition/>
+                    <RepositionThemeTransition/>
+                    <AddDeleteThemeTransition/>
+                    <ReorderThemeTransition/>
+                </TransitionCollection>
+            </ItemsControl.ItemContainerTransitions>
             <GridView.ItemContainerStyle>
                 <Style TargetType="GridViewItem">
-                    <Setter Property="Opacity" Value="0.6"></Setter>
-                    <Setter Property="Background" Value="{ThemeResource PhoneAccentBrush}"></Setter>
+                    <Setter Property="Background" Value="{ThemeResource PhoneAccentBrush}"/>
                     <Setter Property="BorderBrush" Value="{ThemeResource PhoneAccentBrush}"/>
                     <Setter Property="BorderThickness" Value="0"/>
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                     <Setter Property="VerticalContentAlignment" Value="Stretch"/>
                     <Setter Property="Margin" Value="10"/>
-                    <Setter Property="Width" Value="150"/>
-                    <Setter Property="Height" Value="150"/>
+                    <Setter Property="Width" Value="160"/>
+                    <Setter Property="Height" Value="160"/>
                 </Style>
             </GridView.ItemContainerStyle>
         </GridView>

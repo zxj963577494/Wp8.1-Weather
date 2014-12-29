@@ -14,7 +14,7 @@
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxBundlePlatforms>neutral</AppxBundlePlatforms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -81,11 +81,11 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BlankPage1.xaml.cs">
-      <DependentUpon>BlankPage1.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\BackgroundTaskExecute.cs" />
     <Compile Include="AddCityPage.xaml.cs">
@@ -94,10 +94,10 @@
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
-    <Compile Include="Common\ResposeFacede.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
-    <Compile Include="DTO\TileModel.cs" />
-    <Compile Include="Facade\Weather\WeatherInvoker.cs" />
+    <Compile Include="Instruction.xaml.cs">
+      <DependentUpon>Instruction.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MyCityPage.xaml.cs">
       <DependentUpon>MyCityPage.xaml</DependentUpon>
     </Compile>
@@ -150,6 +150,7 @@
     <Content Include="Data\Application.txt" />
     <Content Include="Data\AutoUpdateTimes.txt" />
     <Content Include="Data\Cities.txt" />
+    <Content Include="Data\Config.txt" />
     <Content Include="Data\HotCities.txt" />
     <Content Include="Data\Switches.txt" />
     <Content Include="Images\Background\08.jpg" />
@@ -186,6 +187,18 @@
     <Content Include="Images\TileSquare\11.jpg" />
     <Content Include="Images\TileSquare\12.jpg" />
     <Content Include="Images\TileSquare\13.jpg" />
+    <Content Include="Images\TileWide\00.jpg" />
+    <Content Include="Images\TileWide\01.jpg" />
+    <Content Include="Images\TileWide\02.jpg" />
+    <Content Include="Images\TileWide\04.jpg" />
+    <Content Include="Images\TileWide\06.jpg" />
+    <Content Include="Images\TileWide\07.jpg" />
+    <Content Include="Images\TileWide\08.jpg" />
+    <Content Include="Images\TileWide\09.jpg" />
+    <Content Include="Images\TileWide\10.jpg" />
+    <Content Include="Images\TileWide\11.jpg" />
+    <Content Include="Images\TileWide\12.jpg" />
+    <Content Include="Images\TileWide\13.jpg" />
     <Content Include="Images\Today\03.png" />
     <Content Include="Images\Today\04.png" />
     <Content Include="Images\Today\18.png" />
@@ -237,6 +250,7 @@
     <Content Include="Images\Tomorrow\07.png" />
     <Content Include="Images\Tomorrow\08.png" />
     <Content Include="Images\Tomorrow\901.png" />
+    <None Include="Package.StoreAssociation.xml" />
     <Content Include="StoreManifest.xml" />
     <Content Include="Temp\杭州_20141209.txt" />
     <Content Include="Temp\杭州_20141210050000.txt" />
@@ -250,14 +264,15 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <PRIResource Include="Strings\zh-CN\Resources.resw" />
-  </ItemGroup>
-  <ItemGroup>
+    <Page Include="About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AddCityPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BlankPage1.xaml">
+    <Page Include="Instruction.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -299,14 +314,7 @@
       <Name>Weather.Service</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Images\TileWide\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Fonts\Segoe WP.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

@@ -17,7 +17,7 @@ namespace Weather.Utils
         /// <summary>
         /// 申请锁屏
         /// </summary>
-        public static async void RequestLockScreenAccess()
+        public static async Task RequestLockScreenAccess()
         {
             BackgroundAccessStatus status = BackgroundAccessStatus.Unspecified;
             try

@@ -51,5 +51,10 @@ namespace Weather.Model
         /// 磁贴图片
         /// </summary>
         public string TileSquarePic { get; set; }
+
+        /// <summary>
+        /// 磁贴图片
+        /// </summary>
+        public string TileWidePic { get; set; }
     }
 }

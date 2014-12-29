@@ -33,6 +33,8 @@ namespace Weather.App
         private UserService userService;
         private GetUserRespose userRespose;
         private GetSettingAutoUpdateTimeRepose settingAutoUpdateTimeRepose;
+        private SettingService settingService;
+
 
 
 
@@ -45,7 +47,9 @@ namespace Weather.App
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
 
-            userService = new UserService();
+            userService = UserService.GetInstance();
+            settingService = SettingService.GetInstance();
+
             userRespose = new GetUserRespose();
             settingAutoUpdateTimeRepose = new GetSettingAutoUpdateTimeRepose();
         }
@@ -155,6 +159,8 @@ namespace Weather.App
 
 
 
+        #region 创建更新磁贴
+
         /// <summary>
         /// 创建更新应用磁贴后台任务
         /// </summary>
@@ -186,20 +192,21 @@ namespace Weather.App
             userRespose = await userService.GetUserAsync();
             if (userRespose.UserConfig.IsAutoUpdateForCity == 1)
             {
-                SettingService settingService = new SettingService();
-                settingAutoUpdateTimeRepose = await settingService.GetSettingAutoUpdateTimeAsync();
                 BackgroundTaskExecute backgroundTaskExecute = new BackgroundTaskExecute();
-                int time = settingAutoUpdateTimeRepose.AutoUpdateTimes.FirstOrDefault(x => x.Id == userRespose.UserConfig.AutoUpdateTime).Time;
                 if (BackgroundTaskHelper.IsExist(taskName))
                 {
                     backgroundTaskExecute.Execute(taskName);
                 }
                 else
                 {
+                    settingAutoUpdateTimeRepose = await settingService.GetSettingAutoUpdateTimeAsync();
+                    int time = settingAutoUpdateTimeRepose.AutoUpdateTimes.FirstOrDefault(x => x.Id == userRespose.UserConfig.AutoUpdateTime).Time;
                     backgroundTaskExecute.Create(taskName, taskEntryPoint, time, null);
                 }
             }
-        }
-       
+        } 
+
+        #endregion
+
     }
 }

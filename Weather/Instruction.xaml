@@ -1,0 +1,52 @@
+﻿<Page
+    x:Class="Weather.App.Instruction"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Weather.App"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid x:Name="LayoutRoot">
+        <Grid.Background>
+            <ImageBrush Stretch="None" ImageSource="Images/Other/gaosi.jpg"/>
+        </Grid.Background>
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition/>
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 标题面板 -->
+        <StackPanel Grid.Row="0" Margin="19,0,0,0">
+            <TextBlock Text="天气在线" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
+            <TextBlock Text="使用说明" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+        </StackPanel>
+
+        <!--TODO: 应将内容放入以下网格-->
+        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
+            <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                <RichTextBlock HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <Paragraph FontSize="24"  FontStretch="Undefined" TextIndent="40">
+1.本应用不使用GPS定位获取天气，只需要联网。
+                    </Paragraph>
+                    <Paragraph FontSize="24"  FontStretch="Undefined" TextIndent="40">
+                        2.本应用不获取用户任何资料，只提供天气数据。
+                    </Paragraph>
+                    <Paragraph FontSize="24"  FontStretch="Undefined" TextIndent="40">
+                        3.当用户进行联网更新数据时，会将天气数据存储于本地，当在无网络情况下，会使用本地数据进行更新，为了提高效率，只显示三天内的天气数据。也就是说，一旦更新数据，三天内无须联网也可更新天气数据，但这些数据只是参考数据，天气可能这三天内会发生剧烈变化，所以建议开启网络实时更新。
+                    </Paragraph>
+                    <Paragraph FontSize="24"  FontStretch="Undefined" TextIndent="40">
+                        4.为了节省流量，只有每天第一次打开本应用时会更新数据，此后需要手动点击下方刷新按钮才能更新最新天气。（自动更新数据除外）
+                    </Paragraph>
+                </RichTextBlock>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Page>

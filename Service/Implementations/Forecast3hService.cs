@@ -18,5 +18,7 @@ namespace Service.Implementations
             respose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetForecast3hByCityNameRepose>(resposeString);
             return respose;
         }
+
+
     }
 }

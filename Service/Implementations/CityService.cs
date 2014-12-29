@@ -12,15 +12,26 @@ namespace Weather.Service.Implementations
         public async Task<GetCityRespose> GetCityAsync()
         {
             GetCityRespose respose = new GetCityRespose();
-            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFile<GetCityRespose>("Cities.txt","Data");
+            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileAsync<GetCityRespose>("Cities.txt", "Data").ConfigureAwait(false);
             return respose;
         }
 
-        public async Task<GetCityRespose> GetHotCityAsync()
+        public async Task<GetHotCityRespose> GetHotCityAsync()
         {
-            GetCityRespose respose = new GetCityRespose();
-            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFile<GetCityRespose>( "HotCities.txt","Data");
+            GetHotCityRespose respose = new GetHotCityRespose();
+            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileAsync<GetHotCityRespose>("HotCities.txt", "Data").ConfigureAwait(false);
             return respose;
+        }
+
+        private static readonly CityService instance = new CityService();
+
+        private CityService()
+        {
+        }
+
+        public static CityService GetInstance()
+        {
+            return instance;
         }
     }
 }

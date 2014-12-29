@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Weather.Service.Message;
 
 namespace Weather.App.ViewModel
 {
@@ -14,5 +15,7 @@ namespace Weather.App.ViewModel
         public List<Model.WeatherCity> Cities { get; set; }
 
         public List<Model.WeatherCity> HotCities { get; set; }
+
+        public Model.Config Config { get; set; }
     }
 }

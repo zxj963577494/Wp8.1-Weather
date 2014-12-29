@@ -9,17 +9,31 @@ namespace Weather.Service.Implementations
 {
     public class SettingService
     {
+        private static readonly SettingService instance = new SettingService();
+
+        private SettingService()
+        {
+        }
+
+        public static SettingService GetInstance()
+        {
+            return instance;
+        }
+
+
+
+
         public async Task<GetSettingAutoUpdateTimeRepose> GetSettingAutoUpdateTimeAsync()
         {
             GetSettingAutoUpdateTimeRepose respose = new GetSettingAutoUpdateTimeRepose();
-            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFile<GetSettingAutoUpdateTimeRepose>("AutoUpdateTimes.txt", "Data");
+            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileAsync<GetSettingAutoUpdateTimeRepose>("AutoUpdateTimes.txt", "Data").ConfigureAwait(false);
             return respose;
         }
 
         public async Task<GetSettingSwitchesRespose> GetSettingSwitchesAsync()
         {
             GetSettingSwitchesRespose respose = new GetSettingSwitchesRespose();
-            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFile<GetSettingSwitchesRespose>("Switches.txt", "Data");
+            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileAsync<GetSettingSwitchesRespose>("Switches.txt", "Data").ConfigureAwait(false);
             return respose;
         }
     }
