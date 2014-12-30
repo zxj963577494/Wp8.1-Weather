@@ -177,7 +177,7 @@ namespace Weather.App
             IGetWeatherRequest weatherRequest = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, userCity.CityName);
 
 
-           
+
 
             //有网络
             if (NetHelper.IsNetworkAvailable())
@@ -195,7 +195,7 @@ namespace Weather.App
                     else
                     {
                         NotifyUser("Wifi未启动");
-                        weatherRespose = await GetWeatherAsync(isRefresh, userCity, weatherRequest);
+
                     }
                 }
             }
@@ -309,7 +309,7 @@ namespace Weather.App
             {
                 string displayName = userCity.CityName;
                 string tileActivationArguments = userCity.CityId.ToString();
-              await SecondaryTileHelper.CreateSecondaryTileAsync(tileId, displayName, tileActivationArguments);
+                await SecondaryTileHelper.CreateSecondaryTileAsync(tileId, displayName, tileActivationArguments);
             }
             else
             {

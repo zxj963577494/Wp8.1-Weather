@@ -49,7 +49,6 @@ namespace Weather.Tasks
                     //无论使用移动数据还是WIFI都允许自动更新
                     if (getUserRespose.UserConfig.IsWifiAutoUpdate == 0)
                     {
-
                         //允许自动更新所用城市
                         if (getUserRespose.UserConfig.IsAutoUpdateForCities == 1)
                         {
@@ -57,7 +56,7 @@ namespace Weather.Tasks
                             {
                                 realResposeString = await GetRealResposeString(item.CityName);
 
-                                getWeatherRespose = GetUrlRespose(item.CityName, realResposeString);
+                                getWeatherRespose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(realResposeString);
 
                                 UpdateSecondaryTile(item.CityId + "_Weather", getWeatherRespose, getWeatherTypeRespose);
 
@@ -73,7 +72,7 @@ namespace Weather.Tasks
 
                             realResposeString = await GetRealResposeString(userCity.CityName);
 
-                            getWeatherRespose = GetUrlRespose(userCity.CityName, realResposeString);
+                            getWeatherRespose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(realResposeString);
 
                             string tileId = userCity.CityId + "_Weather";
 
@@ -83,9 +82,7 @@ namespace Weather.Tasks
                             }
 
                             await CreateFile(userCity.CityId, realResposeString);
-
                         }
-
                     }
                     else
                     {
@@ -98,7 +95,7 @@ namespace Weather.Tasks
                                 {
                                     realResposeString = await GetRealResposeString(item.CityName);
 
-                                    getWeatherRespose = GetUrlRespose(item.CityName, realResposeString);
+                                    getWeatherRespose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(realResposeString);
 
                                     UpdateSecondaryTile(item.CityId + "_Weather", getWeatherRespose, getWeatherTypeRespose);
 
@@ -114,7 +111,7 @@ namespace Weather.Tasks
 
                                 realResposeString = await GetRealResposeString(userCity.CityName);
 
-                                getWeatherRespose = GetUrlRespose(userCity.CityName, realResposeString);
+                                getWeatherRespose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(realResposeString);
 
                                 string tileId = userCity.CityId + "_Weather";
 

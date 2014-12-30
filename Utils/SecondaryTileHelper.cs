@@ -15,10 +15,8 @@ namespace Weather.Utils
     /// </summary>
     public static class SecondaryTileHelper
     {
-        private static Uri square150x150Logo = new Uri("ms-appx:///Assets/Logo.scale-100.png");
-        private static Uri wide310x150Logo = new Uri("ms-appx:///Assets/wide310x150Tile-sdk.png");
-        private static Uri square310x310Logo = new Uri("ms-appx:///Assets/square310x310Tile-sdk.png");
-        private static Uri square30x30Logo = new Uri("ms-appx:///Assets/square30x30Tile-sdk.png");
+        private static Uri square150x150Logo = new Uri("ms-appx:///Assets/Logo.png");
+        private static Uri wide310x150Logo = new Uri("ms-appx:///Assets/WideLogo.png");
 
         /// <summary>
         /// 创建辅助磁贴
@@ -33,7 +31,6 @@ namespace Weather.Utils
                                                 tileActivationArguments,
                                                 square150x150Logo,
                                                 TileSize.Square150x150);
-            secondaryTile.VisualElements.Square30x30Logo = square30x30Logo;
             secondaryTile.VisualElements.ShowNameOnSquare150x150Logo = true;
             secondaryTile.VisualElements.ShowNameOnWide310x150Logo = true;
             await secondaryTile.RequestCreateAsync();

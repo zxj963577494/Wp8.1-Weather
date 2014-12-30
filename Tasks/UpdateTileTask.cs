@@ -55,7 +55,7 @@ namespace Weather.Tasks
 
             if (defaultCity != null)
             {
-                getUserRespose = await GetUser();
+                getUserRespose = await userService.GetUserAsync();
 
                 if (!NetHelper.IsNetworkAvailable())
                 {
@@ -65,7 +65,7 @@ namespace Weather.Tasks
                     if (getUserRespose.UserConfig.IsWifiAutoUpdate == 0)
                     {
                         realResposeString = await GetRealResposeString(defaultCity.CityName);
-                        getWeatherRespose = GetUrlRespose(defaultCity.CityName, realResposeString);
+                        getWeatherRespose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(realResposeString);
                         UpdateTile(getWeatherRespose);
                         await CreateFile(defaultCity.CityId.ToString(), realResposeString);
                     }
@@ -74,7 +74,7 @@ namespace Weather.Tasks
                         if (NetHelper.IsWifiConnection())
                         {
                             realResposeString = await GetRealResposeString(defaultCity.CityName);
-                            getWeatherRespose = GetUrlRespose(defaultCity.CityName, realResposeString);
+                            getWeatherRespose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(realResposeString);
                             UpdateTile(getWeatherRespose);
                             await CreateFile(defaultCity.CityId.ToString(), realResposeString);
                         }
@@ -119,7 +119,6 @@ namespace Weather.Tasks
         /// <returns></returns>
         private async Task<Model.UserCity> GetDefaultCity()
         {
-            UserService userService = UserService.GetInstance();
             GetUserCityRespose userRespose = await userService.GetUserCityAsync();
             if (userRespose.UserCities != null)
             {
