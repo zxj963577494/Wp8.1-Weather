@@ -38,93 +38,24 @@ namespace Weather.Tasks
             //网络是否开启
             if (NetHelper.IsNetworkAvailable())
             {
-                string realResposeString = null;
+                getUserRespose = await userService.GetUserAsync();
 
-                getUserRespose = await GetUser();
+                getUserCityRespose = await userService.GetUserCityAsync();
 
-                getUserCityRespose = await GetUserCity();
-
-                if (getUserCityRespose != null)
+                if (getUserCityRespose != null && getUserRespose != null)
                 {
                     //无论使用移动数据还是WIFI都允许自动更新
                     if (getUserRespose.UserConfig.IsWifiAutoUpdate == 0)
                     {
-                        //允许自动更新所用城市
-                        if (getUserRespose.UserConfig.IsAutoUpdateForCities == 1)
-                        {
-                            foreach (var item in getUserCityRespose.UserCities)
-                            {
-                                realResposeString = await GetRealResposeString(item.CityName);
-
-                                getWeatherRespose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(realResposeString);
-
-                                UpdateSecondaryTile(item.CityId + "_Weather", getWeatherRespose, getWeatherTypeRespose);
-
-                                await CreateFile(item.CityId, realResposeString);
-                            }
-                        }
-                        else//允许更新默认城市
-                        {
-                            //获取默认城市
-                            Model.UserCity userCity = (from u in getUserCityRespose.UserCities
-                                                       where u.IsDefault == 1
-                                                       select u).FirstOrDefault();
-
-                            realResposeString = await GetRealResposeString(userCity.CityName);
-
-                            getWeatherRespose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(realResposeString);
-
-                            string tileId = userCity.CityId + "_Weather";
-
-                            if (userCity != null)
-                            {
-                                UpdateSecondaryTile(tileId, getWeatherRespose, getWeatherTypeRespose);
-                            }
-
-                            await CreateFile(userCity.CityId, realResposeString);
-                        }
+                        await UpdateWeather();
                     }
                     else
                     {
                         if (NetHelper.IsWifiConnection())
                         {
-                            //允许自动更新所用城市
-                            if (getUserRespose.UserConfig.IsAutoUpdateForCities == 1)
-                            {
-                                foreach (var item in getUserCityRespose.UserCities)
-                                {
-                                    realResposeString = await GetRealResposeString(item.CityName);
-
-                                    getWeatherRespose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(realResposeString);
-
-                                    UpdateSecondaryTile(item.CityId + "_Weather", getWeatherRespose, getWeatherTypeRespose);
-
-                                    await CreateFile(item.CityId, realResposeString);
-                                }
-                            }
-                            else//允许更新默认城市
-                            {
-                                //获取默认城市
-                                Model.UserCity userCity = (from u in getUserCityRespose.UserCities
-                                                           where u.IsDefault == 1
-                                                           select u).FirstOrDefault();
-
-                                realResposeString = await GetRealResposeString(userCity.CityName);
-
-                                getWeatherRespose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(realResposeString);
-
-                                string tileId = userCity.CityId + "_Weather";
-
-                                if (userCity != null)
-                                {
-                                    UpdateSecondaryTile(tileId, getWeatherRespose, getWeatherTypeRespose);
-                                }
-
-                                await CreateFile(userCity.CityId, realResposeString);
-                            }
+                            await UpdateWeather();
                         }
                     }
-
                 }
             }
             //表示完成任务
@@ -132,25 +63,60 @@ namespace Weather.Tasks
         }
 
         /// <summary>
-        /// 获取用户配置信息
+        /// 更新天气
         /// </summary>
         /// <returns></returns>
-        private async Task<GetUserRespose> GetUser()
+        private async Task UpdateWeather()
         {
-            return await userService.GetUserAsync();
+            //允许自动更新所用城市
+            if (getUserRespose.UserConfig.IsAutoUpdateForCities == 1)
+            {
+                await UpdateAllCity();
+            }
+            else//允许更新默认城市
+            {
+                //获取默认城市
+                Model.UserCity userCity = (from u in getUserCityRespose.UserCities
+                                           where u.IsDefault == 1
+                                           select u).FirstOrDefault();
+
+                await UpdateCity(userCity);
+            }
+        }
+
+
+        /// <summary>
+        /// 更新所有城市
+        /// </summary>
+        /// <returns></returns>
+        private async Task UpdateAllCity()
+        {
+            foreach (var item in getUserCityRespose.UserCities)
+            {
+                await UpdateCity(item);
+            }
+        }
+
+
+
+        /// <summary>
+        /// 更新单个城市
+        /// </summary>
+        /// <returns></returns>
+        private async Task UpdateCity(Model.UserCity userCity)
+        {
+            string realResposeString = await GetRealResposeString(userCity.CityName);
+            getWeatherRespose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(realResposeString);
+            string tileId = userCity.CityId + "_Weather";
+            if (SecondaryTileHelper.IsExists(tileId))
+            {
+                UpdateSecondaryTile(tileId);
+            }
+            await CreateFile(userCity.CityId, realResposeString);
         }
 
         /// <summary>
-        /// 获取常用城市
-        /// </summary>
-        /// <returns></returns>
-        private async Task<GetUserCityRespose> GetUserCity()
-        {
-            return await userService.GetUserCityAsync();
-        }
-
-        /// <summary>
-        /// 
+        ///获取天气字符串
         /// </summary>
         /// <param name="cityName"></param>
         /// <returns></returns>
@@ -164,47 +130,39 @@ namespace Weather.Tasks
         }
 
         /// <summary>
-        /// 
+        /// 创建天气文件
         /// </summary>
-        /// <param name="cityName"></param>
+        /// <param name="cityId"></param>
         /// <param name="realResposeString"></param>
         /// <returns></returns>
-        private static GetWeatherRespose GetUrlRespose(string cityName, string realResposeString)
-        {
-            GetWeatherRespose respose = new GetWeatherRespose();
-            respose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(realResposeString);
-            return respose;
-        }
-
         private static async Task<bool> CreateFile(int cityId, string realResposeString)
         {
-            return await FileHelper.CreateFileForFolderAsync("Temp", cityId.ToString() + "_" + DateTime.Now.ToString("yyyyMMdd") + ".txt", realResposeString);
+            return await FileHelper.CreateFileForFolderAsync("Temp", cityId.ToString() + "_" + StringHelper.GetTodayDateString() + ".txt", realResposeString);
         }
 
-
-        private void UpdateSecondaryTile(string tileId, GetWeatherRespose respose, GetWeatherTypeRespose getWeatherTypeRespose)
+        /// <summary>
+        /// 更新辅助磁贴信息
+        /// </summary>
+        /// <param name="tileId"></param>
+        private void UpdateSecondaryTile(string tileId)
         {
-
-
-
-
             string tileXmlString = @"<tile>"
               + "<visual version='2'>"
               + "<binding template='TileWide310x150BlockAndText01' fallback='TileWideBlockAndText01'>"
-              + "<image id='1' src='ms-appx:///" + (getUserRespose.UserConfig.IsTileSquarePic == 1 ? getWeatherTypeRespose.WeatherTypes.Find(x => x.Wid == respose.result.today.weather_id.fa).TileWidePic : "Assets/Logo.png") + "'/>"
-              + "<text id='1'>" + respose.result.sk.temp + "°</text>"
-              + "<text id='2'>" + respose.result.today.city + "</text>"
-              + "<text id='3'>" + respose.result.today.weather + "</text>"
-              + "<text id='4'>" + respose.result.today.temperature + "</text>"
-              + "<text id='5'>" + respose.result.sk.wind_direction + " " + respose.result.sk.wind_strength + "</text>"
-              + "<text id='6'>" + respose.result.today.week + "</text>"
+              + "<image id='1' src='ms-appx:///" + (getUserRespose.UserConfig.IsTileSquarePic == 1 ? getWeatherTypeRespose.WeatherTypes.Find(x => x.Wid == getWeatherRespose.result.today.weather_id.fa).TileWidePic : "Assets/Logo.png") + "'/>"
+              + "<text id='1'>" + getWeatherRespose.result.sk.temp + "°</text>"
+              + "<text id='2'>" + getWeatherRespose.result.today.city + "</text>"
+              + "<text id='3'>" + getWeatherRespose.result.today.weather + "</text>"
+              + "<text id='4'>" + getWeatherRespose.result.today.temperature + "</text>"
+              + "<text id='5'>" + getWeatherRespose.result.sk.wind_direction + " " + getWeatherRespose.result.sk.wind_strength + "</text>"
+              + "<text id='6'>" + getWeatherRespose.result.today.week + "</text>"
               + "</binding>"
               + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-              + "<image id='1' src='ms-appx:///" + (getUserRespose.UserConfig.IsTileSquarePic == 1 ? getWeatherTypeRespose.WeatherTypes.Find(x => x.Wid == respose.result.today.weather_id.fa).TileSquarePic : "Assets/Logo.png") + "'/>"
-              + "<text id='1'>" + respose.result.sk.temp + "°</text>"
-              + "<text id='2'>" + respose.result.today.weather + "</text>"
-              + "<text id='3'>" + respose.result.today.temperature + "</text>"
-              + "<text id='4'>" + respose.result.sk.wind_direction + " " + respose.result.sk.wind_strength + "</text>"
+              + "<image id='1' src='ms-appx:///" + (getUserRespose.UserConfig.IsTileSquarePic == 1 ? getWeatherTypeRespose.WeatherTypes.Find(x => x.Wid == getWeatherRespose.result.today.weather_id.fa).TileSquarePic : "Assets/Logo.png") + "'/>"
+              + "<text id='1'>" + getWeatherRespose.result.sk.temp + "°</text>"
+              + "<text id='2'>" + getWeatherRespose.result.today.weather + "</text>"
+              + "<text id='3'>" + getWeatherRespose.result.today.temperature + "</text>"
+              + "<text id='4'>" + getWeatherRespose.result.sk.wind_direction + " " + getWeatherRespose.result.sk.wind_strength + "</text>"
               + "</binding>"
               + "</visual>"
               + "</tile>";
