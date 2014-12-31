@@ -41,10 +41,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
-    <TargetPlatform Include="Windows, Version=8.1" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="ApplicationHelper.cs" />
     <Compile Include="BackgroundTaskHelper.cs" />
     <Compile Include="CacheHelper.cs" />
@@ -59,11 +55,16 @@
     <Compile Include="NetHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResolutionHelper.cs" />
+    <Compile Include="ScreenSizeHelper.cs" />
     <Compile Include="SecondaryTileHelper.cs" />
     <Compile Include="SettingPageHelper.cs" />
     <Compile Include="StringHelper.cs" />
     <Compile Include="TileHelper.cs" />
     <Compile Include="ToastHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <TargetPlatform Include="Windows, Version=8.1" />
+    <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -54,7 +54,7 @@
             <TextBlock Text="天气在线" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
             <TextBlock Text="常用城市" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
         </StackPanel>
-        <GridView x:Name="gvCity" Margin="20,0" Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Hidden" ItemClick="gvCity_ItemClick" IsItemClickEnabled="True" ItemsSource="{Binding MyCityPageModels}" Holding="gvCity_Holding" ItemTemplate="{StaticResource GridViewTemplate}" >
+        <GridView x:Name="gvCity" Margin="20,0" Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Hidden" ItemClick="gvCity_ItemClick" IsItemClickEnabled="True" ItemsSource="{Binding MyCityPageModels}" Holding="gvCity_Holding" ItemTemplate="{StaticResource GridViewTemplate}" ItemContainerStyle="{ThemeResource MyCityPageDataItemStyle}" >
             <ItemsControl.ItemContainerTransitions>
                 <TransitionCollection>
                     <EntranceThemeTransition/>
@@ -63,18 +63,7 @@
                     <ReorderThemeTransition/>
                 </TransitionCollection>
             </ItemsControl.ItemContainerTransitions>
-            <GridView.ItemContainerStyle>
-                <Style TargetType="GridViewItem">
-                    <Setter Property="Background" Value="{ThemeResource PhoneAccentBrush}"/>
-                    <Setter Property="BorderBrush" Value="{ThemeResource PhoneAccentBrush}"/>
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-                    <Setter Property="Margin" Value="10"/>
-                    <Setter Property="Width" Value="150"/>
-                    <Setter Property="Height" Value="150"/>
-                </Style>
-            </GridView.ItemContainerStyle>
+
         </GridView>
     </Grid>
     <Page.BottomAppBar>
