@@ -44,8 +44,6 @@ namespace Weather.App
         private ViewModel.MyCityPage myCityPage = null;
         IList<ViewModel.MyCityPageModel> myCityPageModelList = null;
 
-
-
         public MyCityPage()
         {
             this.InitializeComponent();
@@ -158,9 +156,20 @@ namespace Weather.App
             this.navigationHelper.OnNavigatedFrom(e);
         }
 
+
+
+        private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
+        {
+            Frame rootFrame = Window.Current.Content as Frame;
+            if (rootFrame != null && rootFrame.CanGoBack)
+            {
+                rootFrame.GoBack();
+                e.Handled = true;
+            }
+        }
+        #endregion
+
         #region 获取天气数据
-
-
         private async Task GetWeather(int isRefresh)
         {
             progressBar.Visibility = Visibility.Visible;
@@ -176,13 +185,117 @@ namespace Weather.App
                     //不使用wifi更新
                     if (userRespose.UserConfig.IsWifiUpdate == 0)
                     {
-                        await GetWeather2(isRefresh, item);
+                        MyCityPageModel model = null;
+                        //更新所有常用城市
+                        if (userRespose.UserConfig.IsUpdateForCity == 0)
+                        {
+                            //强制刷新
+                            if (isRefresh == 1)
+                            {
+                                //通过网络获取天气数据
+                                model = await GetWeatherByNet(item);
+                                myCityPageModelList.Add(model);
+                            }
+                            else
+                            {
+                                //非强制刷新下，根据是否存在今日天气数据文件，进行获取天气数据
+                                model = await GetWeatherByNetOrClient(item);
+                                myCityPageModelList.Add(model);
+                            }
+                        }
+                        else //只更新默认城市
+                        {
+                            //强制刷新
+                            if (isRefresh == 1)
+                            {
+                                //是默认城市
+                                if (item.IsDefault == 1)
+                                {
+                                    //通过网络获取
+                                    model = await GetWeatherByNet(item);
+                                    myCityPageModelList.Add(model);
+                                }
+                                else
+                                {
+                                    //天气数据置为空
+                                    model = GetWeatherByNo(item);
+                                    myCityPageModelList.Add(model);
+                                }
+
+                            }
+                            else
+                            {
+                                //是默认城市
+                                if (item.IsDefault == 1)
+                                {
+                                    model = await GetWeatherByNetOrClient(item);
+                                    myCityPageModelList.Add(model);
+                                }
+                                else
+                                {
+                                    model = GetWeatherByNo(item);
+                                    myCityPageModelList.Add(model);
+                                }
+                            }
+                        }
                     }
                     else
                     {
                         if (NetHelper.IsWifiConnection())
                         {
-                            await GetWeather2(isRefresh, item);
+                            MyCityPageModel model = null;
+                            //更新所有常用城市
+                            if (userRespose.UserConfig.IsUpdateForCity == 0)
+                            {
+                                //强制刷新
+                                if (isRefresh == 1)
+                                {
+                                    //通过网络获取天气数据
+                                    model = await GetWeatherByNet(item);
+                                    myCityPageModelList.Add(model);
+                                }
+                                else
+                                {
+                                    //非强制刷新下，根据是否存在今日天气数据文件，进行获取天气数据
+                                    model = await GetWeatherByNetOrClient(item);
+                                    myCityPageModelList.Add(model);
+                                }
+                            }
+                            else //只更新默认城市
+                            {
+                                //强制刷新
+                                if (isRefresh == 1)
+                                {
+                                    //是默认城市
+                                    if (item.IsDefault == 1)
+                                    {
+                                        //通过网络获取
+                                        model = await GetWeatherByNet(item);
+                                        myCityPageModelList.Add(model);
+                                    }
+                                    else
+                                    {
+                                        //天气数据置为空
+                                        model = GetWeatherByNo(item);
+                                        myCityPageModelList.Add(model);
+                                    }
+
+                                }
+                                else
+                                {
+                                    //是默认城市
+                                    if (item.IsDefault == 1)
+                                    {
+                                        model = await GetWeatherByNetOrClient(item);
+                                        myCityPageModelList.Add(model);
+                                    }
+                                    else
+                                    {
+                                        model = GetWeatherByNo(item);
+                                        myCityPageModelList.Add(model);
+                                    }
+                                }
+                            }
                         }
                         else
                         {
@@ -193,7 +306,6 @@ namespace Weather.App
                     }
                     UpdateSecondaryTile(item.CityId + "_Weather");
                 }
-
                 myCityPage.MyCityPageModels = myCityPageModelList.ToList();
             }
             else
@@ -234,14 +346,12 @@ namespace Weather.App
         /// <returns></returns>
         public async Task<MyCityPageModel> GetWeatherByClient(Model.UserCity item)
         {
-            weatherRespose = await weatherService.GetWeatherByClientAsync(item.CityId.ToString());
-            MyCityPageModel model = new MyCityPageModel()
-            {
-                CityId = item.CityId,
-                CityName = item.CityName,
-                Temp = weatherRespose == null ? null : weatherRespose.result.today.temperature,
-                TodayPic = weatherRespose == null ? null : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TodayPic
-            };
+            weatherRespose = await weatherService.GetWeatherByClientAsync(item.CityId.ToString()).ConfigureAwait(false);
+            MyCityPageModel model = new MyCityPageModel();
+            model.CityId = item.CityId;
+            model.CityName = item.CityName;
+            model.Temp = weatherRespose == null ? null : weatherRespose.result.today.temperature;
+            model.TodayPic = weatherRespose == null ? null : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TodayPic;
             return model;
         }
 
@@ -259,11 +369,11 @@ namespace Weather.App
             //存在今日天气数据
             if (isExistFile)
             {
-                model = await GetWeatherByClient(item);
+                model = await GetWeatherByClient(item).ConfigureAwait(false);
             }
             else
             {
-                model = await GetWeatherByNet(item);
+                model = await GetWeatherByNet(item).ConfigureAwait(false);
             }
             return model;
         }
@@ -285,73 +395,6 @@ namespace Weather.App
             return model;
         }
 
-        private async Task GetWeather2(int isRefresh, Model.UserCity item)
-        {
-            //更新所有常用城市
-            if (userRespose.UserConfig.IsUpdateForCity == 0)
-            {
-                //强制刷新
-                if (isRefresh == 1)
-                {
-                    //通过网络获取天气数据
-                    MyCityPageModel model = await GetWeatherByNet(item);
-                    myCityPageModelList.Add(model);
-                }
-                else
-                {
-                    //非强制刷新下，根据是否存在今日天气数据文件，进行获取天气数据
-                    MyCityPageModel model = await GetWeatherByNetOrClient(item);
-                    myCityPageModelList.Add(model);
-                }
-            }
-            else //只更新默认城市
-            {
-                //强制刷新
-                if (isRefresh == 1)
-                {
-                    //是默认城市
-                    if (item.IsDefault == 1)
-                    {
-                        //通过网络获取
-                        MyCityPageModel model = await GetWeatherByNet(item);
-                        myCityPageModelList.Add(model);
-                    }
-                    else
-                    {
-                        //天气数据置为空
-                        MyCityPageModel model = GetWeatherByNo(item);
-                        myCityPageModelList.Add(model);
-                    }
-
-                }
-                else
-                {
-                    //是默认城市
-                    if (item.IsDefault == 1)
-                    {
-                        //非强制刷新下，根据是否存在今日天气数据文件，进行获取天气数据
-                        MyCityPageModel model = await GetWeatherByNetOrClient(item);
-                        myCityPageModelList.Add(model);
-                    }
-                    else
-                    {
-                        MyCityPageModel model = GetWeatherByNo(item);
-                        myCityPageModelList.Add(model);
-                    }
-                }
-            }
-        }
-        #endregion
-
-        private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
-        {
-            Frame rootFrame = Window.Current.Content as Frame;
-            if (rootFrame != null && rootFrame.CanGoBack)
-            {
-                rootFrame.GoBack();
-                e.Handled = true;
-            }
-        }
         #endregion
 
         #region Holding
@@ -519,6 +562,13 @@ namespace Weather.App
         }
         #endregion
 
+        #region 常用城市排序
+
+        /// <summary>
+        /// 常用城市排序
+        /// </summary>
+        /// <param name="respose"></param>
+        /// <returns></returns>
         private GetUserCityRespose SortUserCity(GetUserCityRespose respose)
         {
             var data = from c in respose.UserCities
@@ -528,6 +578,11 @@ namespace Weather.App
             return respose;
         }
 
+        /// <summary>
+        /// 常用城市磁贴排序
+        /// </summary>
+        /// <param name="respose"></param>
+        /// <returns></returns>
         private List<MyCityPageModel> SortCityPageModelList(GetUserCityRespose respose)
         {
             respose = SortUserCity(respose);
@@ -539,8 +594,9 @@ namespace Weather.App
             }
             return newList;
         }
+        #endregion
 
-
+        #region 消息通知
 
         /// <summary>
         /// Used to display messages to the user
@@ -573,6 +629,7 @@ namespace Weather.App
                 popup.IsOpen = false;
             }
         }
+        #endregion
 
         #region Command
 
@@ -581,9 +638,30 @@ namespace Weather.App
             Frame.Navigate(typeof(AddCityPage));
         }
 
-        private void abbRefresh_Click(object sender, RoutedEventArgs e)
+        private async void abbRefresh_Click(object sender, RoutedEventArgs e)
         {
-            GetWeather(1);
+            await GetWeather(1);
+        }
+
+        private void SettingCommandBar_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SettingPage));
+        }
+
+        private void AboutCommandBar_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(About));
+        }
+
+        private void InstructionCommandBar_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(Instruction));
+            return;
+        }
+
+        private void EvaluateCommandBar_Click(object sender, RoutedEventArgs e)
+        {
+            SettingPageHelper.LaunchUriForMarketplaceDetail();
         }
         #endregion
 
@@ -644,6 +722,8 @@ namespace Weather.App
         }
 
         #endregion
+
+
 
 
     }

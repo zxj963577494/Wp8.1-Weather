@@ -88,9 +88,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BlankPage1.xaml.cs">
-      <DependentUpon>BlankPage1.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Common\BackgroundTaskExecute.cs" />
     <Compile Include="AddCityPage.xaml.cs">
       <DependentUpon>AddCityPage.xaml</DependentUpon>
@@ -274,10 +271,6 @@
     <Page Include="AddCityPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BlankPage1.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Instruction.xaml">
       <SubType>Designer</SubType>

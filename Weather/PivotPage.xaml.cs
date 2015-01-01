@@ -327,6 +327,17 @@ namespace Weather.App
         {
             Frame.Navigate(typeof(About));
         }
+
+        private void InstructionCommandBar_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(Instruction));
+            return;
+        }
+
+        private void EvaluateCommandBar_Click(object sender, RoutedEventArgs e)
+        {
+            SettingPageHelper.LaunchUriForMarketplaceDetail();
+        }
         #endregion
 
         #region 消息通知
@@ -479,16 +490,9 @@ namespace Weather.App
         }
         #endregion
 
-        private void InstructionCommandBar_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(Instruction));
-            return;
-        }
 
-        private void EvaluateCommandBar_Click(object sender, RoutedEventArgs e)
-        {
-            SettingPageHelper.LaunchUriForMarketplaceDetail();
-        }
+
+
 
 
 
