@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Navigation;
 using Weather.Service.Implementations;
 using Weather.Service.Message;
 using Weather.Utils;
+using System.Threading.Tasks;
 
 // “透视应用程序”模板在 http://go.microsoft.com/fwlink/?LinkID=391641 上有介绍
 
@@ -68,6 +69,12 @@ namespace Weather.App
                 this.DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
+
+
+            await InitializeAppConfig();
+            CreateUpdateTileTask();
+            CreateUpdateSecondaryTileTask();
+
             Weather.App.Common.StyleSelector.SetStyle();
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -129,8 +136,6 @@ namespace Weather.App
             // 确保当前窗口处于活动状态。
             Window.Current.Activate();
 
-            CreateUpdateTileTask();
-            CreateUpdateSecondaryTileTask();
         }
 
         /// <summary>
@@ -157,7 +162,20 @@ namespace Weather.App
             deferral.Complete();
         }
 
+        #region 初始化配置文件
 
+        private async Task InitializeAppConfig()
+        {
+            bool x = await FileHelper.IsExistFileAsync("User\\UserConfig.json");
+            if (!x)
+            {
+                string strUserConfig = @"{'UserConfig':{'IsWifiUpdate':'0','IsUpdateForCity':'1','IsAutoUpdateForCities':'0','IsWifiAutoUpdate':'1','AutoUpdateTime':'1','IsAutoUpdateForCity':'1','IsTileSquarePic':'0'}}";
+                await FileHelper.CreateAndWriteFileAsync("User\\UserConfig.json", strUserConfig);
+
+                await FileHelper.CreateFileAsync("User\\UserCities.json");
+            }
+        }
+        #endregion
 
         #region 创建更新磁贴
 
@@ -204,7 +222,7 @@ namespace Weather.App
                     backgroundTaskExecute.Create(taskName, taskEntryPoint, time, null);
                 }
             }
-        } 
+        }
 
         #endregion
 

@@ -1,1 +1,0 @@
-﻿{"UserConfig":{"IsWifiUpdate":"0","IsUpdateForCity":"1","IsAutoUpdateForCities":"0","IsWifiAutoUpdate":"1","AutoUpdateTime":"1","IsAutoUpdateForCity":"1","IsTileSquarePic":"0"}}

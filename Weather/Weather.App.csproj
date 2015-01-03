@@ -149,12 +149,18 @@
     <Content Include="Assets\WideLogo.scale-100.png" />
     <Content Include="Assets\WideLogo.scale-140.png" />
     <Content Include="Assets\WideLogo.scale-240.png" />
-    <Content Include="Data\Application.txt" />
-    <Content Include="Data\AutoUpdateTimes.txt" />
-    <Content Include="Data\Cities.txt" />
-    <Content Include="Data\Config.txt" />
-    <Content Include="Data\HotCities.txt" />
-    <Content Include="Data\Switches.txt" />
+    <Content Include="Data\AutoUpdateTimes.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Cities.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\HotCities.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Switches.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\Background\08.jpg" />
     <Content Include="Images\Background\10.jpg" />
     <Content Include="Images\Background\07.jpg" />
@@ -176,31 +182,56 @@
     <Content Include="Images\Index\fengli.png" />
     <Content Include="Images\Index\shidu.png" />
     <Content Include="Images\Other\gaosi.jpg" />
-    <Content Include="Images\TileSquare\00.jpg" />
-    <Content Include="Images\TileSquare\01.jpg" />
-    <Content Include="Images\TileSquare\02.jpg" />
-    <Content Include="Images\TileSquare\05.jpg" />
-    <Content Include="Images\TileSquare\04.jpg" />
-    <Content Include="Images\TileSquare\06.jpg" />
-    <Content Include="Images\TileSquare\07.jpg" />
-    <Content Include="Images\TileSquare\08.jpg" />
-    <Content Include="Images\TileSquare\09.jpg" />
-    <Content Include="Images\TileSquare\10.jpg" />
-    <Content Include="Images\TileSquare\11.jpg" />
-    <Content Include="Images\TileSquare\12.jpg" />
-    <Content Include="Images\TileSquare\13.jpg" />
-    <Content Include="Images\TileWide\00.jpg" />
-    <Content Include="Images\TileWide\01.jpg" />
-    <Content Include="Images\TileWide\02.jpg" />
-    <Content Include="Images\TileWide\04.jpg" />
-    <Content Include="Images\TileWide\06.jpg" />
-    <Content Include="Images\TileWide\07.jpg" />
-    <Content Include="Images\TileWide\08.jpg" />
-    <Content Include="Images\TileWide\09.jpg" />
-    <Content Include="Images\TileWide\10.jpg" />
-    <Content Include="Images\TileWide\11.jpg" />
-    <Content Include="Images\TileWide\12.jpg" />
-    <Content Include="Images\TileWide\13.jpg" />
+    <Content Include="Images\TileSquare\00.png" />
+    <Content Include="Images\TileSquare\01.png" />
+    <Content Include="Images\TileSquare\02.png" />
+    <Content Include="Images\TileSquare\03.png" />
+    <Content Include="Images\TileSquare\04.png" />
+    <Content Include="Images\TileSquare\05.png" />
+    <Content Include="Images\TileSquare\06.png" />
+    <Content Include="Images\TileSquare\07.png" />
+    <Content Include="Images\TileSquare\08.png" />
+    <Content Include="Images\TileSquare\09.png" />
+    <Content Include="Images\TileSquare\10.png" />
+    <Content Include="Images\TileSquare\11.png" />
+    <Content Include="Images\TileSquare\12.png" />
+    <Content Include="Images\TileSquare\14.png" />
+    <Content Include="Images\TileSquare\15.png" />
+    <Content Include="Images\TileSquare\16.png" />
+    <Content Include="Images\TileSquare\17.png" />
+    <Content Include="Images\TileSquare\18.png" />
+    <Content Include="Images\TileSquare\20.png" />
+    <Content Include="Images\TileSquare\29.png" />
+    <Content Include="Images\TileSquare\30.png" />
+    <Content Include="Images\TileSquare\31.png" />
+    <Content Include="Images\TileSquare\53.png" />
+    <Content Include="Images\TileSquare\900.png" />
+    <Content Include="Images\TileSquare\901.png" />
+    <Content Include="Images\TileWide\00.png" />
+    <Content Include="Images\TileWide\01.png" />
+    <Content Include="Images\TileWide\02.png" />
+    <Content Include="Images\TileWide\03.png" />
+    <Content Include="Images\TileWide\04.png" />
+    <Content Include="Images\TileWide\05.png" />
+    <Content Include="Images\TileWide\06.png" />
+    <Content Include="Images\TileWide\07.png" />
+    <Content Include="Images\TileWide\08.png" />
+    <Content Include="Images\TileWide\09.png" />
+    <Content Include="Images\TileWide\10.png" />
+    <Content Include="Images\TileWide\11.png" />
+    <Content Include="Images\TileWide\12.png" />
+    <Content Include="Images\TileWide\14.png" />
+    <Content Include="Images\TileWide\15.png" />
+    <Content Include="Images\TileWide\16.png" />
+    <Content Include="Images\TileWide\17.png" />
+    <Content Include="Images\TileWide\18.png" />
+    <Content Include="Images\TileWide\20.png" />
+    <Content Include="Images\TileWide\29.png" />
+    <Content Include="Images\TileWide\30.png" />
+    <Content Include="Images\TileWide\31.png" />
+    <Content Include="Images\TileWide\53.png" />
+    <Content Include="Images\TileWide\900.png" />
+    <Content Include="Images\TileWide\901.png" />
     <Content Include="Images\Today\03.png" />
     <Content Include="Images\Today\04.png" />
     <Content Include="Images\Today\18.png" />
@@ -254,8 +285,6 @@
     <Content Include="Images\Tomorrow\901.png" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="StoreManifest.xml" />
-    <Content Include="User\UserCities.txt" />
-    <Content Include="User\UserConfig.txt" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -310,7 +339,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\WeatherTypes.txt" />
+    <Content Include="Data\WeatherTypes.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tasks\Weather.Tasks.csproj">
@@ -334,9 +365,7 @@
       <Name>Weather.Service</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Temp\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

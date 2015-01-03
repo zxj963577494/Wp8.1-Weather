@@ -365,7 +365,7 @@ namespace Weather.App
         {
             MyCityPageModel model = null;
             string filePath = StringHelper.GetTodayFilePath(item.CityId);
-            bool isExistFile = await FileHelper.IsExistFile(filePath);
+            bool isExistFile = await FileHelper.IsExistFileAsync(filePath);
             //存在今日天气数据
             if (isExistFile)
             {
@@ -551,12 +551,12 @@ namespace Weather.App
         /// <returns></returns>
         private async Task DeleteFile(int cityId)
         {
-            string fileName = cityId + "_" + DateTime.Now.AddDays(-1).ToString("yyyyMMdd") + ".txt";
+            string fileName = cityId + "_" + DateTime.Now.AddDays(-1).ToString("yyyyMMdd") + ".json";
             string filePath = "Temp\\" + fileName;
-            bool x = await FileHelper.IsExistFile(filePath);
+            bool x = await FileHelper.IsExistFileAsync(filePath);
             if (x)
             {
-                await FileHelper.DeleteFile(filePath);
+                await FileHelper.DeleteFileAsync(filePath);
 
             }
         }
@@ -708,7 +708,7 @@ namespace Weather.App
   + "<text id='6'>" + weatherRespose.result.today.week + "</text>"
   + "</binding>"
   + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-  + "<image id='1' src='ms-appx:///" + (userRespose.UserConfig.IsTileSquarePic == 1 ? weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TileSquarePic : "Assets/Logo.png") + "'/>"
+  + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TileSquarePic + "'/>"
   + "<text id='1'>" + weatherRespose.result.sk.temp + "°</text>"
   + "<text id='2'>" + weatherRespose.result.today.weather + "</text>"
   + "<text id='3'>" + weatherRespose.result.today.temperature + "</text>"

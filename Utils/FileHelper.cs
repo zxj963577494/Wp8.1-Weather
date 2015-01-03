@@ -18,16 +18,18 @@ namespace Weather.Utils
         /// 文件目录是否存在
         /// </summary>
         /// <param name="dirName">目录名称</param>
-        public async static Task<bool> IsExistFolder(string dirName)
+        public async static Task<bool> IsExistFolderAsync(string dirName)
         {
             bool isExistFolder = false;
             try
             {
-                //当前应用程序包位置
-                IStorageFolder local = Windows.ApplicationModel.Package.Current.InstalledLocation;
+                IStorageFolder local = Windows.Storage.ApplicationData.Current.LocalFolder;
 
-                StorageFolder storageFolder = await local.GetFolderAsync(dirName).AsTask().ConfigureAwait(false);
-                if (storageFolder != null)
+                IReadOnlyList<StorageFolder> folderList = await local.GetFoldersAsync();
+
+                StorageFolder existFolder = folderList.FirstOrDefault(x => x.Name == dirName);
+
+                if (existFolder != null)
                 {
                     isExistFolder = true;
                 }
@@ -43,24 +45,33 @@ namespace Weather.Utils
         /// <summary>
         /// 文件是否存在
         /// </summary>
-        /// <param name="dirName">目录名称，目录为null时，搜索根目录是否存在文件</param>
-        /// <param name="fileName">文件名称</param>
+        /// <param name="filePath"></param>
         /// <returns></returns>
-        public async static Task<bool> IsExistFile(string filePath)
+        public async static Task<bool> IsExistFileAsync(string filePath)
         {
             bool isExistFile = false;
             try
             {
-                //当前应用程序包位置
-                IStorageFolder local = Windows.ApplicationModel.Package.Current.InstalledLocation;
-                IStorageFile storageFile = await local.GetFileAsync(filePath).AsTask().ConfigureAwait(false);
-                if (storageFile != null)
+                string fileFolder = filePath.Split('\\')[0];
+                string fileName = filePath.Split('\\')[1];
+
+                bool isExistFolder = await IsExistFolderAsync(fileFolder);
+
+                if (isExistFolder)
                 {
-                    isExistFile = true;
-                }
-                else
-                {
-                    isExistFile = false;
+                    IStorageFolder local = Windows.Storage.ApplicationData.Current.LocalFolder;
+                    StorageFolder folder = await local.GetFolderAsync(fileFolder);
+                    IReadOnlyList<StorageFile> fileList = await folder.GetFilesAsync();
+                    StorageFile existFile = fileList.FirstOrDefault(x => x.Name == fileName);
+
+                    if (existFile != null)
+                    {
+                        isExistFile = true;
+                    }
+                    else
+                    {
+                        isExistFile = false;
+                    }
                 }
             }
             catch (Exception)
@@ -75,13 +86,13 @@ namespace Weather.Utils
         /// 创建文件目录
         /// </summary>
         /// <param name="dirName">目录名称</param>
-        public async static Task<bool> CreateDirectory(string dirName)
+        public async static Task<bool> CreateDirectoryAsync(string dirName)
         {
             bool isCreateDir = false;
             try
             {
                 //当前应用程序包位置
-                IStorageFolder local = Windows.ApplicationModel.Package.Current.InstalledLocation;
+                IStorageFolder local = Windows.Storage.ApplicationData.Current.LocalFolder;
                 StorageFolder sampleFile = await local.CreateFolderAsync(dirName, CreationCollisionOption.OpenIfExists);
                 isCreateDir = true;
             }
@@ -96,18 +107,56 @@ namespace Weather.Utils
         /// <summary>
         /// 创建文件
         /// </summary>
-        /// <param name="dirname">目录名称</param>
-        /// <param name="filename">文件名称</param>
-        /// <param name="getDataStream">文件内容</param>
-        /// <returns>是否创建</returns>
-        public async static Task<bool> CreateFileForFolderAsync(string dirname, string filename, string content)
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public async static Task<bool> CreateFileAsync(string filePath)
         {
             bool isCreateFile = false;
             try
             {
                 //当前应用程序包位置
-                IStorageFolder local = Windows.ApplicationModel.Package.Current.InstalledLocation;
-                string filePath = dirname + "\\" + filename;
+                IStorageFolder local = Windows.Storage.ApplicationData.Current.LocalFolder;
+                StorageFile storageFile = await local.CreateFileAsync(filePath, CreationCollisionOption.ReplaceExisting);
+                isCreateFile = true;
+            }
+            catch (Exception)
+            {
+                isCreateFile = false;
+            }
+
+            return isCreateFile;
+        }
+
+
+        /// <summary>
+        /// 删除文件
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static async Task DeleteFileAsync(string filePath)
+        {
+            var x = await IsExistFileAsync(filePath);
+            if (x)
+            {
+                IStorageFile file = await GetFileAccess(filePath);
+                await file.DeleteAsync();
+            }
+        }
+
+
+        /// <summary>
+        /// 创建并写入文件
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        public async static Task<bool> CreateAndWriteFileAsync(string filePath, string content)
+        {
+            bool isCreateFile = false;
+            try
+            {
+                //当前应用程序包位置
+                IStorageFolder local = Windows.Storage.ApplicationData.Current.LocalFolder;
                 StorageFile storageFile = await local.CreateFileAsync(filePath, CreationCollisionOption.ReplaceExisting);
                 var buffer = Windows.Security.Cryptography.CryptographicBuffer.ConvertStringToBinary(
     content, Windows.Security.Cryptography.BinaryStringEncoding.Utf8);
@@ -122,69 +171,51 @@ namespace Weather.Utils
             return isCreateFile;
         }
 
-        /// <summary>
-        /// 删除文件
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
-        public static async Task DeleteFile(string fileName)
-        {
-            var file = await GetFileAccess(fileName).ConfigureAwait(false);
-            if (file != null)
-            {
-                await file.DeleteAsync();
-            }
-        }
+
 
         /// <summary>
-        /// 读取Txt文件
+        /// 读取文件
         /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="fileFolder"></param>
+        /// <param name="filePath"></param>
         /// <returns></returns>
-        public static async Task<string> ReadTxtFile(string fileName, string fileFolder)
+        public static async Task<string> ReadTxtFileByInstalledLocationAsync(string filePath)
         {
             string text = null;
             IStorageFolder local = Windows.ApplicationModel.Package.Current.InstalledLocation;
-            string filePath = fileFolder + "\\" + fileName;
             IStorageFile storageFile = await local.GetFileAsync(filePath).AsTask().ConfigureAwait(false);
             var buffer = await Windows.Storage.FileIO.ReadBufferAsync(storageFile).AsTask().ConfigureAwait(false);
             using (DataReader dataReader = Windows.Storage.Streams.DataReader.FromBuffer(buffer))
             {
-              text= dataReader.ReadString(buffer.Length);
+                text = dataReader.ReadString(buffer.Length);
             }
             return text;
         }
 
-        public async static Task<IInputStream> GetOpenFileSequentialStream(string fileName)
+        /// <summary>
+        /// 读取文件
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static async Task<string> ReadTxtFileAsync(string filePath)
         {
-            var file = await GetFileAccess(fileName);
-
-            return await file.OpenSequentialReadAsync();
+            string text = null;
+            IStorageFolder local = Windows.Storage.ApplicationData.Current.LocalFolder;
+            IStorageFile storageFile = await local.GetFileAsync(filePath).AsTask().ConfigureAwait(false);
+            var buffer = await Windows.Storage.FileIO.ReadBufferAsync(storageFile).AsTask().ConfigureAwait(false);
+            using (DataReader dataReader = Windows.Storage.Streams.DataReader.FromBuffer(buffer))
+            {
+                text = dataReader.ReadString(buffer.Length);
+            }
+            return text;
         }
 
-        public async static Task<IInputStream> GetOpenFileRandomAccesStream(string fileName)
-        {
-            var data = await GetFileRandomAccessStream(fileName, FileAccessMode.Read);
 
-            return data.GetInputStreamAt(0);
-        }
-
-        public async static Task<IOutputStream> GetSaveFileStream(string fileName)
-        {
-            var data = await GetFileRandomAccessStream(fileName, FileAccessMode.ReadWrite);
-
-            return data.GetOutputStreamAt(0);
-        }
-
-        public async static Task<IRandomAccessStream> GetFileRandomAccessStream(string fileName, FileAccessMode accessMode)
-        {
-            var file = await GetFileAccess(fileName);
-
-            return await file.OpenAsync(accessMode);
-        }
-
-        public async static Task<StorageFile> GetFileAccess(string fileName)
+        /// <summary>
+        /// 获取文件
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public async static Task<StorageFile> GetFileAccess(string filePath)
         {
             var storageFolder = ApplicationData.Current.LocalFolder;
 
@@ -192,7 +223,7 @@ namespace Weather.Utils
 
             try
             {
-                file = await storageFolder.GetFileAsync(fileName);
+                file = await storageFolder.GetFileAsync(filePath);
             }
             catch (Exception)
             {
@@ -201,7 +232,7 @@ namespace Weather.Utils
 
             if (file == null)
             {
-                file = await storageFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+                file = await storageFolder.CreateFileAsync(filePath, CreationCollisionOption.ReplaceExisting);
             }
 
             return file;

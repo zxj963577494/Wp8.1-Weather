@@ -16,6 +16,5 @@ namespace Weather.App.ViewModel
 
         public List<Model.WeatherCity> HotCities { get; set; }
 
-        public Model.Config Config { get; set; }
     }
 }

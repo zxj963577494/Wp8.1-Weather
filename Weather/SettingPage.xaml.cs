@@ -88,15 +88,7 @@ namespace Weather.App
         /// 字典。 首次访问页面时，该状态将为 null。</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            //if (e.PageState != null)
-            //{
-            //    cbbIsWifiUpdate.SelectedValue = int.Parse(e.PageState["IsWifiUpdate"].ToString());
-            //    cbbIsUpdateForCity.SelectedValue = int.Parse(e.PageState["IsUpdateForCity"].ToString());
-            //    cbbIsWifiAutoUpdate.SelectedValue = e.PageState["IsWifiAutoUpdate"];
-            //    cbbIsAutoUpdateForCity.SelectedValue = e.PageState["IsAutoUpdateForCity"];
-            //    cbbIsAutoUpdateForCities.SelectedValue = e.PageState["IsAutoUpdateForCities"];
-            //    cbbAutoUpdateTime.SelectedValue = e.PageState["AutoUpdateTime"];
-            //}
+
         }
 
         /// <summary>
@@ -109,12 +101,7 @@ namespace Weather.App
         ///的事件数据。</param>
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
-            e.PageState["IsWifiUpdate"] = cbbIsWifiUpdate.SelectedValue;
-            e.PageState["IsUpdateForCity"] = cbbIsUpdateForCity.SelectedValue;
-            e.PageState["IsWifiAutoUpdate"] = cbbIsWifiAutoUpdate.SelectedValue;
-            e.PageState["IsAutoUpdateForCity"] = cbbIsAutoUpdateForCity.SelectedValue;
-            e.PageState["IsAutoUpdateForCities"] = cbbIsAutoUpdateForCities.SelectedValue;
-            e.PageState["AutoUpdateTime"] = cbbAutoUpdateTime.SelectedValue;
+
         }
 
         #region NavigationHelper 注册
@@ -155,13 +142,13 @@ namespace Weather.App
         }
         #endregion
 
-        private void btnGeneral_Click(object sender, RoutedEventArgs e)
+        private async void btnGeneral_Click(object sender, RoutedEventArgs e)
         {
             userRespose.UserConfig.IsWifiUpdate = int.Parse(cbbIsWifiUpdate.SelectedValue.ToString());
             userRespose.UserConfig.IsUpdateForCity = int.Parse(cbbIsUpdateForCity.SelectedValue.ToString());
             try
             {
-                userService.SaveUser(userRespose);
+               await userService.SaveUser(userRespose);
                 NotifyUser("保存设置成功");
             }
             catch (Exception)
@@ -173,7 +160,7 @@ namespace Weather.App
         }
 
 
-        private void btnAutoUpdate_Click(object sender, RoutedEventArgs e)
+        private async void btnAutoUpdate_Click(object sender, RoutedEventArgs e)
         {
             userRespose.UserConfig.IsWifiAutoUpdate = int.Parse(cbbIsWifiAutoUpdate.SelectedValue.ToString());
             userRespose.UserConfig.IsAutoUpdateForCity = int.Parse(cbbIsAutoUpdateForCity.SelectedValue.ToString());
@@ -181,7 +168,7 @@ namespace Weather.App
             userRespose.UserConfig.AutoUpdateTime = int.Parse(cbbAutoUpdateTime.SelectedValue.ToString());
             try
             {
-                userService.SaveUser(userRespose);
+               await userService.SaveUser(userRespose);
                 NotifyUser("保存设置成功");
             }
             catch (Exception)
@@ -237,21 +224,6 @@ namespace Weather.App
             else
             {
                 popup.IsOpen = false;
-            }
-        }
-
-        private async void btnTile_Click(object sender, RoutedEventArgs e)
-        {
-            userRespose.UserConfig.IsTileSquarePic
-                = int.Parse(cbbIsTileSquarePic.SelectedValue.ToString());
-            try
-            {
-                await userService.SaveUser(userRespose);
-                NotifyUser("保存设置成功");
-            }
-            catch (Exception)
-            {
-                NotifyUser("保存设置失败");
             }
         }
 

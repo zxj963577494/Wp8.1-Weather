@@ -140,8 +140,6 @@ namespace Weather.App
             cityId = e.Parameter.ToString();
 
             userCityRespose = await userService.GetUserCityAsync();
-            userRespose = await userService.GetUserAsync();
-            weatherTypeRespose = await weatherService.GetWeatherTypeAsync();
             if (userCityRespose == null)
             {
                 Frame.Navigate(typeof(AddCityPage), 1);
@@ -149,6 +147,8 @@ namespace Weather.App
             }
             else
             {
+                userRespose = await userService.GetUserAsync();
+                weatherTypeRespose = await weatherService.GetWeatherTypeAsync();
                 GetWeather(cityId, 0);
             }
         }
@@ -220,6 +220,7 @@ namespace Weather.App
 
 
                 UpdateTileFacade(weatherRespose);
+
             }
 
             progressBar.Visibility = Visibility.Collapsed;
@@ -240,7 +241,7 @@ namespace Weather.App
             {
                 string filePath = StringHelper.GetTodayFilePath(userCity.CityId);
 
-                if (!await FileHelper.IsExistFile(filePath))
+                if (!await FileHelper.IsExistFileAsync(filePath))
                 {
                     //不存在当天的天气数据，就从网络获取数据
                     weatherRespose = await weatherService.GetWeatherAsync(weatherRequest);
@@ -265,12 +266,12 @@ namespace Weather.App
         /// <returns></returns>
         private async Task DeleteFile(int cityId)
         {
-            string fileName = cityId + "_" + DateTime.Now.AddDays(-1).ToString("yyyyMMdd") + ".txt";
+            string fileName = cityId + "_" + DateTime.Now.AddDays(-1).ToString("yyyyMMdd") + ".json";
             string filePath = "Temp\\" + fileName;
-            bool x = await FileHelper.IsExistFile(filePath);
+            bool x = await FileHelper.IsExistFileAsync(filePath);
             if (x)
             {
-                await FileHelper.DeleteFile(filePath);
+                await FileHelper.DeleteFileAsync(filePath);
 
             }
         }
@@ -397,17 +398,18 @@ namespace Weather.App
 
         private async void UpdateTileFacade(GetWeatherRespose weatherRespose)
         {
-
             Model.UserCity defaultCity = await GetDefaultCity();
-
-            if (weatherRespose.result.today.date_y == DateTime.Now.ToString("yyyy年MM月dd日"))
+            if (weatherRespose.result.today.city == defaultCity.CityName)
             {
-                UpdateTile(weatherRespose);
-            }
-            else
-            {
-                Model.Future future = weatherRespose.result.future.Find(x => x.date == StringHelper.GetTodayDateString());
-                UpdateTileByClientForTomorrow(future, defaultCity.CityName);
+                if (weatherRespose.result.today.date_y == DateTime.Now.ToString("yyyy年MM月dd日"))
+                {
+                    UpdateTile(weatherRespose);
+                }
+                else
+                {
+                    Model.Future future = weatherRespose.result.future.Find(x => x.date == StringHelper.GetTodayDateString());
+                    UpdateTileByClientForTomorrow(future, defaultCity.CityName);
+                }
             }
         }
 
@@ -447,7 +449,7 @@ namespace Weather.App
                + "<text id='6'>" + respose.result.today.week + "</text>"
                + "</binding>"
                + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-               + "<image id='1' src='ms-appx:///" + (userRespose.UserConfig.IsTileSquarePic == 1 ? weatherTypeRespose.WeatherTypes.Find(x => x.Wid == respose.result.today.weather_id.fa).TileSquarePic : "Assets/Logo.png") + "'/>"
+               + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == respose.result.today.weather_id.fa).TileSquarePic + "'/>"
                + "<text id='1'>" + respose.result.today.city + "</text>"
                + "<text id='2'>" + respose.result.today.weather + "</text>"
                + "<text id='3'>" + respose.result.sk.temp + "</text>"
@@ -478,7 +480,7 @@ namespace Weather.App
                + "<text id='6'>" + future.week + "</text>"
                + "</binding>"
                + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-               + "<image id='1' src='ms-appx:///" + (userRespose.UserConfig.IsTileSquarePic == 1 ? weatherTypeRespose.WeatherTypes.Find(x => x.Wid == future.weather_id.fa).TileSquarePic : "Assets/Logo.png") + "'/>"
+               + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == future.weather_id.fa).TileSquarePic + "'/>"
                + "<text id='1'>" + cityName + "</text>"
                + "<text id='2'>" + future.weather + "</text>"
                + "<text id='3'>" + future.temperature + "</text>"

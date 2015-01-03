@@ -99,7 +99,7 @@ namespace Weather.Tasks
             {
                 return null;
             }
-        } 
+        }
         #endregion
 
         #region 通过网络获取天气
@@ -144,7 +144,8 @@ namespace Weather.Tasks
         /// <returns></returns>
         private async Task CreateFile(int cityId, string realResposeString)
         {
-            await FileHelper.CreateFileForFolderAsync("Temp", cityId + "_" + StringHelper.GetTodayDateString() + ".txt", realResposeString);
+            string filePath = "Temp\\" + cityId + "_" + StringHelper.GetTodayDateString() + ".json";
+            await FileHelper.CreateAndWriteFileAsync(filePath, realResposeString);
         }
 
 
@@ -183,7 +184,7 @@ namespace Weather.Tasks
                + "<text id='6'>" + respose.result.today.week + "</text>"
                + "</binding>"
                + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-               + "<image id='1' src='ms-appx:///" + (getUserRespose.UserConfig.IsTileSquarePic == 1 ? getWeatherTypeRespose.WeatherTypes.Find(x => x.Wid == respose.result.today.weather_id.fa).TileSquarePic : "Assets/Logo.png") + "'/>"
+               + "<image id='1' src='ms-appx:///" + getWeatherTypeRespose.WeatherTypes.Find(x => x.Wid == respose.result.today.weather_id.fa).TileSquarePic + "'/>"
                + "<text id='1'>" + respose.result.today.city + "</text>"
                + "<text id='2'>" + respose.result.today.weather + "</text>"
                + "<text id='3'>" + respose.result.sk.temp + "°</text>"
@@ -240,7 +241,7 @@ namespace Weather.Tasks
                + "<text id='6'>" + future.week + "</text>"
                + "</binding>"
                + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-               + "<image id='1' src='ms-appx:///" + (getUserRespose.UserConfig.IsTileSquarePic == 1 ? getWeatherTypeRespose.WeatherTypes.Find(x => x.Wid == future.weather_id.fa).TileSquarePic : "Assets/Logo.png") + "'/>"
+               + "<image id='1' src='ms-appx:///" + getWeatherTypeRespose.WeatherTypes.Find(x => x.Wid == future.weather_id.fa).TileSquarePic + "'/>"
                + "<text id='1'>" + cityName + "</text>"
                + "<text id='2'>" + future.weather + "</text>"
                + "<text id='3'>" + future.temperature + "</text>"

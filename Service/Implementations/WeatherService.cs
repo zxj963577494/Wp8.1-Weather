@@ -38,12 +38,12 @@ namespace Weather.Service.Implementations
             GetWeatherRespose respose = null;
             for (int i = 0; i < 3; i++)
             {
-                fileName = cityId + "_" + DateTime.Now.AddDays(-i).ToString("yyyyMMdd") + ".txt";
+                fileName = cityId + "_" + DateTime.Now.AddDays(-i).ToString("yyyyMMdd") + ".json";
                 filePath = "Temp\\" + fileName;
-                bool x = await FileHelper.IsExistFile(filePath).ConfigureAwait(false);
+                bool x = await FileHelper.IsExistFileAsync(filePath).ConfigureAwait(false);
                 if (x)
                 {
-                    respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileAsync<GetWeatherRespose>(fileName, "Temp").ConfigureAwait(false);
+                    respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileAsync<GetWeatherRespose>(filePath).ConfigureAwait(false);
                     break;
                 }
             }
@@ -52,14 +52,15 @@ namespace Weather.Service.Implementations
 
         public async Task SaveWeather<T>(T target, string cityId)
         {
-            string fileName = cityId + "_" + StringHelper.GetTodayDateString() + ".txt";
-            await Weather.Utils.JsonSerializeHelper.JsonSerializeForFileAsync(target, fileName, "Temp").ConfigureAwait(false);
+            string fileName = cityId + "_" + StringHelper.GetTodayDateString() + ".json";
+            string filePath = "Temp\\" + fileName;
+            await Weather.Utils.JsonSerializeHelper.JsonSerializeForFileAsync(target, filePath).ConfigureAwait(false);
         }
 
         public async Task<GetWeatherTypeRespose> GetWeatherTypeAsync()
         {
             GetWeatherTypeRespose respose = new GetWeatherTypeRespose();
-            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileAsync<GetWeatherTypeRespose>("WeatherTypes.txt", "Data").ConfigureAwait(false);
+            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileByInstalledLocationAsync<GetWeatherTypeRespose>("Data\\WeatherTypes.json").ConfigureAwait(false);
             return respose;
         }
     }

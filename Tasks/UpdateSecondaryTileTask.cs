@@ -137,7 +137,8 @@ namespace Weather.Tasks
         /// <returns></returns>
         private static async Task<bool> CreateFile(int cityId, string realResposeString)
         {
-            return await FileHelper.CreateFileForFolderAsync("Temp", cityId.ToString() + "_" + StringHelper.GetTodayDateString() + ".txt", realResposeString);
+            string filePath = "Temp\\" + cityId.ToString() + "_" + StringHelper.GetTodayDateString() + ".json";
+            return await FileHelper.CreateAndWriteFileAsync(filePath, realResposeString);
         }
 
         /// <summary>
@@ -149,7 +150,6 @@ namespace Weather.Tasks
             string tileXmlString = @"<tile>"
               + "<visual version='2'>"
               + "<binding template='TileWide310x150BlockAndText01' fallback='TileWideBlockAndText01'>"
-              + "<image id='1' src='ms-appx:///" + (getUserRespose.UserConfig.IsTileSquarePic == 1 ? getWeatherTypeRespose.WeatherTypes.Find(x => x.Wid == getWeatherRespose.result.today.weather_id.fa).TileWidePic : "Assets/Logo.png") + "'/>"
               + "<text id='1'>" + getWeatherRespose.result.sk.temp + "°</text>"
               + "<text id='2'>" + getWeatherRespose.result.today.city + "</text>"
               + "<text id='3'>" + getWeatherRespose.result.today.weather + "</text>"
@@ -158,7 +158,7 @@ namespace Weather.Tasks
               + "<text id='6'>" + getWeatherRespose.result.today.week + "</text>"
               + "</binding>"
               + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-              + "<image id='1' src='ms-appx:///" + (getUserRespose.UserConfig.IsTileSquarePic == 1 ? getWeatherTypeRespose.WeatherTypes.Find(x => x.Wid == getWeatherRespose.result.today.weather_id.fa).TileSquarePic : "Assets/Logo.png") + "'/>"
+              + "<image id='1' src='ms-appx:///" + getWeatherTypeRespose.WeatherTypes.Find(x => x.Wid == getWeatherRespose.result.today.weather_id.fa).TileSquarePic + "'/>"
               + "<text id='1'>" + getWeatherRespose.result.sk.temp + "°</text>"
               + "<text id='2'>" + getWeatherRespose.result.today.weather + "</text>"
               + "<text id='3'>" + getWeatherRespose.result.today.temperature + "</text>"

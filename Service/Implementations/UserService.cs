@@ -24,25 +24,25 @@ namespace Weather.Service.Implementations
         public async Task<GetUserRespose> GetUserAsync()
         {
             GetUserRespose respose = new GetUserRespose();
-            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileAsync<GetUserRespose>("UserConfig.txt", "User").ConfigureAwait(false);
+            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileAsync<GetUserRespose>("User\\UserConfig.json").ConfigureAwait(false);
             return respose;
         }
 
         public async Task SaveUser(GetUserRespose getUserRespose)
         {
-            await Weather.Utils.JsonSerializeHelper.JsonSerializeForFileAsync<GetUserRespose>(getUserRespose, "UserConfig.txt", "User").ConfigureAwait(false);
+            await Weather.Utils.JsonSerializeHelper.JsonSerializeForFileAsync<GetUserRespose>(getUserRespose, "User\\UserConfig.json").ConfigureAwait(false);
         }
 
         public async Task<GetUserCityRespose> GetUserCityAsync()
         {
             GetUserCityRespose respose = new GetUserCityRespose();
-            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileAsync<GetUserCityRespose>("UserCities.txt", "User").ConfigureAwait(false);
+            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileAsync<GetUserCityRespose>("User\\UserCities.json").ConfigureAwait(false);
             return respose;
         }
 
         public async Task SaveUserCity(GetUserCityRespose getUserCityRespose)
         {
-            await Weather.Utils.JsonSerializeHelper.JsonSerializeForFileAsync<GetUserCityRespose>(getUserCityRespose, "UserCities.txt", "User").ConfigureAwait(false);
+            await Weather.Utils.JsonSerializeHelper.JsonSerializeForFileAsync<GetUserCityRespose>(getUserCityRespose, "User\\UserCities.json").ConfigureAwait(false);
 
         }
     }

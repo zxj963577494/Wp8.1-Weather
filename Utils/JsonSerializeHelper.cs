@@ -61,14 +61,13 @@ namespace Weather.Utils
         /// <param name="target"></param>
         /// <param name="fileName"></param>
         /// <param name="fileFolder"></param>
-        public static async Task JsonSerializeForFileAsync<T>(T target, string fileName, string fileFolder)
+        public static async Task JsonSerializeForFileAsync<T>(T target, string filePath)
         {
             try
             {
-                Task.WaitAll();
                 //序列化
                 string jsonContent = JsonSerialize<T>(target);
-                await FileHelper.CreateFileForFolderAsync(fileFolder, fileName, jsonContent).ConfigureAwait(false);
+                await FileHelper.CreateAndWriteFileAsync(filePath, jsonContent).ConfigureAwait(false);
 
             }
             catch (Exception ex)
@@ -78,6 +77,26 @@ namespace Weather.Utils
         }
 
 
+        /// <summary>
+        /// 文件化Json序列化
+        /// </summary>
+        /// <param name="jsonContent"></param>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static async Task JsonSerializeForFileAsync(string jsonContent, string filePath)
+        {
+            try
+            {
+                //序列化
+                await FileHelper.CreateAndWriteFileAsync(filePath, jsonContent).ConfigureAwait(false);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
 
         /// <summary>
         /// 文件化Json反序列化
@@ -85,11 +104,11 @@ namespace Weather.Utils
         /// <param name="type"></param>
         /// <param name="filename"></param>
         /// <returns></returns>
-        public static async Task<T> JsonDeSerializeForFileAsync<T>(string fileName, string fileFolder) where T : class
+        public static async Task<T> JsonDeSerializeForFileAsync<T>(string filePath) where T : class
         {
             try
             {
-                string text = await FileHelper.ReadTxtFile(fileName, fileFolder);
+                string text = await FileHelper.ReadTxtFileAsync(filePath);
                 return JsonDeserialize<T>(text);
             }
             catch (Exception ex)
@@ -99,6 +118,33 @@ namespace Weather.Utils
             }
 
         }
+
+        /// <summary>
+        /// 文件化Json反序列化
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static async Task<T> JsonDeSerializeForFileByInstalledLocationAsync<T>(string filePath) where T : class
+        {
+            try
+            {
+                string text = await FileHelper.ReadTxtFileByInstalledLocationAsync(filePath);
+                return JsonDeserialize<T>(text);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
+        #endregion
+
+
+        #region 文件化Json序列化/反序列化
+
+
         #endregion
     }
 }

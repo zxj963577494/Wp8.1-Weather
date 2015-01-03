@@ -21,6 +21,7 @@ using Windows.UI.Popups;
 using System.Threading.Tasks;
 using Windows.Phone.UI.Input;
 using Weather.Service.Implementations;
+using Weather.Utils;
 
 // “基本页”项模板在 http://go.microsoft.com/fwlink/?LinkID=390556 上有介绍
 
@@ -40,9 +41,7 @@ namespace Weather.App
         private GetHotCityRespose resposeHotCities = null;
         private GetUserCityRespose resposeUserCity = null;
 
-        private string s;
-
-
+        bool isNotFirst = true;
 
 
         public AddCityPage()
@@ -124,19 +123,18 @@ namespace Weather.App
         {
             this.navigationHelper.OnNavigatedTo(e);
             Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
-            if (e.Parameter != null)
+
+            resposeUserCity = await userService.GetUserCityAsync();
+
+            if (resposeUserCity==null)
             {
-                s = e.Parameter.ToString();
+                isNotFirst = false;
             }
 
             resposeCities = await cityService.GetCityAsync();
 
             resposeHotCities = await cityService.GetHotCityAsync(); ;
 
-            if (s != "1")
-            {
-                resposeUserCity = await userService.GetUserCityAsync(); ;
-            }
             page = new ViewModel.SelectCityPage();
             page.Cities = resposeCities.Cities;
             page.HotCities = resposeHotCities.Cities;
@@ -150,11 +148,18 @@ namespace Weather.App
 
         private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
         {
-            Frame rootFrame = Window.Current.Content as Frame;
-            if (rootFrame != null && rootFrame.CanGoBack)
+            if (isNotFirst)
             {
-                rootFrame.GoBack();
-                e.Handled = true;
+                Frame rootFrame = Window.Current.Content as Frame;
+                if (rootFrame != null && rootFrame.CanGoBack)
+                {
+                    rootFrame.GoBack();
+                    e.Handled = true;
+                }
+            }
+            else
+            {
+                Application.Current.Exit();
             }
         }
         #endregion
@@ -233,14 +238,15 @@ namespace Weather.App
                           select c.Id).FirstOrDefault(),
                 AddTime = DateTime.Now,
                 CityName = cityName.Trim(),
-                IsDefault = s == "1" ? 1 : 0
+                IsDefault = isNotFirst == false ? 1 : 0
             };
-            if (s == "1")
+            if (!isNotFirst)
             {
+                GetUserCityRespose respose = new GetUserCityRespose();
                 List<Model.UserCity> userCityList = new List<Model.UserCity>();
                 userCityList.Add(userCity);
-                resposeUserCity.UserCities = userCityList;
-                await userService.SaveUserCity(SortUserCity(resposeUserCity));
+                respose.UserCities = userCityList;
+                await userService.SaveUserCity(SortUserCity(respose));
                 isAdd = true;
             }
             else

@@ -49,7 +49,7 @@ namespace Weather.Utils
         /// <returns></returns>
         public static string GetTodayFilePath(int cityId)
         {
-            string filePath = "Temp\\" + cityId + "_" + StringHelper.GetTodayDateString() + ".txt";
+            string filePath = "Temp\\" + cityId + "_" + StringHelper.GetTodayDateString() + ".json";
             return filePath;
         }
     }

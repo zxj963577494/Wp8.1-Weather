@@ -26,14 +26,14 @@ namespace Weather.Service.Implementations
         public async Task<GetSettingAutoUpdateTimeRepose> GetSettingAutoUpdateTimeAsync()
         {
             GetSettingAutoUpdateTimeRepose respose = new GetSettingAutoUpdateTimeRepose();
-            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileAsync<GetSettingAutoUpdateTimeRepose>("AutoUpdateTimes.txt", "Data").ConfigureAwait(false);
+            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileByInstalledLocationAsync<GetSettingAutoUpdateTimeRepose>("Data\\AutoUpdateTimes.json").ConfigureAwait(false);
             return respose;
         }
 
         public async Task<GetSettingSwitchesRespose> GetSettingSwitchesAsync()
         {
             GetSettingSwitchesRespose respose = new GetSettingSwitchesRespose();
-            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileAsync<GetSettingSwitchesRespose>("Switches.txt", "Data").ConfigureAwait(false);
+            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileByInstalledLocationAsync<GetSettingSwitchesRespose>("Data\\Switches.json").ConfigureAwait(false);
             return respose;
         }
     }
