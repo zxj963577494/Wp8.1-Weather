@@ -304,7 +304,6 @@ namespace Weather.App
                             NotifyUser("Wifi未启动");
                         }
                     }
-                    UpdateSecondaryTile(item.CityId + "_Weather",weatherRespose);
                 }
                 myCityPage.MyCityPageModels = myCityPageModelList.ToList();
             }
@@ -522,27 +521,26 @@ namespace Weather.App
             if (selectedItem != null)
             {
                 int cityId = int.Parse(selectedItem.CommandParameter.ToString());
+
                 string tileId = selectedItem.CommandParameter.ToString() + "_Weather";
+
                 Model.UserCity userCity = (from u in userCityRespose.UserCities
                                            where u.CityId == cityId
                                            select u).FirstOrDefault();
-                string displayName = userCity.CityName;
 
+                string displayName = userCity.CityName;
 
                 IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, userCity.CityName);
                 GetWeatherRespose respose = await weatherService.GetWeatherAsync(request);
-
-
-
                 if (!Utils.SecondaryTileHelper.IsExists(tileId))
                 {
                     await Utils.SecondaryTileHelper.CreateSecondaryTileAsync(tileId, displayName, cityId.ToString());
-                    UpdateSecondaryTile(tileId,respose);
+                    UpdateSecondaryTile(tileId, respose);
                 }
                 else
                 {
                     NotifyUser("该城市磁贴已固定在桌面");
-                    UpdateSecondaryTile(tileId,respose);
+                    UpdateSecondaryTile(tileId, respose);
                 }
             }
         }

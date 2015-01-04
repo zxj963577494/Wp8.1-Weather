@@ -63,6 +63,7 @@ namespace Weather.App
             weatherRespose = new GetWeatherRespose();
             weatherTypeRespose = new GetWeatherTypeRespose();
             settingAutoUpdateTimeRepose = new GetSettingAutoUpdateTimeRepose();
+
         }
 
         /// <summary>
