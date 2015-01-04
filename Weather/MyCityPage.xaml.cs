@@ -304,7 +304,7 @@ namespace Weather.App
                             NotifyUser("Wifi未启动");
                         }
                     }
-                    UpdateSecondaryTile(item.CityId + "_Weather");
+                    UpdateSecondaryTile(item.CityId + "_Weather",weatherRespose);
                 }
                 myCityPage.MyCityPageModels = myCityPageModelList.ToList();
             }
@@ -522,19 +522,27 @@ namespace Weather.App
             if (selectedItem != null)
             {
                 int cityId = int.Parse(selectedItem.CommandParameter.ToString());
-                string titleId = selectedItem.CommandParameter.ToString() + "_Weather";
+                string tileId = selectedItem.CommandParameter.ToString() + "_Weather";
                 Model.UserCity userCity = (from u in userCityRespose.UserCities
                                            where u.CityId == cityId
                                            select u).FirstOrDefault();
                 string displayName = userCity.CityName;
-                if (!Utils.SecondaryTileHelper.IsExists(titleId))
+
+
+                IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, userCity.CityName);
+                GetWeatherRespose respose = await weatherService.GetWeatherAsync(request);
+
+
+
+                if (!Utils.SecondaryTileHelper.IsExists(tileId))
                 {
-                    await Utils.SecondaryTileHelper.CreateSecondaryTileAsync(titleId, displayName, cityId.ToString());
-                    UpdateSecondaryTile(titleId);
+                    await Utils.SecondaryTileHelper.CreateSecondaryTileAsync(tileId, displayName, cityId.ToString());
+                    UpdateSecondaryTile(tileId,respose);
                 }
                 else
                 {
                     NotifyUser("该城市磁贴已固定在桌面");
+                    UpdateSecondaryTile(tileId,respose);
                 }
             }
         }
@@ -676,27 +684,12 @@ namespace Weather.App
 
         #region 磁贴更新
 
-        private void UpdateSecondaryTile(string tileId)
+        private void UpdateSecondaryTile(string tileId, GetWeatherRespose weatherRespose)
         {
             if (weatherRespose.result != null)
             {
                 if (SecondaryTileHelper.IsExists(tileId))
                 {
-                    //                  string tileXmlString = "<tile>"
-                    //   + "<visual version='2'>"
-                    //   + "<binding template='TileWide310x150PeekImage03' fallback='TileWidePeekImage03'>"
-                    //   + "<image id='1' src='ms-appx:///" + (userRespose.UserConfig.IsTileSquarePic == 1 ? weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TileWidePic : "Assets/Logo.png") + "'/>"
-                    //   + "<text id='1'>" + weatherRespose.result.sk.temp + "°\r\n" + weatherRespose.result.today.weather + "\r\n" + weatherRespose.result.today.weather + "\r\n" + weatherRespose.result.sk.wind_direction + " " + weatherRespose.result.sk.wind_strength + "\r\n" + weatherRespose.result.today.week + "</text>"
-                    //   + "</binding>"
-                    //+ "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-                    //+ "<image id='1' src='ms-appx:///" + (userRespose.UserConfig.IsTileSquarePic == 1 ? weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TileSquarePic : "Assets/Logo.png") + "'/>"
-                    //+ "<text id='1'>" + weatherRespose.result.sk.temp + "°</text>"
-                    //+ "<text id='2'>" + weatherRespose.result.today.weather + "</text>"
-                    //+ "<text id='3'>" + weatherRespose.result.today.temperature + "</text>"
-                    //+ "<text id='4'>" + weatherRespose.result.sk.wind_direction + " " + weatherRespose.result.sk.wind_strength + "</text>"
-                    //+ "</binding>"
-                    //+ "</visual>"
-                    //+ "</tile>";
                     string tileXmlString = @"<tile>"
   + "<visual version='2'>"
   + "<binding template='TileWide310x150BlockAndText01' fallback='TileWideBlockAndText01'>"

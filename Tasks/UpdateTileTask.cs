@@ -24,18 +24,18 @@ namespace Weather.Tasks
     {
         private UserService userService = null;
         private WeatherService weatherService = null;
-        private GetUserRespose getUserRespose = null;
-        private GetUserCityRespose getUserCityRespose = null;
-        private GetWeatherTypeRespose getWeatherTypeRespose = null;
+        private GetUserRespose userRespose = null;
+        private GetUserCityRespose userCityRespose = null;
+        private GetWeatherTypeRespose weatherTypeRespose = null;
 
 
         public UpdateTileTask()
         {
             userService = UserService.GetInstance();
             weatherService = WeatherService.GetInstance();
-            getUserRespose = new GetUserRespose();
-            getUserCityRespose = new GetUserCityRespose();
-            getWeatherTypeRespose = new GetWeatherTypeRespose();
+            userRespose = new GetUserRespose();
+            userCityRespose = new GetUserCityRespose();
+            weatherTypeRespose = new GetWeatherTypeRespose();
         }
 
         public async void Run(IBackgroundTaskInstance taskInstance)
@@ -43,7 +43,7 @@ namespace Weather.Tasks
             BackgroundTaskDeferral _deferral = taskInstance.GetDeferral();
 
             //天气类型
-            getWeatherTypeRespose = await weatherService.GetWeatherTypeAsync();
+            weatherTypeRespose = await weatherService.GetWeatherTypeAsync();
 
             //默认城市
             var defaultCity = await GetDefaultCity();
@@ -51,31 +51,33 @@ namespace Weather.Tasks
             if (defaultCity != null)
             {
                 //用户配置
-                getUserRespose = await userService.GetUserAsync();
-
-                //有网络
-                if (NetHelper.IsNetworkAvailable())
+                userRespose = await userService.GetUserAsync();
+                if (userRespose.UserConfig.IsAutoUpdateForCity == 1)
                 {
-                    //无论使用移动数据还是WIFI都允许自动更新
-                    if (getUserRespose.UserConfig.IsWifiAutoUpdate == 0)
+                    //有网络
+                    if (NetHelper.IsNetworkAvailable())
                     {
-                        await SetWeatherByNetTask(defaultCity);
-                    }
-                    else //使用WIFI更新
-                    {
-                        if (NetHelper.IsWifiConnection())
+                        //无论使用移动数据还是WIFI都允许自动更新
+                        if (userRespose.UserConfig.IsWifiAutoUpdate == 0)
                         {
                             await SetWeatherByNetTask(defaultCity);
                         }
-                        else
+                        else //使用WIFI更新
                         {
-                            await GetWeatherByClientTask(defaultCity);
+                            if (NetHelper.IsWifiConnection())
+                            {
+                                await SetWeatherByNetTask(defaultCity);
+                            }
+                            else
+                            {
+                                await GetWeatherByClientTask(defaultCity);
+                            }
                         }
                     }
-                }
-                else
-                {
-                    await GetWeatherByClientTask(defaultCity);
+                    else
+                    {
+                        await GetWeatherByClientTask(defaultCity);
+                    }
                 }
             }
             //表示完成任务
@@ -184,7 +186,7 @@ namespace Weather.Tasks
                + "<text id='6'>" + respose.result.today.week + "</text>"
                + "</binding>"
                + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-               + "<image id='1' src='ms-appx:///" + getWeatherTypeRespose.WeatherTypes.Find(x => x.Wid == respose.result.today.weather_id.fa).TileSquarePic + "'/>"
+               + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == respose.result.today.weather_id.fa).TileSquarePic + "'/>"
                + "<text id='1'>" + respose.result.today.city + "</text>"
                + "<text id='2'>" + respose.result.today.weather + "</text>"
                + "<text id='3'>" + respose.result.sk.temp + "°</text>"
@@ -241,7 +243,7 @@ namespace Weather.Tasks
                + "<text id='6'>" + future.week + "</text>"
                + "</binding>"
                + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-               + "<image id='1' src='ms-appx:///" + getWeatherTypeRespose.WeatherTypes.Find(x => x.Wid == future.weather_id.fa).TileSquarePic + "'/>"
+               + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == future.weather_id.fa).TileSquarePic + "'/>"
                + "<text id='1'>" + cityName + "</text>"
                + "<text id='2'>" + future.weather + "</text>"
                + "<text id='3'>" + future.temperature + "</text>"

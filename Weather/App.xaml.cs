@@ -89,7 +89,7 @@ namespace Weather.App
                 SuspensionManager.RegisterFrame(rootFrame, "AppFrame");
 
                 // TODO: 将此值更改为适合您的应用程序的缓存大小。
-                rootFrame.CacheSize = 1;
+                rootFrame.CacheSize = 0;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
@@ -104,38 +104,45 @@ namespace Weather.App
                         // 假定没有状态并继续。
                     }
                 }
-
+                rootFrame.NavigationFailed += OnNavigationFailed;
                 // 将框架放在当前窗口中。
                 Window.Current.Content = rootFrame;
             }
 
-            if (rootFrame.Content == null)
-            {
-                // 删除用于启动的旋转门导航。
-                if (rootFrame.ContentTransitions != null)
-                {
-                    this.transitions = new TransitionCollection();
-                    foreach (var c in rootFrame.ContentTransitions)
-                    {
-                        this.transitions.Add(c);
-                    }
-                }
+            //if (rootFrame.Content == null)
+            //{
+            //    // 删除用于启动的旋转门导航。
+            //    if (rootFrame.ContentTransitions != null)
+            //    {
+            //        this.transitions = new TransitionCollection();
+            //        foreach (var c in rootFrame.ContentTransitions)
+            //        {
+            //            this.transitions.Add(c);
+            //        }
+            //    }
 
-                rootFrame.ContentTransitions = null;
-                rootFrame.Navigated += this.RootFrame_FirstNavigated;
+            //    rootFrame.ContentTransitions = null;
+            //    rootFrame.Navigated += this.RootFrame_FirstNavigated;
 
-                // 当导航堆栈尚未还原时，导航到第一页，
-                // 并通过将所需信息作为导航参数传入来配置
-                // 新页面。
-                if (!rootFrame.Navigate(typeof(PivotPage), e.Arguments))
-                {
-                    throw new Exception("Failed to create initial page");
-                }
-            }
+            //    // 当导航堆栈尚未还原时，导航到第一页，
+            //    // 并通过将所需信息作为导航参数传入来配置
+            //    // 新页面。
+            //    if (!rootFrame.Navigate(typeof(PivotPage), e.Arguments))
+            //    {
+            //        throw new Exception("Failed to create initial page");
+            //    }
+            //}
 
+            rootFrame.Navigate(typeof(PivotPage), e.Arguments);
             // 确保当前窗口处于活动状态。
             Window.Current.Activate();
 
+        }
+
+
+        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        {
+            throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }
 
         /// <summary>
@@ -173,6 +180,7 @@ namespace Weather.App
                 await FileHelper.CreateAndWriteFileAsync("User\\UserConfig.json", strUserConfig);
 
                 await FileHelper.CreateFileAsync("User\\UserCities.json");
+
             }
         }
         #endregion
@@ -208,19 +216,17 @@ namespace Weather.App
         private async void CreateTask(string taskName, string taskEntryPoint)
         {
             userRespose = await userService.GetUserAsync();
-            if (userRespose.UserConfig.IsAutoUpdateForCity == 1)
+
+            BackgroundTaskExecute backgroundTaskExecute = new BackgroundTaskExecute();
+            if (BackgroundTaskHelper.IsExist(taskName))
             {
-                BackgroundTaskExecute backgroundTaskExecute = new BackgroundTaskExecute();
-                if (BackgroundTaskHelper.IsExist(taskName))
-                {
-                    backgroundTaskExecute.Execute(taskName);
-                }
-                else
-                {
-                    settingAutoUpdateTimeRepose = await settingService.GetSettingAutoUpdateTimeAsync();
-                    int time = settingAutoUpdateTimeRepose.AutoUpdateTimes.FirstOrDefault(x => x.Id == userRespose.UserConfig.AutoUpdateTime).Time;
-                    backgroundTaskExecute.Create(taskName, taskEntryPoint, time, null);
-                }
+                backgroundTaskExecute.Execute(taskName);
+            }
+            else
+            {
+                settingAutoUpdateTimeRepose = await settingService.GetSettingAutoUpdateTimeAsync();
+                int time = settingAutoUpdateTimeRepose.AutoUpdateTimes.FirstOrDefault(x => x.Id == userRespose.UserConfig.AutoUpdateTime).Time;
+                backgroundTaskExecute.Create(taskName, taskEntryPoint, time, null);
             }
         }
 
