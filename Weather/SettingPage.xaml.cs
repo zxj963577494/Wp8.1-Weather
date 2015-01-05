@@ -47,8 +47,6 @@ namespace Weather.App
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-            HardwareButtons.BackPressed += HardwareButtons_BackPressed;//注册重写后退按钮事件
-
 
             settingService = SettingService.GetInstance();
             userService = UserService.GetInstance();
@@ -124,58 +122,23 @@ namespace Weather.App
             this.navigationHelper.OnNavigatedTo(e);
 
             LoadData();
+
+            HardwareButtons.BackPressed += HardwareButtons_BackPressed;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedFrom(e);
+            HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
         }
 
         private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
         {
-            Frame rootFrame = Window.Current.Content as Frame;
-            if (rootFrame != null && rootFrame.CanGoBack)
-            {
-                rootFrame.GoBack();
-                e.Handled = true;
-            }
+            if (Frame.CanGoBack)
+                Frame.GoBack();
+            e.Handled = true;
         }
         #endregion
-
-        private async void btnGeneral_Click(object sender, RoutedEventArgs e)
-        {
-            userRespose.UserConfig.IsWifiUpdate = int.Parse(cbbIsWifiUpdate.SelectedValue.ToString());
-            userRespose.UserConfig.IsUpdateForCity = int.Parse(cbbIsUpdateForCity.SelectedValue.ToString());
-            try
-            {
-               await userService.SaveUser(userRespose);
-                NotifyUser("保存设置成功");
-            }
-            catch (Exception)
-            {
-                NotifyUser("保存设置失败");
-            }
-
-
-        }
-
-
-        private async void btnAutoUpdate_Click(object sender, RoutedEventArgs e)
-        {
-            userRespose.UserConfig.IsWifiAutoUpdate = int.Parse(cbbIsWifiAutoUpdate.SelectedValue.ToString());
-            userRespose.UserConfig.IsAutoUpdateForCity = int.Parse(cbbIsAutoUpdateForCity.SelectedValue.ToString());
-            userRespose.UserConfig.IsAutoUpdateForCities = int.Parse(cbbIsAutoUpdateForCities.SelectedValue.ToString());
-            userRespose.UserConfig.AutoUpdateTime = int.Parse(cbbAutoUpdateTime.SelectedValue.ToString());
-            try
-            {
-               await userService.SaveUser(userRespose);
-                NotifyUser("保存设置成功");
-            }
-            catch (Exception)
-            {
-                NotifyUser("保存设置失败");
-            }
-        }
 
         private async void LoadData()
         {
@@ -231,5 +194,78 @@ namespace Weather.App
         {
             SettingPageHelper.LaunchUriAsync(SettingPageHelper.LaunchUriType.Locks);
         }
+
+
+
+
+        /// <summary>
+        /// 仅在WI-FI建立后更新
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void cbbIsWifiUpdate_DropDownClosed(object sender, object e)
+        {
+            userRespose.UserConfig.IsWifiUpdate = int.Parse(cbbIsWifiUpdate.SelectedValue.ToString());
+           
+            await userService.SaveUser(userRespose);
+
+        }
+        /// <summary>
+        /// 仅更新默认城市
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void cbbIsUpdateForCity_DropDownClosed(object sender, object e)
+        {
+            userRespose.UserConfig.IsUpdateForCity = int.Parse(cbbIsUpdateForCity.SelectedValue.ToString());
+            await userService.SaveUser(userRespose);
+        }
+        /// <summary>
+        /// 仅在WI-FI建立后自动更新
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void cbbIsWifiAutoUpdate_DropDownClosed(object sender, object e)
+        {
+            userRespose.UserConfig.IsWifiAutoUpdate = int.Parse(cbbIsWifiAutoUpdate.SelectedValue.ToString());
+           
+            await userService.SaveUser(userRespose);
+        }
+
+        /// <summary>
+        /// 是否允许自动更新默认城市
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void cbbIsAutoUpdateForCity_DropDownClosed(object sender, object e)
+        {
+            userRespose.UserConfig.IsAutoUpdateForCity = int.Parse(cbbIsAutoUpdateForCity.SelectedValue.ToString());
+          
+            await userService.SaveUser(userRespose);
+        }
+
+        /// <summary>
+        /// 是否允许自动更新所有常用城市
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void cbbIsAutoUpdateForCities_DropDownClosed(object sender, object e)
+        {
+            userRespose.UserConfig.IsAutoUpdateForCities = int.Parse(cbbIsAutoUpdateForCities.SelectedValue.ToString());
+            await userService.SaveUser(userRespose);
+        }
+
+        /// <summary>
+        /// 自动更新频率
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void cbbAutoUpdateTime_DropDownClosed(object sender, object e)
+        {
+            userRespose.UserConfig.AutoUpdateTime = int.Parse(cbbAutoUpdateTime.SelectedValue.ToString());
+            await userService.SaveUser(userRespose);
+        }
+
+
     }
 }

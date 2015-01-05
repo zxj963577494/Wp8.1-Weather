@@ -51,7 +51,6 @@ namespace Weather.App
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-            HardwareButtons.BackPressed += HardwareButtons_BackPressed;//注册重写后退按钮事件
 
             userService = UserService.GetInstance();
             weatherService = WeatherService.GetInstance();
@@ -128,6 +127,7 @@ namespace Weather.App
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
+
             try
             {
                 userCityRespose = await userService.GetUserCityAsync();
@@ -148,25 +148,28 @@ namespace Weather.App
                 throw;
             }
 
+            HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+
+
         }
 
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedFrom(e);
+            HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
+
         }
-
-
 
         private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
         {
-            Frame rootFrame = Window.Current.Content as Frame;
-            if (rootFrame != null && rootFrame.CanGoBack)
-            {
-                rootFrame.GoBack();
-                e.Handled = true;
-            }
+            
+
+            if (Frame.CanGoBack)
+                Frame.GoBack();
+            e.Handled = true;
         }
+
         #endregion
 
         #region 获取天气数据

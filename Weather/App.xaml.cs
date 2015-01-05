@@ -20,6 +20,7 @@ using Weather.Service.Implementations;
 using Weather.Service.Message;
 using Weather.Utils;
 using System.Threading.Tasks;
+using Windows.Phone.UI.Input;
 
 // “透视应用程序”模板在 http://go.microsoft.com/fwlink/?LinkID=391641 上有介绍
 
@@ -53,6 +54,7 @@ namespace Weather.App
 
             userRespose = new GetUserRespose();
             settingAutoUpdateTimeRepose = new GetSettingAutoUpdateTimeRepose();
+
         }
 
         /// <summary>

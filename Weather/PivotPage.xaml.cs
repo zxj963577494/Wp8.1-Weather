@@ -24,6 +24,7 @@ using Weather.Service.Message;
 using Weather.Service.Implementations;
 using Windows.Storage;
 using System.Threading.Tasks;
+using Windows.Phone.UI.Input;
 
 // “透视应用程序”模板在 http://go.microsoft.com/fwlink/?LinkID=391641 上有介绍
 
@@ -190,6 +191,7 @@ namespace Weather.App
                     }
                     else
                     {
+                        weatherRespose.result = null;
                         NotifyUser("Wifi未启动");
                     }
                 }

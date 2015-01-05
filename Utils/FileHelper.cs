@@ -198,15 +198,24 @@ namespace Weather.Utils
         /// <returns></returns>
         public static async Task<string> ReadTxtFileAsync(string filePath)
         {
-            string text = null;
-            IStorageFolder local = Windows.Storage.ApplicationData.Current.LocalFolder;
-            IStorageFile storageFile = await local.GetFileAsync(filePath).AsTask().ConfigureAwait(false);
-            var buffer = await Windows.Storage.FileIO.ReadBufferAsync(storageFile).AsTask().ConfigureAwait(false);
-            using (DataReader dataReader = Windows.Storage.Streams.DataReader.FromBuffer(buffer))
+            try
             {
-                text = dataReader.ReadString(buffer.Length);
+                string text = null;
+                IStorageFolder local = Windows.Storage.ApplicationData.Current.LocalFolder;
+                IStorageFile storageFile = await local.GetFileAsync(filePath).AsTask().ConfigureAwait(false);
+                var buffer = await Windows.Storage.FileIO.ReadBufferAsync(storageFile).AsTask().ConfigureAwait(false);
+                using (DataReader dataReader = Windows.Storage.Streams.DataReader.FromBuffer(buffer))
+                {
+                    text = dataReader.ReadString(buffer.Length);
+                }
+                return text;
             }
-            return text;
+            catch (Exception)
+            {
+                
+                throw;
+            }
+         
         }
 
 

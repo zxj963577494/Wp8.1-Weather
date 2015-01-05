@@ -122,13 +122,16 @@ namespace Weather.App
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
-            Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
-
+           
             resposeUserCity = await userService.GetUserCityAsync();
 
             if (resposeUserCity==null)
             {
                 isNotFirst = false;
+            }
+            else
+            {
+                isNotFirst = true;
             }
 
             resposeCities = await cityService.GetCityAsync();
@@ -139,27 +142,35 @@ namespace Weather.App
             page.Cities = resposeCities.Cities;
             page.HotCities = resposeHotCities.Cities;
             LayoutRoot.DataContext = page;
+
+            HardwareButtons.BackPressed += HardwareButtons_BackPressed;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedFrom(e);
+            HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
         }
 
-        private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
+        private async void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
         {
             if (isNotFirst)
             {
-                Frame rootFrame = Window.Current.Content as Frame;
-                if (rootFrame != null && rootFrame.CanGoBack)
+                e.Handled = true;
+
+                if (Frame.CanGoBack)
                 {
-                    rootFrame.GoBack();
-                    e.Handled = true;
+                    Frame.GoBack();
                 }
             }
             else
             {
-                Application.Current.Exit();
+                resposeUserCity = await userService.GetUserCityAsync();
+
+                if (resposeUserCity == null)
+                {
+                    Application.Current.Exit();
+                }
             }
         }
         #endregion
