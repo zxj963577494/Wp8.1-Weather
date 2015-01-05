@@ -30,7 +30,7 @@ namespace Weather.App
     /// </summary>
     public sealed partial class App : Application
     {
-        private TransitionCollection transitions;
+        //private TransitionCollection transitions;
         private UserService userService;
         private GetUserRespose userRespose;
         private GetSettingAutoUpdateTimeRepose settingAutoUpdateTimeRepose;
@@ -145,15 +145,15 @@ namespace Weather.App
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }
 
-        /// <summary>
-        /// 启动应用程序后还原内容转换。
-        /// </summary>
-        private void RootFrame_FirstNavigated(object sender, NavigationEventArgs e)
-        {
-            var rootFrame = sender as Frame;
-            rootFrame.ContentTransitions = this.transitions ?? new TransitionCollection() { new NavigationThemeTransition() };
-            rootFrame.Navigated -= this.RootFrame_FirstNavigated;
-        }
+        ///// <summary>
+        ///// 启动应用程序后还原内容转换。
+        ///// </summary>
+        //private void RootFrame_FirstNavigated(object sender, NavigationEventArgs e)
+        //{
+        //    var rootFrame = sender as Frame;
+        //    rootFrame.ContentTransitions = this.transitions ?? new TransitionCollection() { new NavigationThemeTransition() };
+        //    rootFrame.Navigated -= this.RootFrame_FirstNavigated;
+        //}
 
         /// <summary>
         /// 在将要挂起应用程序执行时调用。    将保存应用程序状态
