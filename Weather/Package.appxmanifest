@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
-  <Identity Name="25813zhengxvjiang.62418A6C2EC1A" Publisher="CN=F06D22C2-F6A1-49AC-8473-D9A63CB52109" Version="1.0.0.14" />
+  <Identity Name="25813zhengxvjiang.62418A6C2EC1A" Publisher="CN=F06D22C2-F6A1-49AC-8473-D9A63CB52109" Version="1.0.0.15" />
   <mp:PhoneIdentity PhoneProductId="592bb18e-2e0d-4631-b030-11e3f552c907" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>天气在线</DisplayName>

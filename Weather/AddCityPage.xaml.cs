@@ -51,13 +51,15 @@ namespace Weather.App
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-            HardwareButtons.BackPressed += HardwareButtons_BackPressed;//注册重写后退按钮事件
+            this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Required;
+
 
             cityService = CityService.GetInstance();
             userService = UserService.GetInstance();
             resposeCities = new GetCityRespose();
             resposeHotCities = new GetHotCityRespose();
             resposeUserCity = new GetUserCityRespose();
+
         }
 
         /// <summary>
@@ -76,6 +78,10 @@ namespace Weather.App
         {
             get { return this.defaultViewModel; }
         }
+
+
+
+        #region NavigationHelper 注册
 
         /// <summary>
         /// 使用在导航过程中传递的内容填充页。  在从以前的会话
@@ -104,8 +110,6 @@ namespace Weather.App
         {
         }
 
-        #region NavigationHelper 注册
-
         /// <summary>
         /// 此部分中提供的方法只是用于使
         /// NavigationHelper 可响应页面的导航方法。
@@ -122,10 +126,10 @@ namespace Weather.App
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
-           
+
             resposeUserCity = await userService.GetUserCityAsync();
 
-            if (resposeUserCity==null)
+            if (resposeUserCity == null)
             {
                 isNotFirst = false;
             }
@@ -154,23 +158,16 @@ namespace Weather.App
 
         private async void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
         {
-            if (isNotFirst)
-            {
-                e.Handled = true;
 
-                if (Frame.CanGoBack)
-                {
-                    Frame.GoBack();
-                }
+            resposeUserCity = await userService.GetUserCityAsync();
+
+            if (resposeUserCity == null)
+            {
+                Application.Current.Exit();
             }
             else
             {
-                resposeUserCity = await userService.GetUserCityAsync();
-
-                if (resposeUserCity == null)
-                {
-                    Application.Current.Exit();
-                }
+                Frame.Navigate(typeof(PivotPage));
             }
         }
         #endregion

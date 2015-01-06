@@ -123,21 +123,13 @@ namespace Weather.App
 
             LoadData();
 
-            HardwareButtons.BackPressed += HardwareButtons_BackPressed;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedFrom(e);
-            HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
         }
 
-        private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
-        {
-            if (Frame.CanGoBack)
-                Frame.GoBack();
-            e.Handled = true;
-        }
         #endregion
 
         private async void LoadData()
