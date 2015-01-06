@@ -12,8 +12,6 @@ namespace Weather.Utils
         public static void Exit()
         {
             Application.Current.Exit();
- 
-            
         }
 
     }
