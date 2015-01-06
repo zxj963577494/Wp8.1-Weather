@@ -138,6 +138,7 @@ namespace Weather.App
             this.navigationHelper.OnNavigatedTo(e);
 
             userCityRespose = await userService.GetUserCityAsync();
+
             if (userCityRespose == null)
             {
                 Frame.Navigate(typeof(AddCityPage), 1);

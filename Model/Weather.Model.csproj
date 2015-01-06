@@ -40,9 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CientData\WeatherCity.cs" />
-    <Compile Include="CientData\WeatherCityList.cs" />
     <Compile Include="CientData\WeatherType.cs" />
-    <Compile Include="CientData\WeatherTypeList.cs" />
     <Compile Include="Forecast3h\Forecast3h.cs" />
     <Compile Include="Forecast3h\Forecast3hList.cs" />
     <Compile Include="General\Future.cs" />

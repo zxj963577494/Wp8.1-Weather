@@ -134,8 +134,8 @@ namespace Weather.App
 
         private async void LoadData()
         {
-            switchesRespose = await settingService.GetSettingSwitchesAsync();
-            autoUpdateTimeRepose = await settingService.GetSettingAutoUpdateTimeAsync();
+            switchesRespose = settingService.GetSettingSwitches();
+            autoUpdateTimeRepose = settingService.GetSettingAutoUpdateTime();
             userRespose = await userService.GetUserAsync();
             ViewModel.AutoUpdateSettingPage autoUpdateSettingPage = new ViewModel.AutoUpdateSettingPage()
             {
@@ -198,7 +198,7 @@ namespace Weather.App
         private async void cbbIsWifiUpdate_DropDownClosed(object sender, object e)
         {
             userRespose.UserConfig.IsWifiUpdate = int.Parse(cbbIsWifiUpdate.SelectedValue.ToString());
-           
+
             await userService.SaveUser(userRespose);
 
         }
@@ -220,7 +220,7 @@ namespace Weather.App
         private async void cbbIsWifiAutoUpdate_DropDownClosed(object sender, object e)
         {
             userRespose.UserConfig.IsWifiAutoUpdate = int.Parse(cbbIsWifiAutoUpdate.SelectedValue.ToString());
-           
+
             await userService.SaveUser(userRespose);
         }
 
@@ -232,7 +232,7 @@ namespace Weather.App
         private async void cbbIsAutoUpdateForCity_DropDownClosed(object sender, object e)
         {
             userRespose.UserConfig.IsAutoUpdateForCity = int.Parse(cbbIsAutoUpdateForCity.SelectedValue.ToString());
-          
+
             await userService.SaveUser(userRespose);
         }
 

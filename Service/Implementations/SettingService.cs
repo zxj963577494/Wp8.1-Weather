@@ -23,17 +23,27 @@ namespace Weather.Service.Implementations
 
 
 
-        public async Task<GetSettingAutoUpdateTimeRepose> GetSettingAutoUpdateTimeAsync()
+        public GetSettingAutoUpdateTimeRepose GetSettingAutoUpdateTime()
         {
             GetSettingAutoUpdateTimeRepose respose = new GetSettingAutoUpdateTimeRepose();
-            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileByInstalledLocationAsync<GetSettingAutoUpdateTimeRepose>("Data\\AutoUpdateTimes.json").ConfigureAwait(false);
+            List<Model.AutoUpdateTime> list = new List<Model.AutoUpdateTime>();
+            list.Add(new Model.AutoUpdateTime() { Id = 1, Content = "1小时", Time=60 });
+            list.Add(new Model.AutoUpdateTime() { Id = 2, Content = "2小时", Time = 120 });
+            list.Add(new Model.AutoUpdateTime() { Id = 3, Content = "4小时", Time = 240 });
+            list.Add(new Model.AutoUpdateTime() { Id = 4, Content = "6小时", Time = 360 });
+            list.Add(new Model.AutoUpdateTime() { Id = 5, Content = "24小时", Time = 1440 });
+
+            respose.AutoUpdateTimes = list;
             return respose;
         }
 
-        public async Task<GetSettingSwitchesRespose> GetSettingSwitchesAsync()
+        public GetSettingSwitchesRespose GetSettingSwitches()
         {
             GetSettingSwitchesRespose respose = new GetSettingSwitchesRespose();
-            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileByInstalledLocationAsync<GetSettingSwitchesRespose>("Data\\Switches.json").ConfigureAwait(false);
+            List<Model.Switchable> list = new List<Model.Switchable>();
+            list.Add(new Model.Switchable() { Id = 0, Content = "关" });
+            list.Add(new Model.Switchable() { Id = 1, Content = "开" });
+            respose.Switches = list;
             return respose;
         }
     }

@@ -158,6 +158,9 @@
     <Content Include="Data\HotCities.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\NewCities.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Data\Switches.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -283,6 +286,7 @@
     <Content Include="Images\Tomorrow\07.png" />
     <Content Include="Images\Tomorrow\08.png" />
     <Content Include="Images\Tomorrow\901.png" />
+    <None Include="Data\NewHotCities.json" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="StoreManifest.xml" />
   </ItemGroup>

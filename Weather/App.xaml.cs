@@ -226,7 +226,7 @@ namespace Weather.App
             }
             else
             {
-                settingAutoUpdateTimeRepose = await settingService.GetSettingAutoUpdateTimeAsync();
+                settingAutoUpdateTimeRepose = settingService.GetSettingAutoUpdateTime();
                 int time = settingAutoUpdateTimeRepose.AutoUpdateTimes.FirstOrDefault(x => x.Id == userRespose.UserConfig.AutoUpdateTime).Time;
                 backgroundTaskExecute.Create(taskName, taskEntryPoint, time, null);
             }
