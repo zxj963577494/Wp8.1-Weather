@@ -74,8 +74,7 @@ namespace Weather.App
 
 
             await InitializeAppConfig();
-            CreateUpdateTileTask();
-            CreateUpdateSecondaryTileTask();
+           
 
             Weather.App.Common.StyleSelector.SetStyle();
             Frame rootFrame = Window.Current.Content as Frame;
@@ -183,6 +182,8 @@ namespace Weather.App
 
                 await FileHelper.CreateFileAsync("User\\UserCities.json");
 
+                CreateUpdateTileTask();
+                CreateUpdateSecondaryTileTask();
             }
         }
         #endregion

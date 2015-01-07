@@ -14,7 +14,7 @@ namespace Weather.Model
         /// <summary>
         /// 天气唯一标识
         /// </summary>
-        public string Wid { get; set; }
+        public int Wid { get; set; }
 
         /// <summary>
         /// 天气

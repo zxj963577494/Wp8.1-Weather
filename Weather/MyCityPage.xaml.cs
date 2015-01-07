@@ -315,7 +315,7 @@ namespace Weather.App
         public async Task<MyCityPageModel> GetWeatherByNet(Model.UserCity item)
         {
             //不存在当天的天气数据，就从网络获取数据
-            IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, item.CityName);
+            GetWeatherRequest request = new GetWeatherRequest(item.CityName);
             weatherRespose = await weatherService.GetWeatherAsync(request);
             await DeleteFile(item.CityId);
             await weatherService.SaveWeather<GetWeatherRespose>(weatherRespose, item.CityId.ToString());
@@ -323,8 +323,8 @@ namespace Weather.App
             {
                 CityId = item.CityId,
                 CityName = item.CityName,
-                Temp = weatherRespose == null ? null : weatherRespose.result.today.temperature,
-                TodayPic = weatherRespose == null ? null : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TodayPic
+                Temp = weatherRespose == null ? null : weatherRespose.result.data.realtime.weather.temperature += "°",
+                TodayPic = weatherRespose == null ? null : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.data.realtime.weather.img).TodayPic
             };
             return model;
         }
@@ -340,8 +340,8 @@ namespace Weather.App
             MyCityPageModel model = new MyCityPageModel();
             model.CityId = item.CityId;
             model.CityName = item.CityName;
-            model.Temp = weatherRespose == null ? null : weatherRespose.result.today.temperature;
-            model.TodayPic = weatherRespose == null ? null : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TodayPic;
+            model.Temp = weatherRespose == null ? null :  weatherRespose.result.data.realtime.weather.temperature+="°";
+            model.TodayPic = weatherRespose == null ? null : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.data.realtime.weather.img).TodayPic;
             return model;
         }
 
@@ -521,17 +521,17 @@ namespace Weather.App
 
                 string displayName = userCity.CityName;
 
-                IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, userCity.CityName);
+                GetWeatherRequest request = new GetWeatherRequest(userCity.CityName);
                 GetWeatherRespose respose = await weatherService.GetWeatherAsync(request);
                 if (!Utils.SecondaryTileHelper.IsExists(tileId))
                 {
                     await Utils.SecondaryTileHelper.CreateSecondaryTileAsync(tileId, displayName, cityId.ToString());
-                    UpdateSecondaryTile(tileId, respose);
+                    UpdateSecondaryTile(tileId, respose.result.data.realtime);
                 }
                 else
                 {
                     NotifyUser("该城市磁贴已固定在桌面");
-                    UpdateSecondaryTile(tileId, respose);
+                    UpdateSecondaryTile(tileId, respose.result.data.realtime);
                 }
             }
         }
@@ -673,40 +673,27 @@ namespace Weather.App
 
         #region 磁贴更新
 
-        private void UpdateSecondaryTile(string tileId, GetWeatherRespose weatherRespose)
+        private void UpdateSecondaryTile(string tileId, Model.Realtime realtime)
         {
             if (weatherRespose.result != null)
             {
                 if (SecondaryTileHelper.IsExists(tileId))
                 {
                     string tileXmlString = @"<tile>"
-  + "<visual version='2'>"
-  + "<binding template='TileWide310x150BlockAndText01' fallback='TileWideBlockAndText01'>"
-  + "<text id='1'>" + weatherRespose.result.sk.temp + "°</text>"
-  + "<text id='2'>" + weatherRespose.result.today.city + "</text>"
-  + "<text id='3'>" + weatherRespose.result.today.temperature + "</text>"
-  + "<text id='4'>" + weatherRespose.result.today.weather + "</text>"
-  + "<text id='5'>" + weatherRespose.result.sk.wind_direction + " " + weatherRespose.result.sk.wind_strength + "</text>"
-  + "<text id='6'>" + weatherRespose.result.today.week + "</text>"
-  + "</binding>"
-  + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-  + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TileSquarePic + "'/>"
-  + "<text id='1'>" + weatherRespose.result.sk.temp + "°</text>"
-  + "<text id='2'>" + weatherRespose.result.today.temperature + "</text>"
-  + "<text id='3'>" + weatherRespose.result.today.weather + "</text>"
-  + "<text id='4'>" + weatherRespose.result.sk.wind_direction + " " + weatherRespose.result.sk.wind_strength + "</text>"
-  + "</binding>"
-  + "</visual>"
-  + "</tile>";
+               + "<visual version='2'>"
+               + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
+               + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == realtime.weather.img).TileSquarePic + "'/>"
+               + "<text id='1'>" + realtime.weather.temperature + "°</text>"
+               + "<text id='2'>" + realtime.weather.info + "</text>"
+               + "<text id='3'>" + realtime.wind.direct + " " + realtime.wind.power + "</text>"
+               + "<text id='4'>" + realtime.moon + "</text>"
+               + "</binding>"
+               + "</visual>"
+               + "</tile>";
                     SecondaryTileHelper.UpdateSecondaryTileNotificationsByXml(tileId, tileXmlString);
                 }
             }
         }
-
         #endregion
-
-
-
-
     }
 }

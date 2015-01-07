@@ -6,36 +6,19 @@ using System.Threading.Tasks;
 
 namespace Weather.Service.Message
 {
-    /// <summary>
-    /// 根据城市名获取城市天气三小时预报请求类
-    /// </summary>
-    public class GetForecast3hByCityNameRequest
+    public class GetWeatherRequest
     {
-
         #region Field
+        private string _format = "1";
+
         private string _dtype = "json";
 
-        private string _key = "fbaccffcb1100c884418266f011bf55e";
+        private string _key = "4c8397f935951e41ff8a682c50df1690";
 
         /// <summary>
         /// 城市名称
         /// </summary>
         public string cityname { get; set; }
-
-        /// <summary>
-        /// 返回数据格式：json或xml,默认json
-        /// </summary>
-        public string dtype
-        {
-            get
-            {
-                return _dtype;
-            }
-            set
-            {
-                _dtype = value;
-            }
-        }
 
         /// <summary>
         /// key
@@ -50,15 +33,21 @@ namespace Weather.Service.Message
             {
                 _key = value;
             }
-        } 
+        }
         #endregion
 
         #region Method
+
+        public GetWeatherRequest()
+        {
+
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="cityname">城市名称</param>
-        public GetForecast3hByCityNameRequest(string cityname)
+        public GetWeatherRequest(string cityname)
         {
             this.cityname = cityname;
         }
@@ -69,10 +58,9 @@ namespace Weather.Service.Message
         /// <returns></returns>
         public string GetRequestUrl()
         {
-            // System.Uri.EscapeDataString
-            string url = "http://v.juhe.cn/weather/forecast3h.php?dtype=json&cityname=" + Utils.StringHelper.GetUrlString(cityname) + "&key=" + key;
+            string url = "http://op.juhe.cn/onebox/weather/query?dtype=json&format=1&cityname=" + Utils.StringHelper.GetUrlString(cityname) + "&key=" + key;
             return url;
-        } 
+        }
         #endregion
     }
 }

@@ -51,23 +51,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementations\CityService.cs" />
-    <Compile Include="Implementations\Forecast3hService.cs" />
     <Compile Include="Implementations\SettingService.cs" />
     <Compile Include="Implementations\UserService.cs" />
     <Compile Include="Implementations\WeatherService.cs" />
     <Compile Include="Message\City\GetCityRespose.cs" />
     <Compile Include="Message\City\GetHotCityRespose.cs" />
-    <Compile Include="Message\Forecast3h\GetForecast3hByCityNameRepose.cs" />
-    <Compile Include="Message\Forecast3h\GetForecast3hByCityNameRequest.cs" />
     <Compile Include="Message\User\GetUserCityRespose.cs" />
-    <Compile Include="Message\Weather\GetWeatherByCityNameOrIdRequest.cs" />
-    <Compile Include="Message\Weather\GetWeatherByGpsRequest.cs" />
-    <Compile Include="Message\Weather\GetWeatherByIpRequest.cs" />
-    <Compile Include="Message\Weather\GetWeatherFactory.cs" />
-    <Compile Include="Message\Weather\GetWeatherMode.cs" />
+    <Compile Include="Message\Weather\GetWeatherRequest.cs" />
     <Compile Include="Message\Weather\GetWeatherRespose.cs" />
     <Compile Include="Message\Weather\GetWeatherTypeRespose.cs" />
-    <Compile Include="Message\Weather\IGetWeatherRequest.cs" />
     <Compile Include="Message\Setting\GetSettingAutoUpdateTimeRepose.cs" />
     <Compile Include="Message\Setting\GetSettingSwitchesRespose.cs" />
     <Compile Include="Message\User\GetUserRespose.cs" />

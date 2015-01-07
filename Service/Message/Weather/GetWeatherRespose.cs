@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 
 namespace Weather.Service.Message
 {
-    /// <summary>
-    /// 天气响应类
-    /// </summary>
     public class GetWeatherRespose
     {
-        public string resultcode { get; set; }
-
         public string reason { get; set; }
 
-        public Model.Weather result { get; set; }
+        public Result result { get; set; }
 
         public string error_code { get; set; }
+
+
+        public class Result
+        {
+            public Model.Data data { get; set; }
+        }
     }
 }

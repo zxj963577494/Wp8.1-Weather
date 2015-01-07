@@ -41,19 +41,18 @@
   <ItemGroup>
     <Compile Include="CientData\WeatherCity.cs" />
     <Compile Include="CientData\WeatherType.cs" />
-    <Compile Include="Forecast3h\Forecast3h.cs" />
-    <Compile Include="Forecast3h\Forecast3hList.cs" />
-    <Compile Include="General\Future.cs" />
-    <Compile Include="General\Sk.cs" />
-    <Compile Include="General\Today.cs" />
-    <Compile Include="General\Weather.cs" />
-    <Compile Include="General\WeatherId.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setting\AutoUpdateTime.cs" />
     <Compile Include="Setting\Switchable.cs" />
     <Compile Include="User\UserConfig.cs" />
     <Compile Include="User\UserCity.cs" />
+    <Compile Include="Weathers\Data.cs" />
+    <Compile Include="Weathers\Life.cs" />
+    <Compile Include="Weathers\PM25.cs" />
+    <Compile Include="Weathers\Realtime.cs" />
+    <Compile Include="Weathers\WeatherList.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

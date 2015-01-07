@@ -155,12 +155,6 @@
     <Content Include="Data\Cities.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\HotCities.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\NewCities.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Data\Switches.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -286,7 +280,15 @@
     <Content Include="Images\Tomorrow\07.png" />
     <Content Include="Images\Tomorrow\08.png" />
     <Content Include="Images\Tomorrow\901.png" />
-    <None Include="Data\NewHotCities.json" />
+    <Content Include="Data\HotCities.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\WeatherTypes.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\wwww.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="StoreManifest.xml" />
   </ItemGroup>
@@ -341,11 +343,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Data\WeatherTypes.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tasks\Weather.Tasks.csproj">

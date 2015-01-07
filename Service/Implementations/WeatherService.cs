@@ -20,17 +20,25 @@ namespace Weather.Service.Implementations
         {
             return instance;
         }
-
-        public async Task<GetWeatherRespose> GetWeatherAsync(IGetWeatherRequest request)
+        /// <summary>
+        /// 通过网络获取天气对象
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public async Task<GetWeatherRespose> GetWeatherAsync(GetWeatherRequest request)
         {
             GetWeatherRespose respose = new GetWeatherRespose();
             string requestUrl = request.GetRequestUrl();
             string resposeString = await Weather.Utils.HttpHelper.GetUrlResposeAsnyc(requestUrl).ConfigureAwait(false);
-            string realResposeString = HttpHelper.ResposeStringReplace(resposeString);
-            respose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(realResposeString);
+            respose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(resposeString);
             return respose;
         }
 
+        /// <summary>
+        /// 通过本地文件获取天气对象
+        /// </summary>
+        /// <param name="cityId"></param>
+        /// <returns></returns>
         public async Task<GetWeatherRespose> GetWeatherByClientAsync(string cityId)
         {
             string fileName = null;
@@ -50,6 +58,13 @@ namespace Weather.Service.Implementations
             return respose;
         }
 
+        /// <summary>
+        /// 序列化保存天气对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="cityId"></param>
+        /// <returns></returns>
         public async Task SaveWeather<T>(T target, string cityId)
         {
             string fileName = cityId + "_" + StringHelper.GetTodayDateString() + ".json";
@@ -57,10 +72,36 @@ namespace Weather.Service.Implementations
             await Weather.Utils.JsonSerializeHelper.JsonSerializeForFileAsync(target, filePath).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// 直接保存天气对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="cityId"></param>
+        /// <returns></returns>
+        public async Task SaveWeather(string jsonContent, string cityId)
+        {
+            string fileName = cityId + "_" + StringHelper.GetTodayDateString() + ".json";
+            string filePath = "Temp\\" + fileName;
+            await Weather.Utils.FileHelper.CreateAndWriteFileAsync(jsonContent, filePath).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// 获取天气类型
+        /// </summary>
+        /// <returns></returns>
         public async Task<GetWeatherTypeRespose> GetWeatherTypeAsync()
         {
             GetWeatherTypeRespose respose = new GetWeatherTypeRespose();
             respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileByInstalledLocationAsync<GetWeatherTypeRespose>("Data\\WeatherTypes.json").ConfigureAwait(false);
+            return respose;
+        }
+
+
+        public async Task<GetWeatherRespose> GetWeatherByCityNameAsync()
+        {
+            GetWeatherRespose respose = new GetWeatherRespose();
+            respose = await Weather.Utils.JsonSerializeHelper.JsonDeSerializeForFileByInstalledLocationAsync<GetWeatherRespose>("Data\\wwww.json").ConfigureAwait(false);
             return respose;
         }
     }
