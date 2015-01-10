@@ -55,34 +55,67 @@ namespace Weather.Utils
 
 
 
-        public static string ConvertWeek(int i)
+        public static string ConvertWeekNum(int i)
         {
             string week = null;
             switch (i)
             {
                 case 1:
-                    week = "星期一";
+                    week = "周一";
                     break;
                 case 2:
-                    week = "星期二";
+                    week = "周二";
                     break;
                 case 3:
-                    week = "星期三";
+                    week = "周三";
                     break;
                 case 4:
-                    week = "星期四";
+                    week = "周四";
                     break;
                 case 5:
-                    week = "星期五";
+                    week = "周五";
                     break;
                 case 6:
-                    week = "星期六";
+                    week = "周六";
                     break;
                 case 7:
-                    week = "星期天";
+                    week = "周日";
                     break;
                 default:
-                    week = "星期一";
+                    week = "周一";
+                    break;
+            }
+            return week;
+        }
+
+        public static string ConvertWeekCn(string str)
+        {
+            string week = null;
+            switch (str)
+            {
+                case "一":
+                    week = "周一";
+                    break;
+                case "二":
+                    week = "周二";
+                    break;
+                case "三":
+                    week = "周三";
+                    break;
+                case "四":
+                    week = "周四";
+                    break;
+                case "五":
+                    week = "周五";
+                    break;
+                case "六":
+                    week = "周六";
+                    break;
+                case "日":
+                    week = "周日";
+                    break;
+                default:
+                    week = "周一";
                     break;
             }
             return week;

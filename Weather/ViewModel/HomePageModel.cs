@@ -12,23 +12,14 @@ namespace Weather.App.ViewModel
     public class HomePageModel
     {
         public Model.WeatherType WeatherType { get; set; }
-        /// <summary>
-        /// 黎明
-        /// </summary>
-        public List<Model.WeatherList.Weather> Dawn { get; set; }
 
-        /// <summary>
-        /// 白天
-        /// </summary>
-        public List<Model.WeatherList.Weather> Day { get; set; }
+        public Model.WeatherList.Weather Today { get; set; }
 
-        /// <summary>
-        /// 夜晚
-        /// </summary>
-        public List<Model.WeatherList.Weather> Night { get; set; }
-
+        public List<Model.WeatherList.Weather> WeatherList { get; set; }
 
         public Model.Realtime Realtime { get; set; }
+
+        public Model.Life Life { get; set; }
 
         public Model.PM25 PM25 { get; set; }
     }

@@ -82,9 +82,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="About.xaml.cs">
-      <DependentUpon>About.xaml</DependentUpon>
-    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -171,13 +168,15 @@
     <Content Include="Images\Background\04.jpg" />
     <Content Include="Images\Background\06.jpg" />
     <Content Include="Images\Index\lvyou.png" />
-    <Content Include="Images\Index\chenlian.png" />
+    <Content Include="Images\Index\yundong.png" />
     <Content Include="Images\Index\chuanyi.png" />
     <Content Include="Images\Index\shushidu.png" />
     <Content Include="Images\Index\xiche.png" />
     <Content Include="Images\Index\ziwaixian.png" />
     <Content Include="Images\Index\fengli.png" />
     <Content Include="Images\Index\shidu.png" />
+    <Content Include="Images\Index\ganmao.png" />
+    <Content Include="Images\Index\wuran.png" />
     <Content Include="Images\Other\gaosi.jpg" />
     <Content Include="Images\TileSquare\00.png" />
     <Content Include="Images\TileSquare\01.png" />
@@ -286,9 +285,6 @@
     <Content Include="Data\WeatherTypes.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\wwww.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="StoreManifest.xml" />
   </ItemGroup>
@@ -299,10 +295,6 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="About.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="AddCityPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

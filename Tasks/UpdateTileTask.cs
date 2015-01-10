@@ -117,7 +117,7 @@ namespace Weather.Tasks
 
             GetWeatherRespose weatherRespose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(realResposeString);
 
-            UpdateTile(weatherRespose.result.data.realtime);
+            UpdateTile(weatherRespose.result.data);
 
             await CreateFile(userCity.CityId, realResposeString);
         }
@@ -156,25 +156,29 @@ namespace Weather.Tasks
         /// <param name="respose"></param>
         /// <param name="getWeatherTypeRespose"></param>
         /// <param name="getUserRespose"></param>
-        private void UpdateTile(Model.Realtime realtime)
+        private void UpdateTile(Model.Data data)
         {
-
+            string quality = null;
+            if (data.pm25 != null)
+            {
+                quality = data.pm25.pm25.quality;
+            }
             string tileXmlString = @"<tile>"
                + "<visual version='2'>"
                + "<binding template='TileWide310x150BlockAndText01' fallback='TileWideBlockAndText01'>"
-               + "<text id='1'>" + realtime.weather.temperature + "</text>"
-               + "<text id='2'>" + realtime.city_name + "</text>"
-               + "<text id='3'>" + realtime.weather.temperature + " " + realtime.weather.info + "</text>"
-               + "<text id='4'>" + realtime.wind.direct + " " + realtime.wind.power + "</text>"
-               + "<text id='5'>" + realtime.moon + "</text>"
-               + "<text id='6'>" + StringHelper.ConvertWeek(realtime.week) + "</text>"
+               + "<text id='1'>" + data.realtime.weather.temperature + "</text>"
+               + "<text id='2'>" + data.realtime.city_name + "</text>"
+               + "<text id='3'>" + data.realtime.weather.temperature + " " + data.realtime.weather.info + "</text>"
+               + "<text id='4'>" + data.realtime.wind.direct + " " + data.realtime.wind.power + " " + quality + "</text>"
+               + "<text id='5'>" + data.realtime.moon + "</text>"
+               + "<text id='6'>" + StringHelper.ConvertWeekNum(data.realtime.week) + "</text>"
                + "</binding>"
                + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-               + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == realtime.weather.img).TileSquarePic + "'/>"
-               + "<text id='1'>" + realtime.city_name + "</text>"
-               + "<text id='2'>" + realtime.weather.temperature + "</text>"
-               + "<text id='3'>" + realtime.weather.info + "</text>"
-               + "<text id='4'>" + realtime.wind.direct + " " + realtime.wind.power + "</text>"
+               + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == data.realtime.weather.img).TileSquarePic + "'/>"
+               + "<text id='1'>" + data.realtime.city_name + "</text>"
+               + "<text id='2'>" + data.realtime.weather.temperature + "</text>"
+               + "<text id='3'>" + data.realtime.weather.info + "</text>"
+               + "<text id='4'>" + data.realtime.wind.direct + " " + data.realtime.wind.power + " " + quality + "</text>"
                + "</binding>"
                + "</visual>"
                + "</tile>";
@@ -197,7 +201,7 @@ namespace Weather.Tasks
 
             if (weatherRespose.result.data.realtime.date == DateTime.Now.ToString("yyyy-MM-dd"))
             {
-                UpdateTile(weatherRespose.result.data.realtime);
+                UpdateTile(weatherRespose.result.data);
             }
             else
             {

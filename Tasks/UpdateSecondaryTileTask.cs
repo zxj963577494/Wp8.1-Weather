@@ -120,7 +120,7 @@ namespace Weather.Tasks
             string tileId = userCity.CityId + "_Weather";
             if (SecondaryTileHelper.IsExists(tileId))
             {
-                UpdateSecondaryTile(tileId,respose.result.data.realtime);
+                UpdateSecondaryTile(tileId,respose.result.data);
             }
             await CreateFile(userCity.CityId, realResposeString);
         }
@@ -154,16 +154,21 @@ namespace Weather.Tasks
         /// 更新辅助磁贴信息
         /// </summary>
         /// <param name="tileId"></param>
-        private void UpdateSecondaryTile(string tileId, Model.Realtime realtime)
+        private void UpdateSecondaryTile(string tileId, Model.Data data)
         {
+            string quality = null;
+            if (data.pm25 != null)
+            {
+                quality = data.pm25.pm25.quality;
+            }
             string tileXmlString = @"<tile>"
 + "<visual version='2'>"
 + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-+ "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == realtime.weather.img).TileSquarePic + "'/>"
-+ "<text id='1'>" + realtime.weather.temperature + "</text>"
-+ "<text id='2'>" + realtime.weather.info + "</text>"
-+ "<text id='3'>" + realtime.wind.direct + " " + realtime.wind.power + "</text>"
-+ "<text id='4'>" + realtime.moon + "</text>"
++ "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == data.realtime.weather.img).TileSquarePic + "'/>"
++ "<text id='1'>" + data.realtime.weather.temperature + "</text>"
++ "<text id='2'>" + data.realtime.weather.info + "</text>"
++ "<text id='3'>" + data.realtime.wind.direct + " " + data.realtime.wind.power + "</text>"
++ "<text id='4'>" + data.realtime.moon + "</text>"
 + "</binding>"
 + "</visual>"
 + "</tile>";
@@ -227,7 +232,7 @@ namespace Weather.Tasks
             string tileId = userCity.CityId + "_Weather";
             if (weatherRespose.result.data.realtime.date == DateTime.Now.ToString("yyyy-MM-dd"))
             {
-                UpdateSecondaryTile(tileId, respose.result.data.realtime);
+                UpdateSecondaryTile(tileId, respose.result.data);
             }
             else
             {

@@ -324,7 +324,8 @@ namespace Weather.App
                 CityId = item.CityId,
                 CityName = item.CityName,
                 Temp = weatherRespose == null ? null : weatherRespose.result.data.realtime.weather.temperature += "°",
-                TodayPic = weatherRespose == null ? null : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.data.realtime.weather.img).TodayPic
+                TodayPic = weatherRespose == null ? null : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.data.realtime.weather.img).TodayPic,
+                Weather = weatherRespose == null ? null : weatherRespose.result.data.realtime.weather.info
             };
             return model;
         }
@@ -337,11 +338,14 @@ namespace Weather.App
         public async Task<MyCityPageModel> GetWeatherByClient(Model.UserCity item)
         {
             weatherRespose = await weatherService.GetWeatherByClientAsync(item.CityId.ToString()).ConfigureAwait(false);
-            MyCityPageModel model = new MyCityPageModel();
-            model.CityId = item.CityId;
-            model.CityName = item.CityName;
-            model.Temp = weatherRespose == null ? null :  weatherRespose.result.data.realtime.weather.temperature+="°";
-            model.TodayPic = weatherRespose == null ? null : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.data.realtime.weather.img).TodayPic;
+            MyCityPageModel model = new MyCityPageModel()
+            {
+                CityId = item.CityId,
+                CityName = item.CityName,
+                Temp = weatherRespose == null ? null : weatherRespose.result.data.realtime.weather.temperature += "°",
+                TodayPic = weatherRespose == null ? null : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.data.realtime.weather.img).TodayPic,
+                Weather = weatherRespose == null ? null : weatherRespose.result.data.realtime.weather.info
+            };
             return model;
         }
 
@@ -381,6 +385,7 @@ namespace Weather.App
                 CityName = item.CityName,
                 Temp = null,
                 TodayPic = null,
+                Weather = null
             };
             return model;
         }
@@ -508,31 +513,38 @@ namespace Weather.App
 
         private async void DesTopTile_Click(object sender, RoutedEventArgs e)
         {
-            MenuFlyoutItem selectedItem = sender as MenuFlyoutItem;
-            if (selectedItem != null)
+            if (NetHelper.IsNetworkAvailable())
             {
-                int cityId = int.Parse(selectedItem.CommandParameter.ToString());
-
-                string tileId = selectedItem.CommandParameter.ToString() + "_Weather";
-
-                Model.UserCity userCity = (from u in userCityRespose.UserCities
-                                           where u.CityId == cityId
-                                           select u).FirstOrDefault();
-
-                string displayName = userCity.CityName;
-
-                GetWeatherRequest request = new GetWeatherRequest(userCity.CityName);
-                GetWeatherRespose respose = await weatherService.GetWeatherAsync(request);
-                if (!Utils.SecondaryTileHelper.IsExists(tileId))
+                MenuFlyoutItem selectedItem = sender as MenuFlyoutItem;
+                if (selectedItem != null)
                 {
-                    await Utils.SecondaryTileHelper.CreateSecondaryTileAsync(tileId, displayName, cityId.ToString());
-                    UpdateSecondaryTile(tileId, respose.result.data.realtime);
+                    int cityId = int.Parse(selectedItem.CommandParameter.ToString());
+
+                    string tileId = selectedItem.CommandParameter.ToString() + "_Weather";
+
+                    Model.UserCity userCity = (from u in userCityRespose.UserCities
+                                               where u.CityId == cityId
+                                               select u).FirstOrDefault();
+
+                    string displayName = userCity.CityName;
+
+                    GetWeatherRequest request = new GetWeatherRequest(userCity.CityName);
+                    GetWeatherRespose respose = await weatherService.GetWeatherAsync(request);
+                    if (!Utils.SecondaryTileHelper.IsExists(tileId))
+                    {
+                        await Utils.SecondaryTileHelper.CreateSecondaryTileAsync(tileId, displayName, cityId.ToString());
+                        UpdateSecondaryTile(tileId, respose.result.data);
+                    }
+                    else
+                    {
+                        NotifyUser("该城市磁贴已固定在桌面");
+                        UpdateSecondaryTile(tileId, respose.result.data);
+                    }
                 }
-                else
-                {
-                    NotifyUser("该城市磁贴已固定在桌面");
-                    UpdateSecondaryTile(tileId, respose.result.data.realtime);
-                }
+            }
+            else
+            {
+                NotifyUser("该功能需要开启网络");
             }
         }
 
@@ -645,10 +657,6 @@ namespace Weather.App
             Frame.Navigate(typeof(SettingPage));
         }
 
-        private void AboutCommandBar_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(About));
-        }
 
         private void InstructionCommandBar_Click(object sender, RoutedEventArgs e)
         {
@@ -673,26 +681,26 @@ namespace Weather.App
 
         #region 磁贴更新
 
-        private void UpdateSecondaryTile(string tileId, Model.Realtime realtime)
+
+        private void UpdateSecondaryTile(string tileId, Model.Data data)
         {
-            if (weatherRespose.result != null)
+            string quality = null;
+            if (data.pm25 != null)
             {
-                if (SecondaryTileHelper.IsExists(tileId))
-                {
-                    string tileXmlString = @"<tile>"
-               + "<visual version='2'>"
-               + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-               + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == realtime.weather.img).TileSquarePic + "'/>"
-               + "<text id='1'>" + realtime.weather.temperature + "°</text>"
-               + "<text id='2'>" + realtime.weather.info + "</text>"
-               + "<text id='3'>" + realtime.wind.direct + " " + realtime.wind.power + "</text>"
-               + "<text id='4'>" + realtime.moon + "</text>"
-               + "</binding>"
-               + "</visual>"
-               + "</tile>";
-                    SecondaryTileHelper.UpdateSecondaryTileNotificationsByXml(tileId, tileXmlString);
-                }
+                quality = data.pm25.pm25.quality;
             }
+            string tileXmlString = @"<tile>"
++ "<visual version='2'>"
++ "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
++ "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == data.realtime.weather.img).TileSquarePic + "'/>"
++ "<text id='1'>" + data.realtime.weather.temperature + "</text>"
++ "<text id='2'>" + data.realtime.weather.info + "</text>"
++ "<text id='3'>" + data.realtime.wind.direct + "</text>"
++ "<text id='4'>" + data.realtime.moon + " " + quality + "</text>"
++ "</binding>"
++ "</visual>"
++ "</tile>";
+            SecondaryTileHelper.UpdateSecondaryTileNotificationsByXml(tileId, tileXmlString);
         }
         #endregion
     }

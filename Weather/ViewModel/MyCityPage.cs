@@ -23,5 +23,7 @@ namespace Weather.App.ViewModel
         public string TodayPic { get; set; }
 
         public string Temp { get; set; }
+
+        public string Weather { get; set; }
     }
 }

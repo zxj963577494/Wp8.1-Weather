@@ -222,6 +222,8 @@ namespace Weather.App
 
                 homePageModel.WeatherType = weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.data.realtime.weather.img);
 
+                homePageModel.Life = weatherRespose.result.data.life;
+
                 weatherRespose.result.data.realtime.weather.temperature += "°";
 
                 weatherRespose.result.data.realtime.time = weatherRespose.result.data.realtime.time.Substring(0, 5) + "发布";
@@ -230,18 +232,22 @@ namespace Weather.App
 
                 homePageModel.Realtime = weatherRespose.result.data.realtime;
 
-                weatherRespose.result.data.pm25.pm25.quality = "空气质量:" + weatherRespose.result.data.pm25.pm25.quality;
                 homePageModel.PM25 = weatherRespose.result.data.pm25;
 
-                homePageModel.Day = (weatherRespose.result.data.weather.ForEach(x => x.info.day[0] = weatherTypeRespose.WeatherTypes.Find(w => w.Wid.ToString() == x.info.day[0]).TomorrowPic)).ToList();
-                if (weatherRespose.result.data.weather.FirstOrDefault().info.dawn != null)
-                {
-                    homePageModel.Dawn = (weatherRespose.result.data.weather.ForEach(x => x.info.dawn[0] = weatherTypeRespose.WeatherTypes.Find(w => w.Wid.ToString() == x.info.dawn[0]).TomorrowPic)).ToList();
-                }
-                homePageModel.Night = (weatherRespose.result.data.weather.ForEach(x => x.info.night[0] = weatherTypeRespose.WeatherTypes.Find(w => w.Wid.ToString() == x.info.night[0]).TomorrowPic)).ToList();
+
+
+                homePageModel.WeatherList = (weatherRespose.result.data.weather.ForEach(x => x.info.day[0] = weatherTypeRespose.WeatherTypes.Find(w => w.Wid.ToString() == x.info.day[0]).TomorrowPic)).ToList();
+                homePageModel.WeatherList = (weatherRespose.result.data.weather.ForEach(x => x.info.day[2] = x.info.day[2] + "°")).ToList();
+                homePageModel.WeatherList = (homePageModel.WeatherList.ForEach(x => x.info.night[0] = weatherTypeRespose.WeatherTypes.Find(w => w.Wid.ToString() == x.info.night[0]).TomorrowPic)).ToList();
+                homePageModel.WeatherList = (weatherRespose.result.data.weather.ForEach(x => x.info.night[2] = x.info.night[2] + "°")).ToList();
+                homePageModel.WeatherList = (homePageModel.WeatherList.ForEach(x => x.date = DateTime.Parse(x.date).ToString("MM-dd"))).ToList();
+                homePageModel.WeatherList = (homePageModel.WeatherList.ForEach(x => x.week = StringHelper.ConvertWeekCn(x.week))).ToList();
+
+                homePageModel.Today = homePageModel.WeatherList.Find(x => x.date == DateTime.Now.ToString("MM-dd"));
+
+                homePageModel.WeatherList.RemoveAt(0);
 
                 LayoutRoot.DataContext = homePageModel;
-
                 UpdateTileFacade();
                 UpdateSecondaryTileFacade();
             }
@@ -334,11 +340,6 @@ namespace Weather.App
             Frame.Navigate(typeof(SettingPage));
         }
 
-        private void AboutCommandBar_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(About));
-        }
-
         private void InstructionCommandBar_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(Instruction));
@@ -419,7 +420,7 @@ namespace Weather.App
             {
                 if (weatherRespose.result.data.realtime.date == DateTime.Now.ToString("yyyy-MM-dd"))
                 {
-                    UpdateTile(weatherRespose.result.data.realtime);
+                    UpdateTile(weatherRespose.result.data);
                 }
                 else
                 {
@@ -446,7 +447,7 @@ namespace Weather.App
             string tileId = userCity.CityId + "_Weather";
             if (SecondaryTileHelper.IsExists(tileId))
             {
-                UpdateSecondaryTile(tileId, weatherRespose.result.data.realtime);
+                UpdateSecondaryTile(tileId, weatherRespose.result.data);
             }
         }
 
@@ -469,12 +470,12 @@ namespace Weather.App
             if (!Utils.SecondaryTileHelper.IsExists(tileId))
             {
                 await Utils.SecondaryTileHelper.CreateSecondaryTileAsync(tileId, displayName, cityId.ToString());
-                UpdateSecondaryTile(tileId, weatherRespose.result.data.realtime);
+                UpdateSecondaryTile(tileId, weatherRespose.result.data);
             }
             else
             {
                 NotifyUser("该城市磁贴已固定在桌面");
-                UpdateSecondaryTile(tileId, weatherRespose.result.data.realtime);
+                UpdateSecondaryTile(tileId, weatherRespose.result.data);
             }
         }
 
@@ -485,25 +486,30 @@ namespace Weather.App
         /// <param name="respose"></param>
         /// <param name="getWeatherTypeRespose"></param>
         /// <param name="getUserRespose"></param>
-        private void UpdateTile(Model.Realtime realtime)
+        private void UpdateTile(Model.Data data)
         {
 
+            string quality = null;
+            if (data.pm25 != null)
+            {
+                quality = data.pm25.pm25.quality;
+            }
             string tileXmlString = @"<tile>"
                + "<visual version='2'>"
                + "<binding template='TileWide310x150BlockAndText01' fallback='TileWideBlockAndText01'>"
-               + "<text id='1'>" + realtime.weather.temperature + "</text>"
-               + "<text id='2'>" + realtime.city_name + "</text>"
-               + "<text id='3'>" + realtime.weather.temperature + " " + realtime.weather.info + "</text>"
-               + "<text id='4'>" + realtime.wind.direct + "</text>"
-               + "<text id='5'>" + realtime.moon + "</text>"
-               + "<text id='6'>" + StringHelper.ConvertWeek(realtime.week) + "</text>"
+               + "<text id='1'>" + data.realtime.weather.temperature + "</text>"
+               + "<text id='2'>" + data.realtime.city_name + "</text>"
+               + "<text id='3'>" + data.realtime.weather.temperature + " " + data.realtime.weather.info + "</text>"
+               + "<text id='4'>" + data.realtime.wind.direct + " " + quality + "</text>"
+               + "<text id='5'>" + data.realtime.moon + "</text>"
+               + "<text id='6'>" + StringHelper.ConvertWeekNum(data.realtime.week) + "</text>"
                + "</binding>"
                + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-               + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == realtime.weather.img).TileSquarePic + "'/>"
-               + "<text id='1'>" + realtime.city_name + "</text>"
-               + "<text id='2'>" + realtime.weather.temperature + "</text>"
-               + "<text id='3'>" + realtime.weather.info + "</text>"
-               + "<text id='4'>" + realtime.wind.direct + "</text>"
+               + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == data.realtime.weather.img).TileSquarePic + "'/>"
+               + "<text id='1'>" + data.realtime.city_name + "</text>"
+               + "<text id='2'>" + data.realtime.weather.temperature + "</text>"
+               + "<text id='3'>" + data.realtime.weather.info + "</text>"
+               + "<text id='4'>" + data.realtime.wind.direct + " " + quality + "</text>"
                + "</binding>"
                + "</visual>"
                + "</tile>";
@@ -546,16 +552,21 @@ namespace Weather.App
         /// 辅助磁贴
         /// </summary>
         /// <param name="tileId"></param>
-        private void UpdateSecondaryTile(string tileId, Model.Realtime realtime)
+        private void UpdateSecondaryTile(string tileId, Model.Data data)
         {
+            string quality = null;
+            if (data.pm25 != null)
+            {
+                quality =data.pm25.pm25.quality;
+            }
             string tileXmlString = @"<tile>"
 + "<visual version='2'>"
 + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-+ "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == realtime.weather.img).TileSquarePic + "'/>"
-+ "<text id='1'>" + realtime.weather.temperature + "</text>"
-+ "<text id='2'>" + realtime.weather.info + "</text>"
-+ "<text id='3'>" + realtime.wind.direct + "</text>"
-+ "<text id='4'>" + realtime.moon + "</text>"
++ "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == data.realtime.weather.img).TileSquarePic + "'/>"
++ "<text id='1'>" + data.realtime.weather.temperature + "</text>"
++ "<text id='2'>" + data.realtime.weather.info + "</text>"
++ "<text id='3'>" + data.realtime.wind.direct + "</text>"
++ "<text id='4'>" + data.realtime.moon + " " + quality + "</text>"
 + "</binding>"
 + "</visual>"
 + "</tile>";
