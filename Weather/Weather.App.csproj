@@ -161,31 +161,75 @@
     <Content Include="Data\Switches.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\Background\00.scale-140.jpg" />
+    <Content Include="Images\Background\00.scale-140.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\Background\01.scale-140.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\Background\02.scale-120.jpg" />
-    <Content Include="Images\Background\02.scale-140.jpg" />
-    <Content Include="Images\Background\03.scale-120.jpg" />
-    <Content Include="Images\Background\03.scale-140.jpg" />
-    <Content Include="Images\Background\06.scale-100.jpg" />
-    <Content Include="Images\Background\06.scale-140.jpg" />
-    <Content Include="Images\Background\08.scale-120.jpg" />
-    <Content Include="Images\Background\08.scale-140.jpg" />
-    <Content Include="Images\Background\09.scale-120.jpg" />
-    <Content Include="Images\Background\09.scale-140.jpg" />
-    <Content Include="Images\Background\00.scale-120.jpg" />
-    <Content Include="Images\Background\01.scale-120.jpg" />
-    <Content Include="Images\Background\10.scale-120.jpg" />
-    <Content Include="Images\Background\10.scale-140.jpg" />
-    <Content Include="Images\Background\12.jpg" />
-    <Content Include="Images\Background\11.jpg" />
-    <Content Include="Images\Background\04.scale-120.jpg" />
-    <Content Include="Images\Background\13.scale-120.jpg" />
-    <Content Include="Images\Background\13.scale-140.jpg" />
-    <Content Include="Images\Background\14.scale-120.jpg" />
-    <Content Include="Images\Background\14.scale-140.jpg" />
+    <Content Include="Images\Background\02.scale-120.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background\02.scale-140.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background\03.scale-120.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background\03.scale-140.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background\06.scale-120.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background\06.scale-140.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background\08.scale-120.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background\08.scale-140.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background\09.scale-120.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background\09.scale-140.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background\00.scale-120.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background\01.scale-120.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background\10.scale-120.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background\10.scale-140.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background\12.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background\11.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background\04.scale-120.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background\13.scale-120.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background\13.scale-140.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background\14.scale-120.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background\14.scale-140.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\Index\lvyou.png" />
     <Content Include="Images\Index\chenlian.png" />
     <Content Include="Images\Index\chuanyi.png" />
