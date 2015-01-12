@@ -167,16 +167,16 @@ namespace Weather.App
             myCityPage.MyCityPageModels = null;
             myCityPageModelList = null;
             myCityPageModelList = new List<ViewModel.MyCityPageModel>();
-            //如果有网络
-            if (NetHelper.IsNetworkAvailable())
+            //遍历常用城市
+            foreach (var item in userCityRespose.UserCities)
             {
-                //遍历常用城市
-                foreach (var item in userCityRespose.UserCities)
+                MyCityPageModel model = null;
+                //如果有网络
+                if (NetHelper.IsNetworkAvailable())
                 {
                     //不使用wifi更新
                     if (userRespose.UserConfig.IsWifiUpdate == 0)
                     {
-                        MyCityPageModel model = null;
                         //更新所有常用城市
                         if (userRespose.UserConfig.IsUpdateForCity == 0)
                         {
@@ -234,7 +234,6 @@ namespace Weather.App
                     {
                         if (NetHelper.IsWifiConnection())
                         {
-                            MyCityPageModel model = null;
                             //更新所有常用城市
                             if (userRespose.UserConfig.IsUpdateForCity == 0)
                             {
@@ -290,17 +289,19 @@ namespace Weather.App
                         }
                         else
                         {
-                            MyCityPageModel model = GetWeatherByNo(item);
+                            model = GetWeatherByNo(item);
                             myCityPageModelList.Add(model);
                             NotifyUser("Wifi未启动");
                         }
                     }
                 }
+                else
+                {
+                    model = GetWeatherByNo(item);
+                    myCityPageModelList.Add(model);
+                    NotifyUser("请开启网络，以更新最新天气数据");
+                }
                 myCityPage.MyCityPageModels = myCityPageModelList.ToList();
-            }
-            else
-            {
-                NotifyUser("请开启网络，以更新最新天气数据");
             }
             LayoutRoot.DataContext = null;
             LayoutRoot.DataContext = myCityPage;
