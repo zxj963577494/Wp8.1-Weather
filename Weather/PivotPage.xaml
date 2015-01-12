@@ -181,7 +181,7 @@ CommonNavigationTransitionInfo.IsStaggerElement="True">
 			<PivotItem Header="未来天气"
 				Margin="0,14.5,0,0"
 				>
-				<Grid Margin="20,0,0,0">
+				<Grid Margin="0,0,0,0">
 					<Grid.RowDefinitions>
 						<RowDefinition Height="3*"/>
 						<RowDefinition Height="7*"/>

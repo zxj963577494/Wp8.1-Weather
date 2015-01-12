@@ -216,8 +216,6 @@ namespace Weather.App
 
             if (weatherRespose.result != null)
             {
-                await DeleteFile(userCity.CityId);
-                await weatherService.SaveWeather(weatherRespose, userCity.CityId.ToString());
                 ViewModel.HomePageModel homePageModel = new ViewModel.HomePageModel();
 
                 homePageModel.WeatherType = weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.data.realtime.weather.img);
@@ -264,6 +262,7 @@ namespace Weather.App
             if (isRefresh == 1)
             {
                 weatherRespose = await weatherService.GetWeatherAsync(weatherRequest);
+                await weatherService.SaveWeather(weatherRespose, userCity.CityId.ToString());
             }
             else
             {
@@ -273,6 +272,8 @@ namespace Weather.App
                 {
                     //不存在当天的天气数据，就从网络获取数据
                     weatherRespose = await weatherService.GetWeatherAsync(weatherRequest);
+                    await DeleteFile(userCity.CityId);
+                    await weatherService.SaveWeather(weatherRespose, userCity.CityId.ToString());
                 }
                 else
                 {
