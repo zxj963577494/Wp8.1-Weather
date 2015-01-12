@@ -158,24 +158,34 @@
     <Content Include="Data\HotCities.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\NewCities.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Data\Switches.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\Background\08.jpg" />
-    <Content Include="Images\Background\10.jpg" />
-    <Content Include="Images\Background\07.jpg" />
-    <Content Include="Images\Background\09.jpg" />
-    <Content Include="Images\Background\00.jpg" />
-    <Content Include="Images\Background\01.jpg" />
-    <Content Include="Images\Background\02.jpg" />
+    <Content Include="Images\Background\00.scale-140.jpg" />
+    <Content Include="Images\Background\01.scale-140.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Background\02.scale-120.jpg" />
+    <Content Include="Images\Background\02.scale-140.jpg" />
+    <Content Include="Images\Background\03.scale-120.jpg" />
+    <Content Include="Images\Background\03.scale-140.jpg" />
+    <Content Include="Images\Background\06.scale-100.jpg" />
+    <Content Include="Images\Background\06.scale-140.jpg" />
+    <Content Include="Images\Background\08.scale-120.jpg" />
+    <Content Include="Images\Background\08.scale-140.jpg" />
+    <Content Include="Images\Background\09.scale-120.jpg" />
+    <Content Include="Images\Background\09.scale-140.jpg" />
+    <Content Include="Images\Background\00.scale-120.jpg" />
+    <Content Include="Images\Background\01.scale-120.jpg" />
+    <Content Include="Images\Background\10.scale-120.jpg" />
+    <Content Include="Images\Background\10.scale-140.jpg" />
     <Content Include="Images\Background\12.jpg" />
     <Content Include="Images\Background\11.jpg" />
-    <Content Include="Images\Background\13.jpg" />
-    <Content Include="Images\Background\04.jpg" />
-    <Content Include="Images\Background\06.jpg" />
+    <Content Include="Images\Background\04.scale-120.jpg" />
+    <Content Include="Images\Background\13.scale-120.jpg" />
+    <Content Include="Images\Background\13.scale-140.jpg" />
+    <Content Include="Images\Background\14.scale-120.jpg" />
+    <Content Include="Images\Background\14.scale-140.jpg" />
     <Content Include="Images\Index\lvyou.png" />
     <Content Include="Images\Index\chenlian.png" />
     <Content Include="Images\Index\chuanyi.png" />
@@ -286,7 +296,6 @@
     <Content Include="Images\Tomorrow\07.png" />
     <Content Include="Images\Tomorrow\08.png" />
     <Content Include="Images\Tomorrow\901.png" />
-    <None Include="Data\NewHotCities.json" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="StoreManifest.xml" />
   </ItemGroup>

@@ -53,6 +53,7 @@ namespace Weather.App
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Required;
 
             userService = UserService.GetInstance();
             weatherService = WeatherService.GetInstance();
@@ -211,21 +212,33 @@ namespace Weather.App
                 NotifyUser("请开启网络，以更新最新天气数据");
             }
 
-            if (weatherRespose.result != null)
+            if (weatherRespose != null)
             {
-                await DeleteFile(userCity.CityId);
-                await weatherService.SaveWeather(weatherRespose, userCity.CityId.ToString());
+               
                 ViewModel.HomePageModel homePageModel = new ViewModel.HomePageModel();
                 homePageModel.WeatherType = weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa);
                 weatherRespose.result.sk.temp = weatherRespose.result.sk.temp + "°";
                 weatherRespose.result.sk.time = weatherRespose.result.sk.time + "发布";
                 homePageModel.Sk = weatherRespose.result.sk;
                 homePageModel.Today = weatherRespose.result.today;
-                homePageModel.Futures = weatherRespose.result.future.AsParallel().ForEach(x => x.weather_id.fa = weatherTypeRespose.WeatherTypes.Find(w => w.Wid == x.weather_id.fa).TomorrowPic).ToList();
-                LayoutRoot.DataContext = homePageModel;
 
+                var fiture = weatherRespose.result.future.Find(x => x.date == DateTime.Now.ToString("yyyyMMdd"));
+                int i;
+                if (int.TryParse(fiture.weather_id.fa, out i))
+                {
+                    homePageModel.Futures = weatherRespose.result.future.ForEach(x => x.weather_id.fa = weatherTypeRespose.WeatherTypes.Find(w => w.Wid == x.weather_id.fa).TomorrowPic).ToList();
+                }
+                else
+                {
+                    homePageModel.Futures = weatherRespose.result.future;
+                }
+                LayoutRoot.DataContext = homePageModel;
                 UpdateTileFacade();
                 UpdateSecondaryTileFacade();
+            }
+            else
+            {
+                NotifyUser("请开启网络，以更新最新天气数据");
             }
             progressBar.Visibility = Visibility.Collapsed;
         }
@@ -240,6 +253,7 @@ namespace Weather.App
             if (isRefresh == 1)
             {
                 weatherRespose = await weatherService.GetWeatherAsync(weatherRequest);
+                await weatherService.SaveWeather(weatherRespose, userCity.CityId.ToString());
             }
             else
             {
@@ -249,6 +263,8 @@ namespace Weather.App
                 {
                     //不存在当天的天气数据，就从网络获取数据
                     weatherRespose = await weatherService.GetWeatherAsync(weatherRequest);
+                    await DeleteFile(userCity.CityId);
+                    await weatherService.SaveWeather(weatherRespose, userCity.CityId.ToString());
                 }
                 else
                 {

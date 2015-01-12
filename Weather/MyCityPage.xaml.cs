@@ -167,16 +167,17 @@ namespace Weather.App
             myCityPage.MyCityPageModels = null;
             myCityPageModelList = null;
             myCityPageModelList = new List<ViewModel.MyCityPageModel>();
-            //如果有网络
-            if (NetHelper.IsNetworkAvailable())
+            //遍历常用城市
+            foreach (var item in userCityRespose.UserCities)
             {
-                //遍历常用城市
-                foreach (var item in userCityRespose.UserCities)
+                MyCityPageModel model = null;
+                //如果有网络
+                if (NetHelper.IsNetworkAvailable())
                 {
                     //不使用wifi更新
                     if (userRespose.UserConfig.IsWifiUpdate == 0)
                     {
-                        MyCityPageModel model = null;
+
                         //更新所有常用城市
                         if (userRespose.UserConfig.IsUpdateForCity == 0)
                         {
@@ -234,7 +235,6 @@ namespace Weather.App
                     {
                         if (NetHelper.IsWifiConnection())
                         {
-                            MyCityPageModel model = null;
                             //更新所有常用城市
                             if (userRespose.UserConfig.IsUpdateForCity == 0)
                             {
@@ -290,17 +290,19 @@ namespace Weather.App
                         }
                         else
                         {
-                            MyCityPageModel model = GetWeatherByNo(item);
+                            model = GetWeatherByNo(item);
                             myCityPageModelList.Add(model);
                             NotifyUser("Wifi未启动");
                         }
                     }
                 }
+                else
+                {
+                    model = GetWeatherByNo(item);
+                    myCityPageModelList.Add(model);
+                    NotifyUser("请开启网络，以更新最新天气数据");
+                }
                 myCityPage.MyCityPageModels = myCityPageModelList.ToList();
-            }
-            else
-            {
-                NotifyUser("请开启网络，以更新最新天气数据");
             }
             LayoutRoot.DataContext = null;
             LayoutRoot.DataContext = myCityPage;
@@ -470,6 +472,7 @@ namespace Weather.App
 
         private async void RemoveCity_Click(object sender, RoutedEventArgs e)
         {
+
             MenuFlyoutItem selectedItem = sender as MenuFlyoutItem;
             if (selectedItem != null)
             {
@@ -508,31 +511,39 @@ namespace Weather.App
 
         private async void DesTopTile_Click(object sender, RoutedEventArgs e)
         {
-            MenuFlyoutItem selectedItem = sender as MenuFlyoutItem;
-            if (selectedItem != null)
+            //如果有网络
+            if (NetHelper.IsNetworkAvailable())
             {
-                int cityId = int.Parse(selectedItem.CommandParameter.ToString());
-
-                string tileId = selectedItem.CommandParameter.ToString() + "_Weather";
-
-                Model.UserCity userCity = (from u in userCityRespose.UserCities
-                                           where u.CityId == cityId
-                                           select u).FirstOrDefault();
-
-                string displayName = userCity.CityName;
-
-                IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, userCity.CityName);
-                GetWeatherRespose respose = await weatherService.GetWeatherAsync(request);
-                if (!Utils.SecondaryTileHelper.IsExists(tileId))
+                MenuFlyoutItem selectedItem = sender as MenuFlyoutItem;
+                if (selectedItem != null)
                 {
-                    await Utils.SecondaryTileHelper.CreateSecondaryTileAsync(tileId, displayName, cityId.ToString());
-                    UpdateSecondaryTile(tileId, respose);
+                    int cityId = int.Parse(selectedItem.CommandParameter.ToString());
+
+                    string tileId = selectedItem.CommandParameter.ToString() + "_Weather";
+
+                    Model.UserCity userCity = (from u in userCityRespose.UserCities
+                                               where u.CityId == cityId
+                                               select u).FirstOrDefault();
+
+                    string displayName = userCity.CityName;
+
+                    IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, userCity.CityName);
+                    GetWeatherRespose respose = await weatherService.GetWeatherAsync(request);
+                    if (!Utils.SecondaryTileHelper.IsExists(tileId))
+                    {
+                        await Utils.SecondaryTileHelper.CreateSecondaryTileAsync(tileId, displayName, cityId.ToString());
+                        UpdateSecondaryTile(tileId, respose);
+                    }
+                    else
+                    {
+                        NotifyUser("该城市磁贴已固定在桌面");
+                        UpdateSecondaryTile(tileId, respose);
+                    }
                 }
-                else
-                {
-                    NotifyUser("该城市磁贴已固定在桌面");
-                    UpdateSecondaryTile(tileId, respose);
-                }
+            }
+            else
+            {
+                NotifyUser("该功能需要网络连接");
             }
         }
 
@@ -704,9 +715,5 @@ namespace Weather.App
         }
 
         #endregion
-
-
-
-
     }
 }
