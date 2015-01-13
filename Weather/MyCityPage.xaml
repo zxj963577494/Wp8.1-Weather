@@ -32,7 +32,7 @@
     <Grid x:Name="LayoutRoot">
 
         <Grid.Background>
-            <ImageBrush Stretch="None" ImageSource="Images/Other/gaosi.jpg"/>
+            <ImageBrush Stretch="UniformToFill" ImageSource="Images/Other/gaosi.jpg"/>
         </Grid.Background>
         <Grid.ChildrenTransitions>
             <TransitionCollection>

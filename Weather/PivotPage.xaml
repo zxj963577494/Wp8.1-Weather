@@ -8,17 +8,18 @@
 	xmlns:data="using:Weather.Data"
 	mc:Ignorable="d"
 	>
-	<Page.Transitions>
-		<TransitionCollection>
-			<NavigationThemeTransition>
-				<NavigationThemeTransition.DefaultNavigationTransitionInfo>
-					<CommonNavigationTransitionInfo IsStaggeringEnabled="True"/>
-				</NavigationThemeTransition.DefaultNavigationTransitionInfo>
-			</NavigationThemeTransition>
-		</TransitionCollection>
-	</Page.Transitions>
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                    <CommonNavigationTransitionInfo IsStaggeringEnabled="True"/>
+                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+            </NavigationThemeTransition>
+            <PaneThemeTransition Edge="Right" />
+        </TransitionCollection>
+    </Page.Transitions>
 
-	<Grid  x:Name="LayoutRoot">
+    <Grid  x:Name="LayoutRoot">
 
 		<Popup x:Name="popup" >
 			<Border x:Name="StatusBorder" >
@@ -28,7 +29,7 @@
 		<ProgressBar IsIndeterminate="True" x:Name="progressBar" Height="10" VerticalAlignment="Center" Visibility="Collapsed" HorizontalAlignment="Center"/>
 		<Pivot  x:Name="pivot" CommonNavigationTransitionInfo.IsStaggerElement="True" >
 			<Pivot.Background>
-				<ImageBrush Stretch="None" ImageSource="{Binding WeatherType.BackgroundPic}"/>
+                <ImageBrush Stretch="UniformToFill" ImageSource="{Binding WeatherType.BackgroundPic}"/>
 			</Pivot.Background>
 			<!--今日天气-->
 			<PivotItem Header="今日天气"
