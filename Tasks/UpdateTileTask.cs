@@ -41,48 +41,85 @@ namespace Weather.Tasks
         public async void Run(IBackgroundTaskInstance taskInstance)
         {
             BackgroundTaskDeferral _deferral = taskInstance.GetDeferral();
-
-            //天气类型
-            weatherTypeRespose = await weatherService.GetWeatherTypeAsync();
-
-            //默认城市
-            var defaultCity = await GetDefaultCity();
-
-            if (defaultCity != null)
+            //用户配置
+            userRespose = await userService.GetUserAsync();
+            bool IsAutoUpdateTime = false;
+            //是否处于停止更新时间
+            if (userRespose.UserConfig.IsAutoUpdateTimeSpan==1)
             {
-                //用户配置
-                userRespose = await userService.GetUserAsync();
-                if (userRespose.UserConfig.IsAutoUpdateForCity == 1)
+                IsAutoUpdateTime = IsAutoUpdateByTime();
+            }
+            if (!IsAutoUpdateTime)
+            {
+                //天气类型
+                weatherTypeRespose = await weatherService.GetWeatherTypeAsync();
+
+                //默认城市
+                var defaultCity = await GetDefaultCity();
+
+                if (defaultCity != null)
                 {
-                    //有网络
-                    if (NetHelper.IsNetworkAvailable())
+                    if (userRespose.UserConfig.IsAutoUpdateForCity == 1)
                     {
-                        //无论使用移动数据还是WIFI都允许自动更新
-                        if (userRespose.UserConfig.IsWifiAutoUpdate == 0)
+                        //有网络
+                        if (NetHelper.IsNetworkAvailable())
                         {
-                            await SetWeatherByNetTask(defaultCity);
-                        }
-                        else //使用WIFI更新
-                        {
-                            if (NetHelper.IsWifiConnection())
+                            //无论使用移动数据还是WIFI都允许自动更新
+                            if (userRespose.UserConfig.IsWifiAutoUpdate == 0)
                             {
                                 await SetWeatherByNetTask(defaultCity);
                             }
-                            else
+                            else //使用WIFI更新
                             {
-                                await GetWeatherByClientTask(defaultCity);
+                                if (NetHelper.IsWifiConnection())
+                                {
+                                    await SetWeatherByNetTask(defaultCity);
+                                }
+                                else
+                                {
+                                    await GetWeatherByClientTask(defaultCity);
+                                }
                             }
                         }
-                    }
-                    else
-                    {
-                        await GetWeatherByClientTask(defaultCity);
+                        else
+                        {
+                            await GetWeatherByClientTask(defaultCity);
+                        }
                     }
                 }
             }
             //表示完成任务
             _deferral.Complete();
         }
+
+        #region 判断是否出于停止更新时间
+
+        /// <summary>
+        /// 判断是否出于停止更新时间
+        /// </summary>
+        /// <returns></returns>
+        private bool IsAutoUpdateByTime()
+        {
+            bool isTrue = true;
+            DateTime dateStartTime = DateTime.Parse(userRespose.UserConfig.StopAutoUpdateStartTime);
+            DateTime dateEndTime = DateTime.Parse(userRespose.UserConfig.StopAutoUpdateEndTime);
+
+            TimeSpan tsStartTime = dateStartTime.TimeOfDay;
+            TimeSpan tsEndTime = dateEndTime.TimeOfDay;
+            //判断当前时间是否在工作时间段内
+            TimeSpan tsNow = DateTime.Now.TimeOfDay;
+            if (tsNow > tsStartTime && tsNow < tsEndTime)
+            {
+                isTrue = true;
+            }
+            else
+            {
+                isTrue = false;
+            }
+
+            return isTrue;
+        } 
+        #endregion
 
         #region 获取默认城市
 

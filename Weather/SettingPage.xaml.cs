@@ -137,6 +137,7 @@ namespace Weather.App
             switchesRespose = settingService.GetSettingSwitches();
             autoUpdateTimeRepose = settingService.GetSettingAutoUpdateTime();
             userRespose = await userService.GetUserAsync();
+
             ViewModel.AutoUpdateSettingPage autoUpdateSettingPage = new ViewModel.AutoUpdateSettingPage()
             {
                 Switches = switchesRespose.Switches,
@@ -151,6 +152,7 @@ namespace Weather.App
                 AutoUpdateSettingPage = autoUpdateSettingPage,
                 GeneralSettingPage = generalSettingPage,
                 UserConfig = userRespose.UserConfig
+
             };
             LayoutRoot.DataContext = settingPage;
         }
@@ -258,6 +260,38 @@ namespace Weather.App
             await userService.SaveUser(userRespose);
         }
 
+        /// <summary>
+        /// 停止自动更新开始时间
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void tpStart_TimeChanged(object sender, TimePickerValueChangedEventArgs e)
+        {
+            userRespose.UserConfig.StopAutoUpdateStartTime = tpStart.Time.ToString();
+            await userService.SaveUser(userRespose);
+        }
+
+        /// <summary>
+        /// 停止自动更新结束时间
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void tpEnd_TimeChanged(object sender, TimePickerValueChangedEventArgs e)
+        {
+            userRespose.UserConfig.StopAutoUpdateEndTime = tpEnd.Time.ToString();
+            await userService.SaveUser(userRespose);
+        }
+
+        /// <summary>
+        /// 是否开启停止自动更新时间段
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void cbbAutoUpdateTimeSpan_DropDownClosed(object sender, object e)
+        {
+            userRespose.UserConfig.IsAutoUpdateTimeSpan = int.Parse(cbbAutoUpdateTimeSpan.SelectedValue.ToString());
+            await userService.SaveUser(userRespose);
+        }
 
     }
 }

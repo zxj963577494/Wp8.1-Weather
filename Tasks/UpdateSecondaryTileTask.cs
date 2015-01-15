@@ -36,39 +36,79 @@ namespace Weather.Tasks
 
             userRespose = await userService.GetUserAsync();
 
-            userCityRespose = await userService.GetUserCityAsync();
+            bool IsAutoUpdateTime = false;
 
-            if (userCityRespose != null && userRespose != null)
+            //是否处于停止更新时间
+            if (userRespose.UserConfig.IsAutoUpdateTimeSpan == 1)
             {
-                //网络是否开启
-                if (NetHelper.IsNetworkAvailable())
+                IsAutoUpdateTime = IsAutoUpdateByTime();
+            }
+
+            if (!IsAutoUpdateTime)
+            {
+                userCityRespose = await userService.GetUserCityAsync();
+
+                if (userCityRespose != null && userRespose != null)
                 {
-                    //无论使用移动数据还是WIFI都允许自动更新
-                    if (userRespose.UserConfig.IsWifiAutoUpdate == 0)
+                    //网络是否开启
+                    if (NetHelper.IsNetworkAvailable())
                     {
-                        await UpdateWeather();
-                    }
-                    else
-                    {
-                        if (NetHelper.IsWifiConnection())
+                        //无论使用移动数据还是WIFI都允许自动更新
+                        if (userRespose.UserConfig.IsWifiAutoUpdate == 0)
                         {
                             await UpdateWeather();
                         }
                         else
                         {
-                            await UpdateWeatherByClientTask();
+                            if (NetHelper.IsWifiConnection())
+                            {
+                                await UpdateWeather();
+                            }
+                            else
+                            {
+                                await UpdateWeatherByClientTask();
+                            }
                         }
                     }
-                }
-                else
-                {
-                    await UpdateWeatherByClientTask();
+                    else
+                    {
+                        await UpdateWeatherByClientTask();
+                    }
                 }
             }
-
             //表示完成任务
             _deferral.Complete();
         }
+
+
+        #region 判断是否出于停止更新时间
+
+        /// <summary>
+        /// 判断是否出于停止更新时间
+        /// </summary>
+        /// <returns></returns>
+        private bool IsAutoUpdateByTime()
+        {
+            bool isTrue = true;
+            DateTime dateStartTime = DateTime.Parse(userRespose.UserConfig.StopAutoUpdateStartTime);
+            DateTime dateEndTime = DateTime.Parse(userRespose.UserConfig.StopAutoUpdateEndTime);
+
+            TimeSpan tsStartTime = dateStartTime.TimeOfDay;
+            TimeSpan tsEndTime = dateEndTime.TimeOfDay;
+            //判断当前时间是否在工作时间段内
+            TimeSpan tsNow = DateTime.Now.TimeOfDay;
+            if (tsNow > tsStartTime && tsNow < tsEndTime)
+            {
+                isTrue = true;
+            }
+            else
+            {
+                isTrue = false;
+            }
+
+            return isTrue;
+        }
+        #endregion
 
         /// <summary>
         /// 更新天气

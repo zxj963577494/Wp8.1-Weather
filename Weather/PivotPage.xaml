@@ -8,28 +8,31 @@
 	xmlns:data="using:Weather.Data"
 	mc:Ignorable="d"
 	>
-    <Page.Transitions>
-        <TransitionCollection>
-            <NavigationThemeTransition>
-                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
-                    <CommonNavigationTransitionInfo IsStaggeringEnabled="True"/>
-                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
-            </NavigationThemeTransition>
-            <PaneThemeTransition Edge="Right" />
-        </TransitionCollection>
-    </Page.Transitions>
+	<Page.Transitions>
+		<TransitionCollection>
+			<NavigationThemeTransition>
+				<NavigationThemeTransition.DefaultNavigationTransitionInfo>
+					<CommonNavigationTransitionInfo IsStaggeringEnabled="True"/>
+				</NavigationThemeTransition.DefaultNavigationTransitionInfo>
+			</NavigationThemeTransition>
+			<PaneThemeTransition Edge="Right" />
+		</TransitionCollection>
+	</Page.Transitions>
 
-    <Grid  x:Name="LayoutRoot">
+	<Grid  x:Name="LayoutRoot">
 
 		<Popup x:Name="popup" >
 			<Border x:Name="StatusBorder" >
 				<TextBlock x:Name="StatusBlock" Foreground="White" FontSize="20"  Margin="15, 10, 15, 10" TextWrapping="Wrap"/>
 			</Border>
 		</Popup>
-		<ProgressBar IsIndeterminate="True" x:Name="progressBar" Height="10" VerticalAlignment="Center" Visibility="Collapsed" HorizontalAlignment="Center"/>
+		<Popup x:Name="popupProgressBar" VerticalAlignment="Center" HorizontalAlignment="Center"  Width="200">
+			<ProgressBar IsIndeterminate="True" x:Name="progressBar"  Height="10" Foreground="White" Width="200"   Margin="0,-200,0,0"
+Value="200" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+		</Popup>
 		<Pivot  x:Name="pivot" CommonNavigationTransitionInfo.IsStaggerElement="True" >
 			<Pivot.Background>
-                <ImageBrush Stretch="UniformToFill" ImageSource="{Binding WeatherType.BackgroundPic}"/>
+				<ImageBrush Stretch="UniformToFill" ImageSource="{Binding WeatherType.BackgroundPic}"/>
 			</Pivot.Background>
 			<!--今日天气-->
 			<PivotItem Header="今日天气"
@@ -192,36 +195,36 @@ CommonNavigationTransitionInfo.IsStaggerElement="True">
 			<PivotItem Header="未来天气"
 				Margin="0,14.5,0,0"
 				>
-                <Grid Margin="0,0,10,0">
-                    <ListView
+				<Grid Margin="0,0,10,0">
+					<ListView
 					ItemsSource="{Binding Futures}" ScrollViewer.VerticalScrollBarVisibility="Hidden" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid HorizontalAlignment="Stretch" >
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="0.5*"/>
-                                        <ColumnDefinition Width="1.5*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="{Binding week}" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,40"/>
-                                    <Image Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Source="{Binding weather_id.fa}" Stretch="None"  Margin="0,0,0,40"/>
-                                    <TextBlock Grid.Column="2" Text="{Binding weather}" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0,0,0,40"/>
-                                    <TextBlock Grid.Column="3" Text="{Binding temperature}" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0,0,0,40"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                    </ListView>
-                </Grid>
-            </PivotItem>
+						<ListView.ItemTemplate>
+							<DataTemplate>
+								<Grid HorizontalAlignment="Stretch" >
+									<Grid.RowDefinitions>
+										<RowDefinition Height="Auto"/>
+									</Grid.RowDefinitions>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="*"/>
+										<ColumnDefinition Width="0.5*"/>
+										<ColumnDefinition Width="1.5*"/>
+										<ColumnDefinition Width="*"/>
+									</Grid.ColumnDefinitions>
+									<TextBlock Grid.Column="0" Text="{Binding week}" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,40"/>
+									<Image Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Source="{Binding weather_id.fa}" Stretch="None"  Margin="0,0,0,40"/>
+									<TextBlock Grid.Column="2" Text="{Binding weather}" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0,0,0,40"/>
+									<TextBlock Grid.Column="3" Text="{Binding temperature}" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0,0,0,40"/>
+								</Grid>
+							</DataTemplate>
+						</ListView.ItemTemplate>
+						<ListView.ItemContainerStyle>
+							<Style TargetType="ListViewItem">
+								<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+							</Style>
+						</ListView.ItemContainerStyle>
+					</ListView>
+				</Grid>
+			</PivotItem>
 		</Pivot>
 	</Grid>
 	<Page.BottomAppBar>

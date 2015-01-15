@@ -163,7 +163,8 @@ namespace Weather.App
         #region 获取天气数据
         private async Task GetWeather(int isRefresh)
         {
-            progressBar.Visibility = Visibility.Visible;
+            popupProgressBar.IsOpen = true;
+           // progressBar.Visibility = Visibility.Visible;
             myCityPage.MyCityPageModels = null;
             myCityPageModelList = null;
             myCityPageModelList = new List<ViewModel.MyCityPageModel>();
@@ -306,7 +307,8 @@ namespace Weather.App
             }
             LayoutRoot.DataContext = null;
             LayoutRoot.DataContext = myCityPage;
-            progressBar.Visibility = Visibility.Collapsed;
+            popupProgressBar.IsOpen = false;
+            //progressBar.Visibility = Visibility.Collapsed;
         }
 
         /// <summary>

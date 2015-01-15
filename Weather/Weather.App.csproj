@@ -97,6 +97,7 @@
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\StyleSelector.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="Convert\TimePickerToTimeSpanConverter.cs" />
     <Compile Include="Instruction.xaml.cs">
       <DependentUpon>Instruction.xaml</DependentUpon>
     </Compile>
@@ -162,28 +163,18 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Package.StoreAssociation.xml" />
-    <Content Include="Images\Background\00.scale-120.jpg" />
     <Content Include="Images\Background\00.jpg" />
-    <Content Include="Images\Background\01.scale-120.jpg" />
     <Content Include="Images\Background\01.jpg" />
-    <Content Include="Images\Background\02.scale-120.jpg" />
     <Content Include="Images\Background\02.jpg" />
-    <Content Include="Images\Background\03.scale-120.jpg" />
     <Content Include="Images\Background\03.jpg" />
     <Content Include="Images\Background\04.jpg" />
-    <Content Include="Images\Background\06.scale-120.jpg" />
     <Content Include="Images\Background\06.jpg" />
-    <Content Include="Images\Background\08.scale-120.jpg" />
     <Content Include="Images\Background\08.jpg" />
-    <Content Include="Images\Background\09.scale-120.jpg" />
     <Content Include="Images\Background\09.jpg" />
-    <Content Include="Images\Background\10.scale-120.jpg" />
     <Content Include="Images\Background\10.jpg" />
     <Content Include="Images\Background\11.jpg" />
     <Content Include="Images\Background\12.jpg" />
-    <Content Include="Images\Background\13.scale-120.jpg" />
     <Content Include="Images\Background\13.jpg" />
-    <Content Include="Images\Background\14.scale-120.jpg" />
     <Content Include="Images\Background\14.jpg" />
     <Content Include="Images\Index\chenlian.png" />
     <Content Include="Images\Index\chuanyi.png" />

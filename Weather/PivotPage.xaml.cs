@@ -179,8 +179,8 @@ namespace Weather.App
         /// <param name="cityId"></param>
         private async void GetWeather(string cityId, int isRefresh)
         {
-            progressBar.Visibility = Visibility.Visible;
-
+            popupProgressBar.IsOpen = true;
+            //progressBar.Visibility = Visibility.Visible;
 
             Model.UserCity userCity = string.IsNullOrEmpty(cityId) ? userCityRespose.UserCities.FirstOrDefault(x => x.IsDefault == 1) : userCityRespose.UserCities.FirstOrDefault(x => x.CityId == int.Parse(cityId));
 
@@ -216,7 +216,9 @@ namespace Weather.App
             {
                
                 ViewModel.HomePageModel homePageModel = new ViewModel.HomePageModel();
+
                 homePageModel.WeatherType = weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa);
+
                 weatherRespose.result.sk.temp = weatherRespose.result.sk.temp + "°";
                 weatherRespose.result.sk.time = weatherRespose.result.sk.time + "发布";
                 homePageModel.Sk = weatherRespose.result.sk;
@@ -240,7 +242,9 @@ namespace Weather.App
             {
                 NotifyUser("请开启网络，以更新最新天气数据");
             }
-            progressBar.Visibility = Visibility.Collapsed;
+
+            popupProgressBar.IsOpen = false;
+            //progressBar.Visibility = Visibility.Collapsed;
         }
 
 

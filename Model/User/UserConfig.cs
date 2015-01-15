@@ -37,6 +37,21 @@ namespace Weather.Model
         public int IsAutoUpdateForCities { get; set; }
 
         /// <summary>
+        /// 是否开启停止自动更新时间段
+        /// </summary>
+        public int IsAutoUpdateTimeSpan { get; set; }
+
+        /// <summary>
+        /// 停止自动更新开始时间
+        /// </summary>
+        public string StopAutoUpdateStartTime { get; set; }
+
+        /// <summary>
+        /// 停止自动更新结束时间
+        /// </summary>
+        public string StopAutoUpdateEndTime { get; set; }
+
+        /// <summary>
         /// 使用Wifi自动更新
         /// </summary>
         public int IsWifiAutoUpdate { get; set; }
