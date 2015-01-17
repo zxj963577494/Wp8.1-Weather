@@ -75,7 +75,6 @@ Value="200" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <AppBarButton x:Name="abbAdd" Label="添加城市" Icon="Add" Click="abbAdd_Click" />
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Uid="SettingCommandBar" x:Name="SettingCommandBar" Click="SettingCommandBar_Click" Label="设置" />
-                <AppBarButton x:Uid="AboutCommandBar" x:Name="AboutCommandBar" Click="AboutCommandBar_Click" Label="关于" />
                 <AppBarButton x:Uid="AboutCommandBar" x:Name="InstructionCommandBar" Click="InstructionCommandBar_Click" Label="使用说明" />
                 <AppBarButton x:Uid="AboutCommandBar" x:Name="EvaluateCommandBar" Click="EvaluateCommandBar_Click" Label="给评价" />
             </CommandBar.SecondaryCommands>

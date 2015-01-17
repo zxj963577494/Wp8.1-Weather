@@ -658,11 +658,6 @@ namespace Weather.App
             Frame.Navigate(typeof(SettingPage));
         }
 
-        private void AboutCommandBar_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(About));
-        }
-
         private void InstructionCommandBar_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(Instruction));

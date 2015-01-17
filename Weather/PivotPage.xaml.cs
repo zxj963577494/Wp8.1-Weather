@@ -149,7 +149,7 @@ namespace Weather.App
             {
                 userRespose = await userService.GetUserAsync();
                 weatherTypeRespose = await weatherService.GetWeatherTypeAsync();
-                GetWeather(cityId, 0);
+                await GetWeather(cityId, 0);
             }
 
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;
@@ -177,7 +177,7 @@ namespace Weather.App
         /// 获取天气数据
         /// </summary>
         /// <param name="cityId"></param>
-        private async void GetWeather(string cityId, int isRefresh)
+        private async Task GetWeather(string cityId, int isRefresh)
         {
             popupProgressBar.IsOpen = true;
             //progressBar.Visibility = Visibility.Visible;
@@ -214,7 +214,7 @@ namespace Weather.App
 
             if (weatherRespose != null)
             {
-               
+
                 ViewModel.HomePageModel homePageModel = new ViewModel.HomePageModel();
 
                 homePageModel.WeatherType = weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa);
@@ -225,6 +225,10 @@ namespace Weather.App
                 homePageModel.Today = weatherRespose.result.today;
 
                 var fiture = weatherRespose.result.future.Find(x => x.date == DateTime.Now.ToString("yyyyMMdd"));
+                if (fiture == null)
+                {
+                    return;
+                }
                 int i;
                 if (int.TryParse(fiture.weather_id.fa, out i))
                 {
@@ -308,9 +312,9 @@ namespace Weather.App
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void abbRefresh_Click(object sender, RoutedEventArgs e)
+        private async void abbRefresh_Click(object sender, RoutedEventArgs e)
         {
-            GetWeather(cityId, 1);
+            await GetWeather(cityId, 1);
         }
 
         /// <summary>
@@ -336,10 +340,6 @@ namespace Weather.App
             Frame.Navigate(typeof(SettingPage));
         }
 
-        private void AboutCommandBar_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(About));
-        }
 
         private void InstructionCommandBar_Click(object sender, RoutedEventArgs e)
         {
@@ -532,7 +532,7 @@ namespace Weather.App
                + "<text id='6'>" + future.week + "</text>"
                + "</binding>"
                + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-               + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == future.weather_id.fa).TileSquarePic + "'/>"
+               + "<image id='1' src='ms-appx:///" + future.weather_id.fa.Replace("Tomorrow", "TileSquare") + "'/>"
                + "<text id='1'>" + cityName + "</text>"
                + "<text id='2'>" + future.temperature + "</text>"
                + "<text id='3'>" + future.weather + "</text>"
