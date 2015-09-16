@@ -597,7 +597,7 @@ namespace Weather.App
                + "<text id='1'>" + weatherRespose.result.FirstOrDefault().basic.city + "</text>"
                + "<text id='2'>" + weatherRespose.result.FirstOrDefault().now.tmp + "°</text>"
                + "<text id='3'>" + weatherRespose.result.FirstOrDefault().now.cond.txt + "</text>"
-               + "<text id='4'>" + weatherRespose.result.FirstOrDefault().now.wind.dir + " " + weatherRespose.result.FirstOrDefault().now.wind.sc + " 级</text>"
+               + "<text id='4'>" + weatherRespose.result.FirstOrDefault().now.wind.dir + " " + weatherRespose.result.FirstOrDefault().now.wind.sc + "</text>"
                + "</binding>"
                + "</visual>"
                + "</tile>";

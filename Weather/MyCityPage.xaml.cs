@@ -693,7 +693,7 @@ namespace Weather.App
                 + "<text id='1'>" + cityName + "</text>"
                 + "<text id='2'>" + daily_forecast.tmp.min + "°~" + daily_forecast.tmp.max + "</text>"
                 + "<text id='3'>" + (daily_forecast.cond.code_d == daily_forecast.cond.code_n ? daily_forecast.cond.txt_d : daily_forecast.cond.txt_d + "转" + daily_forecast.cond.txt_n) + "</text>"
-                + "<text id='4'>" + daily_forecast.wind.dir + " " + daily_forecast.wind.sc + " 级</text>"
+                + "<text id='4'>" + daily_forecast.wind.dir + " " + daily_forecast.wind.sc + "</text>"
                 + "</binding>"
                 + "</visual>"
                 + "</tile>";

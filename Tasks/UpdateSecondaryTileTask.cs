@@ -211,7 +211,7 @@ namespace Weather.Tasks
                + "<text id='1'>" + respose.result.FirstOrDefault().basic.city + "</text>"
                + "<text id='2'>" + respose.result.FirstOrDefault().now.tmp + "°</text>"
                + "<text id='3'>" + respose.result.FirstOrDefault().now.cond.txt + "</text>"
-               + "<text id='4'>" + respose.result.FirstOrDefault().now.wind.dir + " " + respose.result.FirstOrDefault().now.wind.sc + "级</text>"
+               + "<text id='4'>" + respose.result.FirstOrDefault().now.wind.dir + " " + respose.result.FirstOrDefault().now.wind.sc + "</text>"
                + "</binding>"
                + "</visual>"
                + "</tile>";
@@ -309,7 +309,7 @@ namespace Weather.Tasks
                + "<text id='1'>" + cityName + "</text>"
                + "<text id='2'>" + daily_forecast.tmp.min + "°~" + daily_forecast.tmp.max + "</text>"
                + "<text id='3'>" + (daily_forecast.cond.code_d == daily_forecast.cond.code_n ? daily_forecast.cond.txt_d : daily_forecast.cond.txt_d + "转" + daily_forecast.cond.txt_n) + "</text>"
-               + "<text id='4'>" + daily_forecast.wind.dir + " " + daily_forecast.wind.sc + " 级</text>"
+               + "<text id='4'>" + daily_forecast.wind.dir + " " + daily_forecast.wind.sc + "</text>"
                + "</binding>"
                + "</visual>"
                + "</tile>";
