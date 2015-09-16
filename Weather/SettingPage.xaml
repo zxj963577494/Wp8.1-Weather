@@ -69,14 +69,8 @@ CommonNavigationTransitionInfo.IsStaggerElement="True">
 					</ComboBox>
 					<ComboBox  Grid.Row="3" Header="自动更新频率" x:Name="cbbAutoUpdateTime" ItemsSource="{Binding AutoUpdateSettingPage.AutoUpdateTimes}" SelectedValuePath="Id"  DisplayMemberPath="Content" SelectedValue="{Binding UserConfig.AutoUpdateTime}" DropDownClosed="cbbAutoUpdateTime_DropDownClosed">
 					</ComboBox>
-                    <ComboBox  Grid.Row="4" Header="是否开启停止自动更新时间段" x:Name="cbbAutoUpdateTimeSpan" ItemsSource="{Binding AutoUpdateSettingPage.Switches}" SelectedValuePath="Id"  DisplayMemberPath="Content" SelectedValue="{Binding UserConfig.IsAutoUpdateTimeSpan}" DropDownClosed="cbbAutoUpdateTimeSpan_DropDownClosed">
-                    </ComboBox>
-                    <TimePicker Time="{Binding UserConfig.StopAutoUpdateStartTime,Converter={StaticResource TimePickerToTimeSpanConverter}}" Header="停止自动更新开始时间" Grid.Row="5" x:Name="tpStart" TimeChanged="tpStart_TimeChanged"  />
-
-                    <TimePicker Time="{Binding UserConfig.StopAutoUpdateEndTime,Converter={StaticResource TimePickerToTimeSpanConverter}}" Header="停止自动更新结束时间" Grid.Row="6"  x:Name="tpEnd" TimeChanged="tpEnd_TimeChanged"  />
 				</Grid>
 			</PivotItem>
-
 			<PivotItem
 				Margin="0,10,0,-9.778"
 				Header="锁屏设置"

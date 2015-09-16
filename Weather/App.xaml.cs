@@ -178,7 +178,7 @@ namespace Weather.App
             bool x = await FileHelper.IsExistFileAsync("User\\UserConfig.json");
             if (!x)
             {
-                string strUserConfig = @"{'UserConfig':{'IsWifiUpdate':'0','IsUpdateForCity':'1','IsAutoUpdateForCities':'0','IsWifiAutoUpdate':'1','AutoUpdateTime':'1','IsAutoUpdateForCity':'1','IsTileSquarePic':'0','IsAutoUpdateTimeSpan':'0','StopAutoUpdateStartTime':'20:00:00','StopAutoUpdateEndTime':'06:00:00'}}";
+                string strUserConfig = @"{'UserConfig':{'IsWifiUpdate':'0','IsUpdateForCity':'1','IsAutoUpdateForCities':'0','IsWifiAutoUpdate':'0','AutoUpdateTime':'2','IsAutoUpdateForCity':'1','IsTileSquarePic':'0','IsAutoUpdateTimeSpan':'0','StopAutoUpdateStartTime':'20:00:00','StopAutoUpdateEndTime':'06:00:00'}}";
                 await FileHelper.CreateAndWriteFileAsync("User\\UserConfig.json", strUserConfig);
 
                 await FileHelper.CreateFileAsync("User\\UserCities.json");

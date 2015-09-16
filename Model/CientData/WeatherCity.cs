@@ -14,7 +14,7 @@ namespace Weather.Model
         /// <summary>
         /// ID
         /// </summary>
-        public int Id { get; set; }
+        public string ID { get; set; }
 
         /// <summary>
         /// 省份
@@ -27,8 +27,13 @@ namespace Weather.Model
         public string City { get; set; }
 
         /// <summary>
-        /// 区县
+        /// 区县（中文）
         /// </summary>
-        public string District { get; set; }
+        public string DistrictZH { get; set; }
+
+        /// <summary>
+        /// 区县（英文文）
+        /// </summary>
+        public string DistrictEN { get; set; }
     }
 }

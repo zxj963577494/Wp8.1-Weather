@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Weather.Utils
@@ -47,10 +48,29 @@ namespace Weather.Utils
         /// </summary>
         /// <param name="cityId"></param>
         /// <returns></returns>
-        public static string GetTodayFilePath(int cityId)
+        public static string GetTodayFilePath(string cityId)
         {
             string filePath = "Temp\\" + cityId + "_" + StringHelper.GetTodayDateString() + ".json";
             return filePath;
         }
+
+        /// <summary>
+        /// 是否是英文
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static bool IsEN(string str)
+        {
+            Regex regEnglish = new Regex("^[a-zA-Z]");
+            if (regEnglish.IsMatch(str))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
     }
 }

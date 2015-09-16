@@ -155,14 +155,14 @@ namespace Weather.Tasks
         /// <returns></returns>
         private async Task UpdateCity(Model.UserCity userCity)
         {
-            string realResposeString = await GetRealResposeString(userCity.CityName);
-            GetWeatherRespose respose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(realResposeString);
+            string resposeString = await GetRealResposeString(userCity.CityId);
+            GetWeatherRespose respose = Weather.Utils.JsonSerializeHelper.JsonDeserialize<GetWeatherRespose>(resposeString);
             string tileId = userCity.CityId + "_Weather";
             if (SecondaryTileHelper.IsExists(tileId))
             {
                 UpdateSecondaryTile(respose, tileId);
             }
-            await CreateFile(userCity.CityId, realResposeString);
+            await CreateFile(userCity.CityId, resposeString);
         }
 
         /// <summary>
@@ -170,13 +170,12 @@ namespace Weather.Tasks
         /// </summary>
         /// <param name="cityName"></param>
         /// <returns></returns>
-        private static async Task<String> GetRealResposeString(string cityName)
+        private static async Task<String> GetRealResposeString(string cityId)
         {
-            IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, cityName);
+            IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.CityId, cityId);
             string requestUrl = request.GetRequestUrl();
             string resposeString = await Weather.Utils.HttpHelper.GetUrlResposeAsnyc(requestUrl);
-            string realResposeString = HttpHelper.ResposeStringReplace(resposeString);
-            return realResposeString;
+            return resposeString.Replace("HeWeather data service 3.0", "result"); ;
         }
 
         /// <summary>
@@ -185,7 +184,7 @@ namespace Weather.Tasks
         /// <param name="cityId"></param>
         /// <param name="realResposeString"></param>
         /// <returns></returns>
-        private static async Task<bool> CreateFile(int cityId, string realResposeString)
+        private static async Task<bool> CreateFile(string cityId, string realResposeString)
         {
             string filePath = "Temp\\" + cityId.ToString() + "_" + StringHelper.GetTodayDateString() + ".json";
             return await FileHelper.CreateAndWriteFileAsync(filePath, realResposeString);
@@ -195,27 +194,27 @@ namespace Weather.Tasks
         /// 更新辅助磁贴信息
         /// </summary>
         /// <param name="tileId"></param>
-        private void UpdateSecondaryTile(GetWeatherRespose weatherRespose, string tileId)
+        private void UpdateSecondaryTile(GetWeatherRespose respose, string tileId)
         {
             string tileXmlString = @"<tile>"
               + "<visual version='2'>"
-              + "<binding template='TileWide310x150BlockAndText01' fallback='TileWideBlockAndText01'>"
-              + "<text id='1'>" + weatherRespose.result.sk.temp + "°</text>"
-              + "<text id='2'>" + weatherRespose.result.today.city + "</text>"
-              + "<text id='3'>" + weatherRespose.result.today.temperature + "</text>"
-              + "<text id='4'>" + weatherRespose.result.today.weather + "</text>"
-              + "<text id='5'>" + weatherRespose.result.sk.wind_direction + " " + weatherRespose.result.sk.wind_strength + "</text>"
-              + "<text id='6'>" + weatherRespose.result.today.week + "</text>"
-              + "</binding>"
-              + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-              + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TileSquarePic + "'/>"
-              + "<text id='1'>" + weatherRespose.result.sk.temp + "°</text>"
-              + "<text id='2'>" + weatherRespose.result.today.temperature + "</text>"
-              + "<text id='3'>" + weatherRespose.result.today.weather + "</text>"
-              + "<text id='4'>" + weatherRespose.result.sk.wind_direction + " " + weatherRespose.result.sk.wind_strength + "</text>"
-              + "</binding>"
-              + "</visual>"
-              + "</tile>";
+              + "<binding template='TileWide310x150PeekImage02' fallback='TileWidePeekImage02'>"
+               + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Code == weatherRespose.result.FirstOrDefault().now.cond.code).TileWidePic + "'/>"
+               + "<text id='1'>" + weatherRespose.result.FirstOrDefault().basic.city + "</text>"
+               + "<text id='2'>" + weatherRespose.result.FirstOrDefault().daily_forecast.FirstOrDefault().tmp.min + "°~" + weatherRespose.result.FirstOrDefault().daily_forecast.FirstOrDefault().tmp.max + "° " + weatherRespose.result.FirstOrDefault().now.cond.txt + "</text>"
+               + "<text id='3'>" + weatherRespose.result.FirstOrDefault().now.wind.dir + " " + weatherRespose.result.FirstOrDefault().now.wind.sc + " 级</text>"
+               + "<text id='4'>湿度: " + weatherRespose.result.FirstOrDefault().now.hum + "%</text>"
+               + "<text id='5'>能见度: " + weatherRespose.result.FirstOrDefault().now.vis + "km</text>"
+               + "</binding>"
+               + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
+               + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Code == respose.result.FirstOrDefault().now.cond.code).TileSquarePic + "'/>"
+               + "<text id='1'>" + respose.result.FirstOrDefault().basic.city + "</text>"
+               + "<text id='2'>" + respose.result.FirstOrDefault().now.tmp + "°</text>"
+               + "<text id='3'>" + respose.result.FirstOrDefault().now.cond.txt + "</text>"
+               + "<text id='4'>" + respose.result.FirstOrDefault().now.wind.dir + " " + respose.result.FirstOrDefault().now.wind.sc + "级</text>"
+               + "</binding>"
+               + "</visual>"
+               + "</tile>";
             SecondaryTileHelper.UpdateSecondaryTileNotificationsByXml(tileId, tileXmlString);
         }
 
@@ -275,15 +274,13 @@ namespace Weather.Tasks
 
             GetWeatherRespose respose = await weatherService.GetWeatherByClientAsync(userCity.CityId.ToString());
             string tileId = userCity.CityId + "_Weather";
-            if (respose.result.today.date_y == DateTime.Now.ToString("yyyy年MM月dd日"))
+            if (respose.result.FirstOrDefault().daily_forecast.FirstOrDefault().date == DateTime.Now.ToString("yyyy-MM-dd"))
             {
                 UpdateSecondaryTile(respose, tileId);
             }
             else
             {
-                Model.Future future = respose.result.future.Find(x => x.date == StringHelper.GetTodayDateString());
-                UpdateTileByClientForTomorrow(tileId, future, userCity.CityName);
-
+                UpdateTileByClientForTomorrow(tileId, respose.result.FirstOrDefault().daily_forecast.FirstOrDefault(x => x.date == DateTime.Now.ToString("yyyy-MM-dd")), userCity.CityName);
             }
         }
 
@@ -294,28 +291,30 @@ namespace Weather.Tasks
         /// <param name="cityName"></param>
         /// <param name="getWeatherTypeRespose"></param>
         /// <param name="getUserRespose"></param>
-        private void UpdateTileByClientForTomorrow(string tileId, Model.Future future, string cityName)
+        private void UpdateTileByClientForTomorrow(string tileId, Model.Weather.Daily_forecastItem daily_forecast, string cityName)
         {
-            string tileXmlString = @"<tile>"
+            string tileXmlString = "<tile>"
                + "<visual version='2'>"
-               + "<binding template='TileWide310x150BlockAndText01' fallback='TileWideBlockAndText01'>"
-               + "<text id='1'>暂无</text>"
-               + "<text id='2'>" + cityName + "</text>"
-               + "<text id='3'>" + future.temperature + "</text>"
-               + "<text id='4'>" + future.weather + "</text>"
-               + "<text id='5'>" + future.wind + "</text>"
-               + "<text id='6'>" + future.week + "</text>"
+               + "<binding template='TileWide310x150Text01' fallback='TileWideText01'>"
+               + "<text id='1'>" + cityName + "</text>"
+               + "<text id='2'>" + daily_forecast.tmp.min + "°~" + daily_forecast.tmp.max + "° " + (daily_forecast.cond.code_d == daily_forecast.cond.code_n ? daily_forecast.cond.txt_d : daily_forecast.cond.txt_d + "转" + daily_forecast.cond.txt_n) + "</text>"
+               + "<text id='3'>" + daily_forecast.wind.dir + " " + daily_forecast.wind.sc + " 级</text>"
+               + "<text id='4'>湿度: " + daily_forecast.hum + "%</text>"
+               + "<text id='5'>能见度: " + daily_forecast.vis + "km</text>"
                + "</binding>"
                + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-               + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == future.weather_id.fa).TileSquarePic + "'/>"
+               + "<image id='1' src='ms-appx:///"
+               + ((DateTime.Compare(DateTime.Now.ToLocalTime(), DateTime.Parse(daily_forecast.astro.sr)) > 1 & DateTime.Compare(DateTime.Now.ToLocalTime(), DateTime.Parse(daily_forecast.astro.ss)) < 0) ? weatherTypeRespose.WeatherTypes.Find(x => x.Code == daily_forecast.cond.code_d).TileSquarePic : weatherTypeRespose.WeatherTypes.Find(x => x.Code == daily_forecast.cond.code_n).TileSquarePic)
+               + "'/>"
                + "<text id='1'>" + cityName + "</text>"
-               + "<text id='2'>" + future.temperature + "</text>"
-               + "<text id='3'>" + future.weather + "</text>"
-               + "<text id='4'>" + future.wind + "</text>"
+               + "<text id='2'>" + daily_forecast.tmp.min + "°~" + daily_forecast.tmp.max + "</text>"
+               + "<text id='3'>" + (daily_forecast.cond.code_d == daily_forecast.cond.code_n ? daily_forecast.cond.txt_d : daily_forecast.cond.txt_d + "转" + daily_forecast.cond.txt_n) + "</text>"
+               + "<text id='4'>" + daily_forecast.wind.dir + " " + daily_forecast.wind.sc + " 级</text>"
                + "</binding>"
                + "</visual>"
                + "</tile>";
             SecondaryTileHelper.UpdateSecondaryTileNotificationsByXml(tileId, tileXmlString);
+
         }
 
         #endregion

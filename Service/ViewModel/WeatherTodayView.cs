@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Weather.Model
+namespace Weather.Service.ViewModel
 {
-    /// <summary>
-    /// 今日天气
-    /// </summary>
-    public class Today
+    public class WeatherTodayView
     {
         /// <summary>
         /// 城市 [天津]
@@ -32,14 +29,14 @@ namespace Weather.Model
         public string temperature { get; set; }
 
         /// <summary>
+        /// 天气标识
+        /// </summary>
+        public int weather_id { get; set; }
+
+        /// <summary>
         /// 今日天气 [晴转霾]
         /// </summary>
         public string weather { get; set; }
-
-        /// <summary>
-        /// 天气唯一标识
-        /// </summary>
-        public WeatherId weather_id { get; set; }
 
         /// <summary>
         /// 风向风力 [西南风微风]
@@ -85,15 +82,5 @@ namespace Weather.Model
         /// 干燥指数 [中等]
         /// </summary>
         public string drying_index { get; set; }
-
-
-
-
-
-
-
-
-
-
     }
 }

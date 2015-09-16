@@ -13,21 +13,21 @@ namespace Weather.Service.Message
     {
         private static IGetWeatherRequest getWeatherRequest = null;
 
-        public static IGetWeatherRequest CreateGetWeatherRequest(GetWeatherMode mode,string args)
+        public static IGetWeatherRequest CreateGetWeatherRequest(GetWeatherMode mode, string args)
         {
             switch (mode)
             {
                 case GetWeatherMode.City:
-                    getWeatherRequest = new GetWeatherByCityNameOrIdRequest(args);
+                    getWeatherRequest = new GetWeatherByCityNameRequest(args);
                     break;
-                case GetWeatherMode.Gps:
-                    getWeatherRequest = new GetWeatherByGpsRequest(args.Split(',')[0],args.Split(',')[1]);
+                case GetWeatherMode.CityId:
+                    getWeatherRequest = new GetWeatherByCityIdRequest(args);
                     break;
-                case GetWeatherMode.Ip:
+                case GetWeatherMode.CityIp:
                     getWeatherRequest = new GetWeatherByIpRequest(args);
                     break;
                 default:
-                    getWeatherRequest = new GetWeatherByCityNameOrIdRequest(args);
+                    getWeatherRequest = new GetWeatherByCityIdRequest(args);
                     break;
             }
             return getWeatherRequest;

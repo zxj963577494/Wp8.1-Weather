@@ -16,7 +16,7 @@ namespace Weather.App.ViewModel
 
     public class MyCityPageModel
     {
-        public int CityId { get; set; }
+        public string CityId { get; set; }
 
         public string CityName { get; set; }
 

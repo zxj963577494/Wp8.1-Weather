@@ -81,7 +81,6 @@ namespace Weather.Utils
             bool isCache = false;
             if (getCacheEntity != null)
             {
-                //isCache = UniversalCommon_operator.AddIsolateStorageObj(getCacheEntity.CacheKey, getCacheEntity);
             }
             return isCache;
         }

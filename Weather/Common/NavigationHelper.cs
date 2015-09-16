@@ -26,7 +26,7 @@ namespace Weather.App.Common
     /// 1) 在某处创建一个 NavigationHelper 实例(如
     ///     页面的构造函数中)，并注册 LoadState 和
     ///     SaveState 事件的回调。
-    /// <code>
+    /// <Code>
     ///     public MyPage()
     ///     {
     ///         this.InitializeComponent();
@@ -39,12 +39,12 @@ namespace Weather.App.Common
     ///     { }
     ///     private async void navigationHelper_SaveState(object sender, LoadStateEventArgs e)
     ///     { }
-    /// </code>
+    /// </Code>
     /// 
     /// 2) 在以下情况下注册页面以调入 NavigationHelper: 该页面
     ///      通过重写 <see cref="Windows.UI.Xaml.Controls.Page.OnNavigatedTo"/> 
     ///     和 <see cref="Windows.UI.Xaml.Controls.Page.OnNavigatedFrom"/> 事件以参与导航。
-    /// <code>
+    /// <Code>
     ///     protected override void OnNavigatedTo(NavigationEventArgs e)
     ///     {
     ///         navigationHelper.OnNavigatedTo(e);
@@ -54,7 +54,7 @@ namespace Weather.App.Common
     ///     {
     ///         navigationHelper.OnNavigatedFrom(e);
     ///     }
-    /// </code>
+    /// </Code>
     /// </example>
     [Windows.Foundation.Metadata.WebHostHidden]
     public class NavigationHelper : DependencyObject

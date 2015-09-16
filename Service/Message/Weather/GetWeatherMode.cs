@@ -11,8 +11,17 @@ namespace Weather.Service.Message
     /// </summary>
     public enum GetWeatherMode
     {
+        /// <summary>
+        /// 城市名称
+        /// </summary>
         City=1,
-        Gps=2,
-        Ip=3
+        /// <summary>
+        /// 城市ID
+        /// </summary>
+        CityId=2,
+        /// <summary>
+        /// IP地址
+        /// </summary>
+        CityIp=3,
     }
 }

@@ -19,6 +19,7 @@ using Weather.Utils;
 using Weather.Service.Message;
 using Weather.Service.Implementations;
 using Windows.Phone.UI.Input;
+using System.Threading.Tasks;
 
 // “基本页”项模板在 http://go.microsoft.com/fwlink/?LinkID=390556 上有介绍
 
@@ -34,10 +35,8 @@ namespace Weather.App
 
         private SettingService settingService = null;
         private UserService userService = null;
-
         private GetSettingSwitchesRespose switchesRespose = null;
         private GetSettingAutoUpdateTimeRepose autoUpdateTimeRepose = null;
-
         private GetUserRespose userRespose = null;
 
         public SettingPage()
@@ -117,11 +116,11 @@ namespace Weather.App
         /// </summary>
         /// <param name="e">提供导航方法数据和
         /// 无法取消导航请求的事件处理程序。</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.navigationHelper.OnNavigatedTo(e);
 
-            LoadData();
+            await LoadData();
 
         }
 
@@ -132,7 +131,7 @@ namespace Weather.App
 
         #endregion
 
-        private async void LoadData()
+        private async Task LoadData()
         {
             switchesRespose = settingService.GetSettingSwitches();
             autoUpdateTimeRepose = settingService.GetSettingAutoUpdateTime();
@@ -154,6 +153,7 @@ namespace Weather.App
                 UserConfig = userRespose.UserConfig
 
             };
+            LayoutRoot.DataContext = null;
             LayoutRoot.DataContext = settingPage;
         }
 
@@ -257,39 +257,6 @@ namespace Weather.App
         private async void cbbAutoUpdateTime_DropDownClosed(object sender, object e)
         {
             userRespose.UserConfig.AutoUpdateTime = int.Parse(cbbAutoUpdateTime.SelectedValue.ToString());
-            await userService.SaveUser(userRespose);
-        }
-
-        /// <summary>
-        /// 停止自动更新开始时间
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void tpStart_TimeChanged(object sender, TimePickerValueChangedEventArgs e)
-        {
-            userRespose.UserConfig.StopAutoUpdateStartTime = tpStart.Time.ToString();
-            await userService.SaveUser(userRespose);
-        }
-
-        /// <summary>
-        /// 停止自动更新结束时间
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void tpEnd_TimeChanged(object sender, TimePickerValueChangedEventArgs e)
-        {
-            userRespose.UserConfig.StopAutoUpdateEndTime = tpEnd.Time.ToString();
-            await userService.SaveUser(userRespose);
-        }
-
-        /// <summary>
-        /// 是否开启停止自动更新时间段
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void cbbAutoUpdateTimeSpan_DropDownClosed(object sender, object e)
-        {
-            userRespose.UserConfig.IsAutoUpdateTimeSpan = int.Parse(cbbAutoUpdateTimeSpan.SelectedValue.ToString());
             await userService.SaveUser(userRespose);
         }
 

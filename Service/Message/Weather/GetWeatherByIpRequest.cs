@@ -13,46 +13,14 @@ namespace Weather.Service.Message
     {
 
         #region Field
-        private string _format = "1";
 
-        private string _dtype = "json";
-
-        private string _key = "fbaccffcb1100c884418266f011bf55e";
+        private string _key = "f65dfbde990c433da6a56feda554d759";
 
         /// <summary>
         /// ip地址
         /// </summary>
-        public string ip { get; set; }
+        public string cityIp { get; set; }
 
-        /// <summary>
-        /// 未来6天预报(future)两种返回格式，1或2，默认1
-        /// </summary>
-        public string format
-        {
-            get
-            {
-                return _format;
-            }
-            set
-            {
-                _format = value;
-            }
-        }
-
-        /// <summary>
-        /// 返回数据格式：json或xml,默认json
-        /// </summary>
-        public string dtype
-        {
-            get
-            {
-                return _dtype;
-            }
-            set
-            {
-                _dtype = value;
-            }
-        }
 
         /// <summary>
         /// key
@@ -67,19 +35,15 @@ namespace Weather.Service.Message
             {
                 _key = value;
             }
-        } 
+        }
         #endregion
 
         #region Method
 
-        public GetWeatherByIpRequest()
-        {
 
-        }
-
-        public GetWeatherByIpRequest(string ip)
+        public GetWeatherByIpRequest(string cityIp)
         {
-            this.ip = ip;
+            this.cityIp = cityIp;
         }
 
         /// <summary>
@@ -88,9 +52,8 @@ namespace Weather.Service.Message
         /// <returns></returns>
         public string GetRequestUrl()
         {
-            string url = "http://v.juhe.cn/weather/ip?dtype=json&format=" + format + "&ip=" + ip + "&key=" + key;
-            return url;
-        }  
+            return "https://api.heweather.com/x3/weather?cityip=" + cityIp + "&key=" + key;
+        }
         #endregion
     }
 }

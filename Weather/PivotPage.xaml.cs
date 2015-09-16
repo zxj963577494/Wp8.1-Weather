@@ -25,6 +25,7 @@ using Weather.Service.Implementations;
 using Windows.Storage;
 using System.Threading.Tasks;
 using Windows.Phone.UI.Input;
+using Weather.App.ViewModel;
 
 // “透视应用程序”模板在 http://go.microsoft.com/fwlink/?LinkID=391641 上有介绍
 
@@ -147,6 +148,10 @@ namespace Weather.App
             }
             else
             {
+                if (cityId == "")
+                {
+                    cityId = userCityRespose.UserCities.FirstOrDefault().CityId;
+                }
                 userRespose = await userService.GetUserAsync();
                 weatherTypeRespose = await weatherService.GetWeatherTypeAsync();
                 await GetWeather(cityId, 0);
@@ -180,11 +185,10 @@ namespace Weather.App
         private async Task GetWeather(string cityId, int isRefresh)
         {
             popupProgressBar.IsOpen = true;
-            //progressBar.Visibility = Visibility.Visible;
 
-            Model.UserCity userCity = string.IsNullOrEmpty(cityId) ? userCityRespose.UserCities.FirstOrDefault(x => x.IsDefault == 1) : userCityRespose.UserCities.FirstOrDefault(x => x.CityId == int.Parse(cityId));
+            Model.UserCity userCity = string.IsNullOrEmpty(cityId) ? userCityRespose.UserCities.FirstOrDefault(x => x.IsDefault == 1) : userCityRespose.UserCities.FirstOrDefault(x => x.CityId == cityId);
 
-            IGetWeatherRequest weatherRequest = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, userCity.CityName);
+            IGetWeatherRequest weatherRequest = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.CityId, userCity.CityId);
 
             //有网络
             if (NetHelper.IsNetworkAvailable())
@@ -214,33 +218,66 @@ namespace Weather.App
 
             if (weatherRespose != null)
             {
-
-                ViewModel.HomePageModel homePageModel = new ViewModel.HomePageModel();
-
-                homePageModel.WeatherType = weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa);
-
-                weatherRespose.result.sk.temp = weatherRespose.result.sk.temp + "°";
-                weatherRespose.result.sk.time = weatherRespose.result.sk.time + "发布";
-                homePageModel.Sk = weatherRespose.result.sk;
-                homePageModel.Today = weatherRespose.result.today;
-
-                var fiture = weatherRespose.result.future.Find(x => x.date == DateTime.Now.ToString("yyyyMMdd"));
-                if (fiture == null)
+                var respose = weatherRespose.result.FirstOrDefault();
+                if (respose.status == "ok")
                 {
-                    return;
-                }
-                int i;
-                if (int.TryParse(fiture.weather_id.fa, out i))
-                {
-                    homePageModel.Futures = weatherRespose.result.future.ForEach(x => x.weather_id.fa = weatherTypeRespose.WeatherTypes.Find(w => w.Wid == x.weather_id.fa).TomorrowPic).ToList();
+                    ViewModel.HomePageModel homePageModel = new ViewModel.HomePageModel();
+
+                    var aqi = respose.aqi;
+                    var now = respose.now;
+                    var basic = respose.basic;
+                    var daily_forecast = respose.daily_forecast;
+                    var hourly_forecast = respose.hourly_forecast;
+
+                    homePageModel.Aqi = "空气质量: " + aqi.city.qlty;
+                    homePageModel.City = basic.city;
+                    homePageModel.Daytmp = daily_forecast.FirstOrDefault().tmp.min + "° / " + daily_forecast.FirstOrDefault().tmp.max + "°";
+                    homePageModel.Hum = now.hum + " %";
+                    homePageModel.Pres = now.pres + " hPa";
+                    homePageModel.Tmp = now.tmp + "°";
+                    homePageModel.Txt = now.cond.txt;
+                    homePageModel.Update = basic.update.loc + " 发布";
+                    homePageModel.Vis = now.vis + " km";
+                    homePageModel.Wind = now.wind.dir + " " + now.wind.sc + " 级";
+                    homePageModel.WeatherType = weatherTypeRespose.WeatherTypes.FirstOrDefault(x => x.Code == now.cond.code);
+
+                    List<ViewModel.DailyItem> dailyList = new List<ViewModel.DailyItem>();
+                    foreach (var item in daily_forecast)
+                    {
+                        DailyItem daily = new DailyItem()
+                        {
+                            Date = item.date,
+                            Image = weatherTypeRespose.WeatherTypes.FirstOrDefault(x => x.Code == item.cond.code_d).TomorrowPic,
+                            Tmp = item.tmp.min + "° / " + item.tmp.max + "°",
+                            Txt = item.cond.txt_d
+                        };
+                        dailyList.Add(daily);
+                    }
+
+                    homePageModel.DailyList = dailyList;
+
+                    List<ViewModel.HourlyItem> hourlyList = new List<ViewModel.HourlyItem>();
+                    foreach (var item in hourly_forecast)
+                    {
+                        HourlyItem hourly = new HourlyItem()
+                        {
+                            Date = DateTime.Parse(item.date).ToString("HH:mm"),
+                            Hum = item.hum + " %",
+                            Tmp = item.tmp + "°",
+                            Wind = item.wind.dir + " " + item.wind.sc
+                        };
+                        hourlyList.Add(hourly);
+                    }
+                    homePageModel.HourlyList = hourlyList;
+
+                    LayoutRoot.DataContext = homePageModel;
+                    UpdateTileFacade();
+                    UpdateSecondaryTileFacade();
                 }
                 else
                 {
-                    homePageModel.Futures = weatherRespose.result.future;
+                    NotifyUser("数据获取失败");
                 }
-                LayoutRoot.DataContext = homePageModel;
-                UpdateTileFacade();
-                UpdateSecondaryTileFacade();
             }
             else
             {
@@ -248,10 +285,7 @@ namespace Weather.App
             }
 
             popupProgressBar.IsOpen = false;
-            //progressBar.Visibility = Visibility.Collapsed;
         }
-
-
 
 
         private async Task<GetWeatherRespose> GetWeatherAsync(int isRefresh, Model.UserCity userCity, IGetWeatherRequest weatherRequest)
@@ -292,7 +326,7 @@ namespace Weather.App
         /// </summary>
         /// <param name="cityId"></param>
         /// <returns></returns>
-        private async Task DeleteFile(int cityId)
+        private async Task DeleteFile(string cityId)
         {
             string fileName = cityId + "_" + DateTime.Now.AddDays(-1).ToString("yyyyMMdd") + ".json";
             string filePath = "Temp\\" + fileName;
@@ -347,10 +381,6 @@ namespace Weather.App
             return;
         }
 
-        private void EvaluateCommandBar_Click(object sender, RoutedEventArgs e)
-        {
-            SettingPageHelper.LaunchUriForMarketplaceDetail();
-        }
         #endregion
 
         #region 消息通知
@@ -417,16 +447,18 @@ namespace Weather.App
         private async void UpdateTileFacade()
         {
             Model.UserCity defaultCity = await GetDefaultCity();
-            if (weatherRespose.result.today.city == defaultCity.CityName)
+
+            if (weatherRespose.result.FirstOrDefault().basic.city == defaultCity.CityName)
             {
-                if (weatherRespose.result.today.date_y == DateTime.Now.ToString("yyyy年MM月dd日"))
+                // 同一天
+                if (weatherRespose.result.FirstOrDefault().daily_forecast.FirstOrDefault().date == DateTime.Now.ToString("yyyy-MM-dd"))
                 {
                     UpdateTile();
                 }
                 else
                 {
-                    Model.Future future = weatherRespose.result.future.Find(x => x.date == StringHelper.GetTodayDateString());
-                    UpdateTileByClientForTomorrow(future, defaultCity.CityName);
+                    UpdateTileByClientForTomorrow(weatherRespose.result.FirstOrDefault().daily_forecast.FirstOrDefault(x => x.date == DateTime.Now.ToString("yyyy-MM-dd")), weatherRespose.result.FirstOrDefault().basic.city);
+
                 }
             }
         }
@@ -443,7 +475,7 @@ namespace Weather.App
             }
             else
             {
-                userCity = userCityRespose.UserCities.FirstOrDefault(x => x.CityId == int.Parse(cityId));
+                userCity = userCityRespose.UserCities.FirstOrDefault(x => x.CityId == cityId);
             }
             string tileId = userCity.CityId + "_Weather";
             if (SecondaryTileHelper.IsExists(tileId))
@@ -464,7 +496,7 @@ namespace Weather.App
             }
             else
             {
-                userCity = userCityRespose.UserCities.FirstOrDefault(x => x.CityId == int.Parse(cityId));
+                userCity = userCityRespose.UserCities.FirstOrDefault(x => x.CityId == cityId);
             }
             string tileId = userCity.CityId + "_Weather";
             string displayName = userCity.CityName;
@@ -484,28 +516,27 @@ namespace Weather.App
         /// <summary>
         /// 应用磁贴
         /// </summary>
-        /// <param name="respose"></param>
+        /// <param name="weatherRespose"></param>
         /// <param name="getWeatherTypeRespose"></param>
         /// <param name="getUserRespose"></param>
         private void UpdateTile()
         {
-
             string tileXmlString = @"<tile>"
                + "<visual version='2'>"
-               + "<binding template='TileWide310x150BlockAndText01' fallback='TileWideBlockAndText01'>"
-               + "<text id='1'>" + weatherRespose.result.sk.temp + "</text>"
-               + "<text id='2'>" + weatherRespose.result.today.city + "</text>"
-               + "<text id='3'>" + weatherRespose.result.today.temperature + "</text>"
-               + "<text id='4'>" + weatherRespose.result.today.weather + "</text>"
-               + "<text id='5'>" + weatherRespose.result.sk.wind_direction + " " + weatherRespose.result.sk.wind_strength + "</text>"
-               + "<text id='6'>" + weatherRespose.result.today.week + "</text>"
+               + "<binding template='TileWide310x150PeekImage02' fallback='TileWidePeekImage02'>"
+               + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Code == weatherRespose.result.FirstOrDefault().now.cond.code).TileWidePic + "'/>"
+               + "<text id='1'>" + weatherRespose.result.FirstOrDefault().basic.city + "</text>"
+               + "<text id='2'>" + weatherRespose.result.FirstOrDefault().daily_forecast.FirstOrDefault().tmp.min + "°~" + weatherRespose.result.FirstOrDefault().daily_forecast.FirstOrDefault().tmp.max + "° " + weatherRespose.result.FirstOrDefault().now.cond.txt + "</text>"
+               + "<text id='3'>" + weatherRespose.result.FirstOrDefault().now.wind.dir + " " + weatherRespose.result.FirstOrDefault().now.wind.sc + " 级</text>"
+               + "<text id='4'>湿度: " + weatherRespose.result.FirstOrDefault().now.hum + "%</text>"
+               + "<text id='5'>能见度: " + weatherRespose.result.FirstOrDefault().now.vis + "km</text>"
                + "</binding>"
                + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-               + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TileSquarePic + "'/>"
-               + "<text id='1'>" + weatherRespose.result.today.city + "</text>"
-               + "<text id='2'>" + weatherRespose.result.sk.temp + "</text>"
-               + "<text id='3'>" + weatherRespose.result.today.weather + "</text>"
-               + "<text id='4'>" + weatherRespose.result.sk.wind_direction + " " + weatherRespose.result.sk.wind_strength + "</text>"
+               + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Code == weatherRespose.result.FirstOrDefault().now.cond.code).TileSquarePic + "'/>"
+               + "<text id='1'>" + weatherRespose.result.FirstOrDefault().basic.city + "</text>"
+               + "<text id='2'>" + weatherRespose.result.FirstOrDefault().now.tmp + "°</text>"
+               + "<text id='3'>" + weatherRespose.result.FirstOrDefault().now.cond.txt + "</text>"
+               + "<text id='4'>" + weatherRespose.result.FirstOrDefault().now.wind.dir + " " + weatherRespose.result.FirstOrDefault().now.wind.sc + " 级</text>"
                + "</binding>"
                + "</visual>"
                + "</tile>";
@@ -519,24 +550,25 @@ namespace Weather.App
         /// <param name="cityName"></param>
         /// <param name="getWeatherTypeRespose"></param>
         /// <param name="getUserRespose"></param>
-        private void UpdateTileByClientForTomorrow(Model.Future future, string cityName)
+        private void UpdateTileByClientForTomorrow(Model.Weather.Daily_forecastItem daily_forecast, string cityName)
         {
             string tileXmlString = @"<tile>"
                + "<visual version='2'>"
-               + "<binding template='TileWide310x150BlockAndText01' fallback='TileWideBlockAndText01'>"
-               + "<text id='1'>暂无</text>"
-               + "<text id='2'>" + cityName + "</text>"
-               + "<text id='3'>" + future.temperature + "</text>"
-               + "<text id='4'>" + future.weather + "</text>"
-               + "<text id='5'>" + future.wind + "</text>"
-               + "<text id='6'>" + future.week + "</text>"
+               + "<binding template='TileWide310x150Text01' fallback='TileWideText01'>"
+               + "<text id='1'>" + cityName + "</text>"
+               + "<text id='2'>" + daily_forecast.tmp.min + "°~" + daily_forecast.tmp.max + "° " + (daily_forecast.cond.code_d == daily_forecast.cond.code_n ? daily_forecast.cond.txt_d : daily_forecast.cond.txt_d + "转" + daily_forecast.cond.txt_n) + "</text>"
+               + "<text id='3'>" + daily_forecast.wind.dir + " " + daily_forecast.wind.sc + " 级</text>"
+               + "<text id='4'>湿度: " + daily_forecast.hum + "%</text>"
+               + "<text id='5'>能见度: " + daily_forecast.vis + "km</text>"
                + "</binding>"
                + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-               + "<image id='1' src='ms-appx:///" + future.weather_id.fa.Replace("Tomorrow", "TileSquare") + "'/>"
+               + "<image id='1' src='ms-appx:///"
+               + ((DateTime.Compare(DateTime.Now.ToLocalTime(), DateTime.Parse(daily_forecast.astro.sr)) > 0 & DateTime.Compare(DateTime.Now.ToLocalTime(), DateTime.Parse(daily_forecast.astro.ss)) < 0) ? weatherTypeRespose.WeatherTypes.FirstOrDefault(x => x.Code == daily_forecast.cond.code_d).TileSquarePic : weatherTypeRespose.WeatherTypes.FirstOrDefault(x => x.Code == daily_forecast.cond.code_n).TileSquarePic)
+               + "'/>"
                + "<text id='1'>" + cityName + "</text>"
-               + "<text id='2'>" + future.temperature + "</text>"
-               + "<text id='3'>" + future.weather + "</text>"
-               + "<text id='4'>" + future.wind + "</text>"
+               + "<text id='2'>" + daily_forecast.tmp.min + "°~" + daily_forecast.tmp.max + "</text>"
+               + "<text id='3'>" + (daily_forecast.cond.code_d == daily_forecast.cond.code_n ? daily_forecast.cond.txt_d : daily_forecast.cond.txt_d + "转" + daily_forecast.cond.txt_n) + "</text>"
+               + "<text id='4'>" + daily_forecast.wind.dir + " " + daily_forecast.wind.sc + " 级</text>"
                + "</binding>"
                + "</visual>"
                + "</tile>";
@@ -551,24 +583,24 @@ namespace Weather.App
         private void UpdateSecondaryTile(string tileId)
         {
             string tileXmlString = @"<tile>"
-+ "<visual version='2'>"
-+ "<binding template='TileWide310x150BlockAndText01' fallback='TileWideBlockAndText01'>"
-+ "<text id='1'>" + weatherRespose.result.sk.temp + "</text>"
-+ "<text id='2'>" + weatherRespose.result.today.city + "</text>"
-+ "<text id='3'>" + weatherRespose.result.today.temperature + "</text>"
-+ "<text id='4'>" + weatherRespose.result.today.weather + "</text>"
-+ "<text id='5'>" + weatherRespose.result.sk.wind_direction + " " + weatherRespose.result.sk.wind_strength + "</text>"
-+ "<text id='6'>" + weatherRespose.result.today.week + "</text>"
-+ "</binding>"
-+ "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-+ "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TileSquarePic + "'/>"
-+ "<text id='1'>" + weatherRespose.result.sk.temp + "</text>"
-+ "<text id='2'>" + weatherRespose.result.today.temperature + "</text>"
-+ "<text id='3'>" + weatherRespose.result.today.weather + "</text>"
-+ "<text id='4'>" + weatherRespose.result.sk.wind_direction + " " + weatherRespose.result.sk.wind_strength + "</text>"
-+ "</binding>"
-+ "</visual>"
-+ "</tile>";
+              + "<visual version='2'>"
+              + "<binding template='TileWide310x150PeekImage02' fallback='TileWidePeekImage02'>"
+               + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Code == weatherRespose.result.FirstOrDefault().now.cond.code).TileWidePic + "'/>"
+               + "<text id='1'>" + weatherRespose.result.FirstOrDefault().basic.city + "</text>"
+               + "<text id='2'>" + weatherRespose.result.FirstOrDefault().daily_forecast.FirstOrDefault().tmp.min + "°~" + weatherRespose.result.FirstOrDefault().daily_forecast.FirstOrDefault().tmp.max + "° " + weatherRespose.result.FirstOrDefault().now.cond.txt + "</text>"
+               + "<text id='3'>" + weatherRespose.result.FirstOrDefault().now.wind.dir + " " + weatherRespose.result.FirstOrDefault().now.wind.sc + " 级</text>"
+               + "<text id='4'>湿度: " + weatherRespose.result.FirstOrDefault().now.hum + "%</text>"
+                + "<text id='5'>能见度: " + weatherRespose.result.FirstOrDefault().now.vis + "</text>"
+               + "</binding>"
+              + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
+               + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Code == weatherRespose.result.FirstOrDefault().now.cond.code).TileSquarePic + "'/>"
+               + "<text id='1'>" + weatherRespose.result.FirstOrDefault().basic.city + "</text>"
+               + "<text id='2'>" + weatherRespose.result.FirstOrDefault().now.tmp + "°</text>"
+               + "<text id='3'>" + weatherRespose.result.FirstOrDefault().now.cond.txt + "</text>"
+               + "<text id='4'>" + weatherRespose.result.FirstOrDefault().now.wind.dir + " " + weatherRespose.result.FirstOrDefault().now.wind.sc + " 级</text>"
+               + "</binding>"
+               + "</visual>"
+               + "</tile>";
             SecondaryTileHelper.UpdateSecondaryTileNotificationsByXml(tileId, tileXmlString);
         }
 

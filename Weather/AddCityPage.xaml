@@ -131,7 +131,7 @@
 				</ItemsControl.ItemContainerTransitions>
 				<GridView.ItemTemplate>
 					<DataTemplate>
-						<Button Content="{Binding District}"  FontSize="14" Style="{StaticResource ButtonTileStyle}"/>
+                        <Button Content="{Binding DistrictZH}"  FontSize="14" Style="{StaticResource ButtonTileStyle}"/>
 					</DataTemplate>
 				</GridView.ItemTemplate>
 				

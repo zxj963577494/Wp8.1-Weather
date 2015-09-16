@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Weather.Model
+namespace Weather.Service.ViewModel
 {
-    /// <summary>
-    /// 当前实况天气
-    /// </summary>
-    public class Sk
+    public class WeatherSkView
     {
         /// <summary>
         /// 当前温度 [21]

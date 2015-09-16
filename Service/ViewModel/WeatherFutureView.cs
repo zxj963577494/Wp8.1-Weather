@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Weather.Model
+namespace Weather.Service.ViewModel
 {
-    /// <summary>
-    /// 未来天气
-    /// </summary>
-    public class Future
+    public class WeatherFutureView
     {
         /// <summary>
         /// 气温 [28℃~36℃]
@@ -22,10 +19,9 @@ namespace Weather.Model
         public string weather { get; set; }
 
         /// <summary>
-        /// 天气唯一标识 []
+        /// 天气标识
         /// </summary>
-        public WeatherId weather_id { get; set; }
-
+        public int weather_id { get; set; }
 
         /// <summary>
         /// 风力 [南风3-4级]
@@ -41,7 +37,5 @@ namespace Weather.Model
         /// 日期 [20140804]
         /// </summary>
         public string date { get; set; }
-
     }
-
 }

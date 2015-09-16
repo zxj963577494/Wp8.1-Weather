@@ -14,7 +14,7 @@ namespace Weather.Model
         /// <summary>
         /// 城市ID
         /// </summary>
-        public int CityId { get; set; }
+        public string CityId { get; set; }
 
         /// <summary>
         /// 城市名称

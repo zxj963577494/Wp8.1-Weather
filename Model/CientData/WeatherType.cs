@@ -14,12 +14,12 @@ namespace Weather.Model
         /// <summary>
         /// 天气唯一标识
         /// </summary>
-        public string Wid { get; set; }
+        public string Code { get; set; }
 
         /// <summary>
         /// 天气
         /// </summary>
-        public string Weather { get; set; }
+        public string TxtZH { get; set; }
 
         /// <summary>
         /// 今日白天天气图片

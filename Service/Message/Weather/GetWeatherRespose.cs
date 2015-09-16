@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Weather.Model.Weather;
 
 namespace Weather.Service.Message
 {
@@ -11,12 +12,9 @@ namespace Weather.Service.Message
     /// </summary>
     public class GetWeatherRespose
     {
-        public string resultcode { get; set; }
-
-        public string reason { get; set; }
-
-        public Model.Weather result { get; set; }
-
-        public string error_code { get; set; }
+        /// <summary>
+        /// 和风天气
+        /// </summary>
+        public List<HeWeatherItem> result { get; set; }
     }
 }

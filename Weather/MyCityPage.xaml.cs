@@ -23,6 +23,7 @@ using Weather.App;
 using Windows.Phone.UI.Input;
 using Weather.Utils;
 using Weather.App.ViewModel;
+using System.Text;
 
 // “基本页”项模板在 http://go.microsoft.com/fwlink/?LinkID=390556 上有介绍
 
@@ -140,7 +141,6 @@ namespace Weather.App
                 {
                     await GetWeather(0);
                 }
-
             }
             catch (Exception)
             {
@@ -164,7 +164,7 @@ namespace Weather.App
         private async Task GetWeather(int isRefresh)
         {
             popupProgressBar.IsOpen = true;
-           // progressBar.Visibility = Visibility.Visible;
+            // progressBar.Visibility = Visibility.Visible;
             myCityPage.MyCityPageModels = null;
             myCityPageModelList = null;
             myCityPageModelList = new List<ViewModel.MyCityPageModel>();
@@ -172,39 +172,26 @@ namespace Weather.App
             foreach (var item in userCityRespose.UserCities)
             {
                 MyCityPageModel model = null;
-                //如果有网络
+                // 如果有网络
                 if (NetHelper.IsNetworkAvailable())
                 {
-                    //不使用wifi更新
+                    // 不使用wifi更新
                     if (userRespose.UserConfig.IsWifiUpdate == 0)
                     {
-
-                        //更新所有常用城市
-                        if (userRespose.UserConfig.IsUpdateForCity == 0)
+                        //强制刷新
+                        if (isRefresh == 1)
                         {
-                            //强制刷新
-                            if (isRefresh == 1)
+                            // 更新所有常用城市
+                            if (userRespose.UserConfig.IsUpdateForCity == 0)
                             {
-                                //通过网络获取天气数据
                                 model = await GetWeatherByNet(item);
                                 myCityPageModelList.Add(model);
                             }
-                            else
-                            {
-                                //非强制刷新下，根据是否存在今日天气数据文件，进行获取天气数据
-                                model = await GetWeatherByNetOrClient(item);
-                                myCityPageModelList.Add(model);
-                            }
-                        }
-                        else //只更新默认城市
-                        {
-                            //强制刷新
-                            if (isRefresh == 1)
+                            else //只更新默认城市
                             {
                                 //是默认城市
                                 if (item.IsDefault == 1)
                                 {
-                                    //通过网络获取
                                     model = await GetWeatherByNet(item);
                                     myCityPageModelList.Add(model);
                                 }
@@ -214,9 +201,17 @@ namespace Weather.App
                                     model = GetWeatherByNo(item);
                                     myCityPageModelList.Add(model);
                                 }
-
                             }
-                            else
+                        }
+                        else
+                        {
+                            // 更新所有常用城市
+                            if (userRespose.UserConfig.IsUpdateForCity == 0)
+                            {
+                                model = await GetWeatherByNetOrClient(item);
+                                myCityPageModelList.Add(model);
+                            }
+                            else //只更新默认城市
                             {
                                 //是默认城市
                                 if (item.IsDefault == 1)
@@ -226,6 +221,7 @@ namespace Weather.App
                                 }
                                 else
                                 {
+                                    //天气数据置为空
                                     model = GetWeatherByNo(item);
                                     myCityPageModelList.Add(model);
                                 }
@@ -236,32 +232,20 @@ namespace Weather.App
                     {
                         if (NetHelper.IsWifiConnection())
                         {
-                            //更新所有常用城市
-                            if (userRespose.UserConfig.IsUpdateForCity == 0)
+                            //强制刷新
+                            if (isRefresh == 1)
                             {
-                                //强制刷新
-                                if (isRefresh == 1)
+                                // 更新所有常用城市
+                                if (userRespose.UserConfig.IsUpdateForCity == 0)
                                 {
-                                    //通过网络获取天气数据
                                     model = await GetWeatherByNet(item);
                                     myCityPageModelList.Add(model);
                                 }
-                                else
-                                {
-                                    //非强制刷新下，根据是否存在今日天气数据文件，进行获取天气数据
-                                    model = await GetWeatherByNetOrClient(item);
-                                    myCityPageModelList.Add(model);
-                                }
-                            }
-                            else //只更新默认城市
-                            {
-                                //强制刷新
-                                if (isRefresh == 1)
+                                else //只更新默认城市
                                 {
                                     //是默认城市
                                     if (item.IsDefault == 1)
                                     {
-                                        //通过网络获取
                                         model = await GetWeatherByNet(item);
                                         myCityPageModelList.Add(model);
                                     }
@@ -271,9 +255,17 @@ namespace Weather.App
                                         model = GetWeatherByNo(item);
                                         myCityPageModelList.Add(model);
                                     }
-
                                 }
-                                else
+                            }
+                            else
+                            {
+                                // 更新所有常用城市
+                                if (userRespose.UserConfig.IsUpdateForCity == 0)
+                                {
+                                    model = await GetWeatherByNetOrClient(item);
+                                    myCityPageModelList.Add(model);
+                                }
+                                else //只更新默认城市
                                 {
                                     //是默认城市
                                     if (item.IsDefault == 1)
@@ -283,6 +275,7 @@ namespace Weather.App
                                     }
                                     else
                                     {
+                                        //天气数据置为空
                                         model = GetWeatherByNo(item);
                                         myCityPageModelList.Add(model);
                                     }
@@ -311,6 +304,7 @@ namespace Weather.App
             //progressBar.Visibility = Visibility.Collapsed;
         }
 
+
         /// <summary>
         /// 通过网络获取
         /// </summary>
@@ -327,8 +321,8 @@ namespace Weather.App
             {
                 CityId = item.CityId,
                 CityName = item.CityName,
-                Temp = weatherRespose == null ? null : weatherRespose.result.today.temperature,
-                TodayPic = weatherRespose == null ? null : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TodayPic
+                Temp = weatherRespose == null ? null : weatherRespose.result.FirstOrDefault().daily_forecast.FirstOrDefault().tmp.min + "°~" + weatherRespose.result.FirstOrDefault().daily_forecast.FirstOrDefault().tmp.max + "°",
+                TodayPic = weatherRespose == null ? null : weatherTypeRespose.WeatherTypes.Find(x => x.Code == weatherRespose.result.FirstOrDefault().now.cond.code).TodayPic
             };
             return model;
         }
@@ -344,14 +338,14 @@ namespace Weather.App
             MyCityPageModel model = new MyCityPageModel();
             model.CityId = item.CityId;
             model.CityName = item.CityName;
-            model.Temp = weatherRespose == null ? null : weatherRespose.result.today.temperature;
-            model.TodayPic = weatherRespose == null ? null : weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TodayPic;
+            model.Temp = weatherRespose == null ? null : weatherRespose.result.FirstOrDefault().daily_forecast.FirstOrDefault(x => x.date == DateTime.Now.ToString("yyyy-MM-dd")).tmp.min + "°~" + weatherRespose.result.FirstOrDefault().daily_forecast.FirstOrDefault(x => x.date == DateTime.Now.ToString("yyyy-MM-dd")).tmp.max + "°";
+            model.TodayPic = weatherRespose == null ? null : weatherTypeRespose.WeatherTypes.Find(x => x.Code == weatherRespose.result.FirstOrDefault().daily_forecast.FirstOrDefault(y => y.date == DateTime.Now.ToString("yyyy-MM-dd")).cond.code_d).TodayPic;
             return model;
         }
 
 
         /// <summary>
-        /// 非强制刷新下，根据是否存在今日天气数据文件，进行获取天气数据
+        /// 通过本地或网络方式获取
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -436,7 +430,7 @@ namespace Weather.App
                 MenuFlyoutItem selectedItem = sender as MenuFlyoutItem;
                 if (selectedItem != null)
                 {
-                    int cityId = int.Parse(selectedItem.CommandParameter.ToString());
+                    string cityId = selectedItem.CommandParameter.ToString();
                     var DefaultCityed = userCityRespose.UserCities.FirstOrDefault(x => x.IsDefault == 1);
                     if (DefaultCityed.CityId != cityId)
                     {
@@ -480,7 +474,7 @@ namespace Weather.App
             {
                 if (userCityRespose.UserCities.Count > 1)
                 {
-                    int cityId = int.Parse(selectedItem.CommandParameter.ToString());
+                    string cityId = selectedItem.CommandParameter.ToString();
 
                     ViewModel.MyCityPageModel city = myCityPageModelList.FirstOrDefault(x => x.CityId == cityId);
 
@@ -519,7 +513,7 @@ namespace Weather.App
                 MenuFlyoutItem selectedItem = sender as MenuFlyoutItem;
                 if (selectedItem != null)
                 {
-                    int cityId = int.Parse(selectedItem.CommandParameter.ToString());
+                    string cityId = selectedItem.CommandParameter.ToString();
 
                     string tileId = selectedItem.CommandParameter.ToString() + "_Weather";
 
@@ -529,17 +523,17 @@ namespace Weather.App
 
                     string displayName = userCity.CityName;
 
-                    IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, userCity.CityName);
+                    IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.CityId, userCity.CityId);
                     GetWeatherRespose respose = await weatherService.GetWeatherAsync(request);
                     if (!Utils.SecondaryTileHelper.IsExists(tileId))
                     {
                         await Utils.SecondaryTileHelper.CreateSecondaryTileAsync(tileId, displayName, cityId.ToString());
-                        UpdateSecondaryTile(tileId, respose);
+                        UpdateSecondaryTile(tileId, respose.result.FirstOrDefault().daily_forecast.FirstOrDefault(), displayName);
                     }
                     else
                     {
                         NotifyUser("该城市磁贴已固定在桌面");
-                        UpdateSecondaryTile(tileId, respose);
+                        UpdateSecondaryTile(tileId, respose.result.FirstOrDefault().daily_forecast.FirstOrDefault(), displayName);
                     }
                 }
             }
@@ -559,7 +553,7 @@ namespace Weather.App
         /// </summary>
         /// <param name="cityId"></param>
         /// <returns></returns>
-        private async Task DeleteFile(int cityId)
+        private async Task DeleteFile(string cityId)
         {
             string fileName = cityId + "_" + DateTime.Now.AddDays(-1).ToString("yyyyMMdd") + ".json";
             string filePath = "Temp\\" + fileName;
@@ -577,7 +571,7 @@ namespace Weather.App
         /// <summary>
         /// 常用城市排序
         /// </summary>
-        /// <param name="respose"></param>
+        /// <param name="weatherRespose"></param>
         /// <returns></returns>
         private GetUserCityRespose SortUserCity(GetUserCityRespose respose)
         {
@@ -591,7 +585,7 @@ namespace Weather.App
         /// <summary>
         /// 常用城市磁贴排序
         /// </summary>
-        /// <param name="respose"></param>
+        /// <param name="weatherRespose"></param>
         /// <returns></returns>
         private List<MyCityPageModel> SortCityPageModelList(GetUserCityRespose respose)
         {
@@ -664,10 +658,6 @@ namespace Weather.App
             return;
         }
 
-        private void EvaluateCommandBar_Click(object sender, RoutedEventArgs e)
-        {
-            SettingPageHelper.LaunchUriForMarketplaceDetail();
-        }
         #endregion
 
         #region ItemClick
@@ -681,31 +671,32 @@ namespace Weather.App
 
         #region 磁贴更新
 
-        private void UpdateSecondaryTile(string tileId, GetWeatherRespose weatherRespose)
+        private void UpdateSecondaryTile(string tileId, Model.Weather.Daily_forecastItem daily_forecast, string cityName)
         {
             if (weatherRespose.result != null)
             {
                 if (SecondaryTileHelper.IsExists(tileId))
                 {
-                    string tileXmlString = @"<tile>"
-  + "<visual version='2'>"
-  + "<binding template='TileWide310x150BlockAndText01' fallback='TileWideBlockAndText01'>"
-  + "<text id='1'>" + weatherRespose.result.sk.temp + "°</text>"
-  + "<text id='2'>" + weatherRespose.result.today.city + "</text>"
-  + "<text id='3'>" + weatherRespose.result.today.temperature + "</text>"
-  + "<text id='4'>" + weatherRespose.result.today.weather + "</text>"
-  + "<text id='5'>" + weatherRespose.result.sk.wind_direction + " " + weatherRespose.result.sk.wind_strength + "</text>"
-  + "<text id='6'>" + weatherRespose.result.today.week + "</text>"
-  + "</binding>"
-  + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
-  + "<image id='1' src='ms-appx:///" + weatherTypeRespose.WeatherTypes.Find(x => x.Wid == weatherRespose.result.today.weather_id.fa).TileSquarePic + "'/>"
-  + "<text id='1'>" + weatherRespose.result.sk.temp + "°</text>"
-  + "<text id='2'>" + weatherRespose.result.today.temperature + "</text>"
-  + "<text id='3'>" + weatherRespose.result.today.weather + "</text>"
-  + "<text id='4'>" + weatherRespose.result.sk.wind_direction + " " + weatherRespose.result.sk.wind_strength + "</text>"
-  + "</binding>"
-  + "</visual>"
-  + "</tile>";
+                    string tileXmlString = "<tile>"
+                + "<visual version='2'>"
+                + "<binding template='TileWide310x150Text01' fallback='TileWideText01'>"
+                + "<text id='1'>" + cityName + "</text>"
+                + "<text id='2'>" + daily_forecast.tmp.min + "°~" + daily_forecast.tmp.max + "° " + (daily_forecast.cond.code_d == daily_forecast.cond.code_n ? daily_forecast.cond.txt_d : daily_forecast.cond.txt_d + "转" + daily_forecast.cond.txt_n) + "</text>"
+                + "<text id='3'>" + daily_forecast.wind.dir + " " + daily_forecast.wind.sc + " 级</text>"
+                + "<text id='4'>湿度: " + daily_forecast.hum + "%</text>"
+                + "<text id='5'>能见度: " + daily_forecast.vis + "km</text>"
+                + "</binding>"
+                + "<binding template='TileSquare150x150PeekImageAndText01' fallback='TileSquarePeekImageAndText01'>"
+                + "<image id='1' src='ms-appx:///"
+                + ((DateTime.Compare(DateTime.Now.ToLocalTime(), DateTime.Parse(daily_forecast.astro.sr)) > 1 & DateTime.Compare(DateTime.Now.ToLocalTime(), DateTime.Parse(daily_forecast.astro.ss)) < 0) ? weatherTypeRespose.WeatherTypes.Find(x => x.Code == daily_forecast.cond.code_d).TileSquarePic : weatherTypeRespose.WeatherTypes.Find(x => x.Code == daily_forecast.cond.code_n).TileSquarePic)
+                + "'/>"
+                + "<text id='1'>" + cityName + "</text>"
+                + "<text id='2'>" + daily_forecast.tmp.min + "°~" + daily_forecast.tmp.max + "</text>"
+                + "<text id='3'>" + (daily_forecast.cond.code_d == daily_forecast.cond.code_n ? daily_forecast.cond.txt_d : daily_forecast.cond.txt_d + "转" + daily_forecast.cond.txt_n) + "</text>"
+                + "<text id='4'>" + daily_forecast.wind.dir + " " + daily_forecast.wind.sc + " 级</text>"
+                + "</binding>"
+                + "</visual>"
+                + "</tile>";
                     SecondaryTileHelper.UpdateSecondaryTileNotificationsByXml(tileId, tileXmlString);
                 }
             }

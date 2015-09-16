@@ -23,18 +23,5 @@ namespace Weather.Utils
             string result = await httpClient.GetStringAsync(uri);
             return result;
         }
-
-        /// <summary>
-        /// 由于返回的字符串不符合反序列化格式，进行相关替换
-        /// </summary>
-        /// <param name="souce"></param>
-        /// <returns></returns>
-        public static string ResposeStringReplace(string souce)
-        {
-            Regex r = new Regex("\"\\w+_\\d+\":", RegexOptions.Multiline);
-            return r.Replace(souce, "").Replace("{{", "[{").Replace("}}", "}]");
-        }
-
-       
     }
 }

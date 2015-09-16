@@ -43,13 +43,13 @@ Temporary Items
 .apdisk
 
 # 忽略dbg文件和dbg目录
-Weather/bin/
-Model/obj/
-NotificationsExtensions/obj/
-Service/obj/
-Tasks/obj/
-Utils/obj/
-Weather/obj/
+/Weather/bin/
+/Model/obj/
+/NotificationsExtensions/obj/
+/Service/obj/
+/Tasks/obj/
+/Utils/obj/
+/Weather/obj/
 /Weather.sln.ide
 Weather.v12.suo
 *.user

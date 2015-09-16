@@ -127,6 +127,7 @@ namespace Weather.App
         {
             this.navigationHelper.OnNavigatedTo(e);
 
+            // 获取用户城市数据
             resposeUserCity = await userService.GetUserCityAsync();
 
             if (resposeUserCity == null)
@@ -138,13 +139,18 @@ namespace Weather.App
                 isNotFirst = true;
             }
 
+            // 获取城市
             resposeCities = await cityService.GetCityAsync();
-
+            // 获取人们城市
             resposeHotCities = await cityService.GetHotCityAsync(); ;
 
+            // 数据绑定
             page = new ViewModel.SelectCityPage();
+
             page.Cities = resposeCities.Cities;
+
             page.HotCities = resposeHotCities.Cities;
+
             LayoutRoot.DataContext = page;
 
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;
@@ -186,17 +192,25 @@ namespace Weather.App
             }
             if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
             {
-                sender.ItemsSource = from d in page.Cities
-                                     where d.District.Contains(userInput)
-                                     select d.District;
+                // 判断输入值是否是英文
+                if (Weather.Utils.StringHelper.IsEN(userInput)){
+                    sender.ItemsSource = from d in page.Cities
+                                         where d.DistrictEN.Contains(userInput)
+                                         select d.DistrictZH;
+                }
+                else
+                {
+                    sender.ItemsSource = from d in page.Cities
+                                         where d.DistrictZH.Contains(userInput)
+                                         select d.DistrictZH;
+                }
+                
             }
         }
 
-
-
         private async void asbCity_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
-
+            asbCity.Text = "";
             string cityname = args.SelectedItem.ToString();
             if (!string.IsNullOrEmpty(cityname))
             {
@@ -216,9 +230,9 @@ namespace Weather.App
             {
 
                 Model.WeatherCity city = (Model.WeatherCity)e.ClickedItem;
-                if (!string.IsNullOrEmpty(city.District))
+                if (!string.IsNullOrEmpty(city.DistrictZH))
                 {
-                    bool isSuccess = await UpdateUserCity(city.District);
+                    bool isSuccess = await UpdateUserCity(city.DistrictZH);
                     if (isSuccess)
                     {
                         Frame.Navigate(typeof(MyCityPage));
@@ -235,6 +249,11 @@ namespace Weather.App
 
         }
 
+        /// <summary>
+        /// 更新
+        /// </summary>
+        /// <param name="cityName"></param>
+        /// <returns></returns>
         public async Task<bool> UpdateUserCity(string cityName)
         {
             bool isAdd = false;
@@ -242,8 +261,8 @@ namespace Weather.App
             Model.UserCity userCity = new Model.UserCity()
             {
                 CityId = (from c in page.Cities
-                          where c.District == cityName
-                          select c.Id).FirstOrDefault(),
+                          where c.DistrictZH == cityName
+                          select c.ID).FirstOrDefault(),
                 AddTime = DateTime.Now,
                 CityName = cityName.Trim(),
                 IsDefault = isNotFirst == false ? 1 : 0
@@ -283,6 +302,12 @@ namespace Weather.App
 
             return isAdd;
         }
+
+        /// <summary>
+        /// 排序
+        /// </summary>
+        /// <param name="weatherRespose"></param>
+        /// <returns></returns>
         private GetUserCityRespose SortUserCity(GetUserCityRespose respose)
         {
             var data = from c in respose.UserCities
@@ -292,6 +317,10 @@ namespace Weather.App
             return respose;
         }
 
+        /// <summary>
+        /// 通知
+        /// </summary>
+        /// <param name="strMessage"></param>
         private void NotifyUser(string strMessage)
         {
             StatusBorder.Background = new SolidColorBrush(Windows.UI.Colors.Green);
