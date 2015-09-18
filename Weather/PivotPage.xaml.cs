@@ -219,69 +219,63 @@ namespace Weather.App
             if (weatherRespose != null)
             {
                 var respose = weatherRespose.result.FirstOrDefault();
-                if (respose.status == "ok")
+
+                ViewModel.HomePageModel homePageModel = new ViewModel.HomePageModel();
+
+                var aqi = respose.aqi;
+                var now = respose.now;
+                var basic = respose.basic;
+                var daily_forecast = respose.daily_forecast;
+                var hourly_forecast = respose.hourly_forecast;
+
+                homePageModel.Aqi = "空气质量: " + aqi.city.qlty;
+                homePageModel.City = basic.city;
+                homePageModel.Daytmp = daily_forecast.FirstOrDefault().tmp.min + "° / " + daily_forecast.FirstOrDefault().tmp.max + "°";
+                homePageModel.Hum = now.hum + " %";
+                homePageModel.Pres = now.pres + " hPa";
+                homePageModel.Tmp = now.tmp + "°";
+                homePageModel.Txt = now.cond.txt;
+                homePageModel.Update = basic.update.loc + " 发布";
+                homePageModel.Vis = now.vis + " km";
+                homePageModel.Wind = now.wind.dir + " " + now.wind.sc + " 级";
+                homePageModel.WeatherType = weatherTypeRespose.WeatherTypes.FirstOrDefault(x => x.Code == now.cond.code);
+
+                List<ViewModel.DailyItem> dailyList = new List<ViewModel.DailyItem>();
+                foreach (var item in daily_forecast)
                 {
-                    ViewModel.HomePageModel homePageModel = new ViewModel.HomePageModel();
-
-                    var aqi = respose.aqi;
-                    var now = respose.now;
-                    var basic = respose.basic;
-                    var daily_forecast = respose.daily_forecast;
-                    var hourly_forecast = respose.hourly_forecast;
-
-                    homePageModel.Aqi = "空气质量: " + aqi.city.qlty;
-                    homePageModel.City = basic.city;
-                    homePageModel.Daytmp = daily_forecast.FirstOrDefault().tmp.min + "° / " + daily_forecast.FirstOrDefault().tmp.max + "°";
-                    homePageModel.Hum = now.hum + " %";
-                    homePageModel.Pres = now.pres + " hPa";
-                    homePageModel.Tmp = now.tmp + "°";
-                    homePageModel.Txt = now.cond.txt;
-                    homePageModel.Update = basic.update.loc + " 发布";
-                    homePageModel.Vis = now.vis + " km";
-                    homePageModel.Wind = now.wind.dir + " " + now.wind.sc + " 级";
-                    homePageModel.WeatherType = weatherTypeRespose.WeatherTypes.FirstOrDefault(x => x.Code == now.cond.code);
-
-                    List<ViewModel.DailyItem> dailyList = new List<ViewModel.DailyItem>();
-                    foreach (var item in daily_forecast)
+                    DailyItem daily = new DailyItem()
                     {
-                        DailyItem daily = new DailyItem()
-                        {
-                            Date = item.date,
-                            Image = weatherTypeRespose.WeatherTypes.FirstOrDefault(x => x.Code == item.cond.code_d).TomorrowPic,
-                            Tmp = item.tmp.min + "° / " + item.tmp.max + "°",
-                            Txt = item.cond.txt_d
-                        };
-                        dailyList.Add(daily);
-                    }
-
-                    homePageModel.DailyList = dailyList;
-
-                    List<ViewModel.HourlyItem> hourlyList = new List<ViewModel.HourlyItem>();
-                    foreach (var item in hourly_forecast)
-                    {
-                        HourlyItem hourly = new HourlyItem()
-                        {
-                            Date = DateTime.Parse(item.date).ToString("HH:mm"),
-                            Hum = item.hum + " %",
-                            Tmp = item.tmp + "°",
-                            Wind = item.wind.dir + " " + item.wind.sc
-                        };
-                        hourlyList.Add(hourly);
-                    }
-                    homePageModel.HourlyList = hourlyList;
-
-                    LayoutRoot.DataContext = homePageModel;
-                    UpdateTileFacade();
-                    UpdateSecondaryTileFacade();
+                        Date = item.date,
+                        Image = weatherTypeRespose.WeatherTypes.FirstOrDefault(x => x.Code == item.cond.code_d).TomorrowPic,
+                        Tmp = item.tmp.min + "° / " + item.tmp.max + "°",
+                        Txt = item.cond.txt_d
+                    };
+                    dailyList.Add(daily);
                 }
-                else
+
+                homePageModel.DailyList = dailyList;
+
+                List<ViewModel.HourlyItem> hourlyList = new List<ViewModel.HourlyItem>();
+                foreach (var item in hourly_forecast)
                 {
-                    NotifyUser("数据获取失败");
+                    HourlyItem hourly = new HourlyItem()
+                    {
+                        Date = DateTime.Parse(item.date).ToString("HH:mm"),
+                        Hum = item.hum + " %",
+                        Tmp = item.tmp + "°",
+                        Wind = item.wind.dir + " " + item.wind.sc
+                    };
+                    hourlyList.Add(hourly);
                 }
+                homePageModel.HourlyList = hourlyList;
+
+                LayoutRoot.DataContext = homePageModel;
+                UpdateTileFacade();
+                UpdateSecondaryTileFacade();
             }
             else
             {
-                NotifyUser("请开启网络，以更新最新天气数据");
+                NotifyUser("天气数据获取失败");
             }
 
             popupProgressBar.IsOpen = false;

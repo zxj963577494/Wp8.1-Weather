@@ -20,7 +20,7 @@ namespace Weather.Utils
         {
             Uri uri = new Uri(url);
             HttpClient httpClient = new HttpClient();
-            string result = await httpClient.GetStringAsync(uri);
+            string result = await httpClient.GetStringAsync(uri).ConfigureAwait(false);
             return result;
         }
     }

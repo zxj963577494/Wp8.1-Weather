@@ -313,7 +313,7 @@ namespace Weather.App
         public async Task<MyCityPageModel> GetWeatherByNet(Model.UserCity item)
         {
             //不存在当天的天气数据，就从网络获取数据
-            IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.City, item.CityName);
+            IGetWeatherRequest request = GetWeatherRequestFactory.CreateGetWeatherRequest(GetWeatherMode.CityId, item.CityId);
             weatherRespose = await weatherService.GetWeatherAsync(request);
             await DeleteFile(item.CityId);
             await weatherService.SaveWeather<GetWeatherRespose>(weatherRespose, item.CityId.ToString());

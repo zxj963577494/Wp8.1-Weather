@@ -194,44 +194,19 @@
   </AccountPackageIdentityNames>
   <PackageInfoList LandingUrl="https://dev.windows.com/dashboard/Application?appId=9NBLGGH0DWXM">
     <PackageInfo>
-      <OsMinVersion>6.3.0.0</OsMinVersion>
-      <PackageArchitecture>Unknown</PackageArchitecture>
-      <PackageMaxArchitectureVersion>1.0.0.24</PackageMaxArchitectureVersion>
-    </PackageInfo>
-    <PackageInfo>
-      <OsMinVersion>6.3.0.0</OsMinVersion>
-      <PackageArchitecture>Unknown</PackageArchitecture>
-      <PackageMaxArchitectureVersion>1.0.0.24</PackageMaxArchitectureVersion>
-    </PackageInfo>
-    <PackageInfo>
-      <OsMinVersion>6.3.0.0</OsMinVersion>
-      <PackageArchitecture>Unknown</PackageArchitecture>
-      <PackageMaxArchitectureVersion>1.0.0.24</PackageMaxArchitectureVersion>
-    </PackageInfo>
-    <PackageInfo>
-      <OsMinVersion>6.3.0.0</OsMinVersion>
-      <PackageArchitecture>Unknown</PackageArchitecture>
-      <PackageMaxArchitectureVersion>1.0.0.24</PackageMaxArchitectureVersion>
-    </PackageInfo>
-    <PackageInfo>
-      <OsMinVersion>6.3.0.0</OsMinVersion>
-      <PackageArchitecture>Unknown</PackageArchitecture>
-      <PackageMaxArchitectureVersion>1.0.0.24</PackageMaxArchitectureVersion>
-    </PackageInfo>
-    <PackageInfo>
-      <OsMinVersion>6.3.0.0</OsMinVersion>
+      <OsMinVersion>6.3.1.0</OsMinVersion>
       <PackageArchitecture>Neutral</PackageArchitecture>
-      <PackageMaxArchitectureVersion>1.0.0.24</PackageMaxArchitectureVersion>
+      <PackageMaxArchitectureVersion>2.0.0.0</PackageMaxArchitectureVersion>
     </PackageInfo>
     <PackageInfo>
-      <OsMinVersion>6.3.0.0</OsMinVersion>
-      <PackageArchitecture>Unknown</PackageArchitecture>
-      <PackageMaxArchitectureVersion>1.0.0.24</PackageMaxArchitectureVersion>
+      <OsMinVersion>6.3.1.0</OsMinVersion>
+      <PackageArchitecture>Neutral</PackageArchitecture>
+      <PackageMaxArchitectureVersion>2.0.0.0</PackageMaxArchitectureVersion>
     </PackageInfo>
     <PackageInfo>
-      <OsMinVersion>6.3.0.0</OsMinVersion>
-      <PackageArchitecture>Unknown</PackageArchitecture>
-      <PackageMaxArchitectureVersion>1.0.0.24</PackageMaxArchitectureVersion>
+      <OsMinVersion>6.3.1.0</OsMinVersion>
+      <PackageArchitecture>Neutral</PackageArchitecture>
+      <PackageMaxArchitectureVersion>2.0.0.0</PackageMaxArchitectureVersion>
     </PackageInfo>
   </PackageInfoList>
 </StoreAssociation>
