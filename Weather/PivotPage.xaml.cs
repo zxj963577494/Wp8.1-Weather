@@ -227,8 +227,10 @@ namespace Weather.App
                 var basic = respose.basic;
                 var daily_forecast = respose.daily_forecast;
                 var hourly_forecast = respose.hourly_forecast;
-
-                homePageModel.Aqi = "空气质量: " + aqi.city.qlty;
+                if (aqi != null)
+                {
+                    homePageModel.Aqi = "空气质量: " + aqi.city.qlty;
+                }
                 homePageModel.City = basic.city;
                 homePageModel.Daytmp = daily_forecast.FirstOrDefault().tmp.min + "° / " + daily_forecast.FirstOrDefault().tmp.max + "°";
                 homePageModel.Hum = now.hum + " %";
